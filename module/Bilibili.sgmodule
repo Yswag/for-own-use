@@ -3,12 +3,13 @@
 
 [Rule]
 DOMAIN-SUFFIX,cm.bilibili.com,REJECT
-DOMAIN-SUFFIX,grpc.biliapi.net,REJECT-NO-DROP
+#DOMAIN-SUFFIX,grpc.biliapi.net,REJECT-NO-DROP
 # Reject IP 請求
 URL-REGEX,^https?:\/\/app\.bilibili\.com\/x\/resource\/ip,REJECT
 # Reject DefaultWords
 URL-REGEX,^https?:\/\/app\.bilibili\.com\/bilibili\.app\.interface\.v1\.Search\/Default,REJECT
 URL-REGEX,^https://app.bilibili.com/x/v2/search/defaultwords,REJECT
+URL-REGEX,^https://grpc.biliapi.net/bilibili.app.interface.v1.Search/DefaultWords,REJECT
 # 首頁右上活動移除(需重新安裝)
 URL-REGEX,^https?:\/\/app\.bilibili\.com\/x\/resource\/top\/activity,REJECT
 # 贊助廣告
