@@ -2,6 +2,10 @@
 #!desc=手機網頁顯示優化
 #!system=ios
 
+[Rule]
+# 攔截登入提示
+URL-REGEX,^https:\/\/blog\.csdn\.net\/sw\.js$,REJECT
+
 [Header Rewrite]
 # 重寫網頁至桌面板
 ^https:\/\/blog\.csdn\.net\/ header-replace User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36$2"
