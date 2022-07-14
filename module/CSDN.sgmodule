@@ -1,0 +1,16 @@
+#!name=CSDN
+#!desc=手機網頁顯示優化
+#!system=ios
+
+[Header Rewrite]
+# 重寫網頁至桌面板
+^https:\/\/blog\.csdn\.net\/ header-replace User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36$2"
+
+[Script]
+# 注入CSS
+csdn.res.js = type=http-response,pattern=^https:\/\/blog\.csdn\.net\/,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-self-use/main/js/csdn-res.js,script-update-interval=0
+# 禁用app跳轉
+csdn.req.js = type=http-response,pattern=^https:\/\/wvhzpj\.openinstall\.io\/ulink,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-self-use/main/js/csdn-req.js,script-update-interval=0
+
+[MITM]
+hostname = %APPEND% blog.csdn.net, *.openinstall.io
