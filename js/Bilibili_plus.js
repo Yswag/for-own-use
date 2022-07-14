@@ -61,21 +61,22 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           magicJS.logError(`記錄Story的aid出現異常：${err}`);
         }
         break;
-      // 開屏廣告處理
-      case /^https?:\/\/app\.bilibili\.com\/x\/v2\/splash\/list/.test(magicJS.request.url):
+        break;
+        // 開屏廣告（預加載）如果粗暴地關掉，會使用預加載的數據，導致關不掉
+      case /^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list/.test(magicJS.request.url):
         try {
           let obj = JSON.parse(magicJS.response.body);
-          obj["data"]["max_time"] = 0;
-          obj["data"]["min_interval"] = 31536000;
-          obj["data"]["pull_interval"] = 31536000;
-          for (let i = 0; i < obj["data"]["list"].length; i++) {
-            obj["data"]["list"][i]["duration"] = 0;
-            obj["data"]["list"][i]["begin_time"] = 1915027200;
-            obj["data"]["list"][i]["end_time"] = 1924272000;
+          if(obj.data){
+          for (let item of obj["data"]["list"]) {
+              item["duration"] = 0;  // 顯示時間
+              // 2040 年
+              item["begin_time"] = 2240150400;
+              item["end_time"] = 2240150400;
+          }
           }
           body = JSON.stringify(obj);
         } catch (err) {
-          magicJS.logError(`開屏廣告處理出現異常：${err}`);
+          magicJS.logError(`開屏廣告（預加載）出現異常：${err}`);
         }
         break;
       // 標籤頁處理，如去除會員購等等
