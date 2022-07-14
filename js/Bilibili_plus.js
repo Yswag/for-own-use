@@ -178,6 +178,32 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           magicJS.logError(`直播去廣告出現異常：${err}`);
         }
         break;
+        //去除熱搜
+        case /^https?:\/\/app\.bilibili\.com\/x\/v2\/search\/square/.test(magicJS.request.url):
+        try {
+          let obj = JSON.parse(magicJS.response.body);
+          if(obj.data.length>3){
+          delete obj.data[0];
+          delete obj.data[3];
+          }
+          body = JSON.stringify(obj);
+        } catch (err) {
+          magicJS.logError(`熱搜去廣告出現異常：${err}`);
+        }
+        break;
+        // 1080p+
+        case /https?:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\?/.test(magicJS.request.url):
+        try {
+          let obj = JSON.parse(magicJS.response.body);
+          obj["data"]["vip"]["type"] = 2;
+          obj["data"]["vip"]["status"] = 1;
+          obj["data"]["vip"]["vip_pay_type"] = 1;
+          obj["data"]["vip"]["due_date"] = 4669824160;
+          body = JSON.stringify(obj);
+        } catch (err) {
+          magicJS.logError(`1080P出現異常：${err}`);
+        }
+        break;
       // 追番去廣告
       case /^https?:\/\/api\.bilibili\.com\/pgc\/page\/bangumi/.test(magicJS.request.url):
         try {
@@ -191,6 +217,27 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           body = JSON.stringify(obj);
         } catch (err) {
           magicJS.logError(`追番去廣告出現異常：${err}`);
+        }
+        break;
+        // 播放頁去廣告
+      case /pgc\/page\/cinema\/tab\?/.test(magicJS.request.url):
+        try {
+          let obj = JSON.parse(magicJS.response.body);
+          obj.result.modules.forEach((module) => {
+            // 頭部banner
+            if (module.style.startsWith("banner")) {
+              module.items = module.items.filter((i) => !(i.link.indexOf("play")==-1));
+            }
+            if (module.style.startsWith("function")) {
+              module.items = module.items.filter((i) => (i.blink.indexOf("www.bilibili.com")==-1));
+            }
+            if (module.style.startsWith("tip")) {
+              module.items = null;
+            }
+          });
+          body = JSON.stringify(obj);
+        } catch (err) {
+          magicJS.logError(`播放頁去廣告出現異常：${err}`);
         }
         break;
       // 動態去廣告
