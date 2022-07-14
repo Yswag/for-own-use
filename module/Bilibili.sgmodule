@@ -45,21 +45,11 @@ Bilibili vip unlock = type=http-response,pattern=^https?:\/\/app\.bilibili\.com\
 Bilibili 簡中cc轉繁中 = type=http-response,pattern=^https?:\/\/i.\.hdslb\.com\/bfs\/subtitle\/.+\.json$,requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/Yswag/for-self-use/main/js/Bilibili_cc.js,script-update-interval=0
 
 [Host]
-upos-hz-mirrorakam.akamaized.net = 23.200.74.34
-upos-sz-mirrorcosov.bilivideo.com = 43.132.83.49
-line3-h5-mobile-api.biligame.com = 154.91.143.32
-passport.bilibili.com = 118.193.16.42
-member.bilibili.com = 118.193.16.42
-mall.bilibili.com = 163.181.39.205
-*.hdslb.com = 163.181.39.223
-broadcast.chat.bilibili.com = 8.216.44.30
-dataflow.biliapi.com = 118.193.17.34
-pay.bilibili.com = 118.193.16.42
-show.bilibili.com = 163.181.22.1
-data.bilibili.com = 164.52.13.51
-api.live.bilibili.com = 45.40.60.170
-api.vc.bilibili.com = 45.40.60.170
-api.bilibili.com = 118.193.16.42
+*.bilibili.com = server:34.80.2.188
+upos-hz-mirrorakam.akamaized.net = server:34.80.2.188
+upos-sz-mirrorcosov.bilivideo.com = server:34.80.2.188
+line3-h5-mobile-api.biligame.com = server:34.80.2.188
+*.hdslb.com = server:34.80.2.188
 
 [Map Local]
 ^https?:\/\/.+\.(bilibili|biliapi)\.(com|net)\/x\/resource\/ip\? data="https://raw.githubusercontent.com/Yswag/for-self-use/main/js/Blank_Dict.json"
