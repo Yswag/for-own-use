@@ -42,6 +42,7 @@ Bili-去除熱搜 = type=http-response,pattern=^https://app.bilibili.com/x/v2/se
 Bilibili-skin = type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\?,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-self-use/main/js/Bilibili_plus.js,script-update-interval=0
 # 解鎖一般影片清晰度
 Bilibili vip unlock = type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\?,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-self-use/main/js/Bilibili_plus.js,script-update-interval=0
+Bilibili 簡中cc轉繁中 = type=http-response,pattern=^https?:\/\/i.\.hdslb\.com\/bfs\/subtitle\/.+\.json$,requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/Yswag/for-self-use/main/js/Bilibili_cc.js,script-update-interval=0
 
 [Host]
 upos-hz-mirrorakam.akamaized.net = 23.200.74.34
@@ -85,4 +86,4 @@ api.bilibili.com = 118.193.16.42
 ^https?:\/\/api\.vc\.bilibili\.com\/dynamic_svr\/v1\/dynamic_svr\/mix_uplist - reject
 
 [MITM]
-hostname = %APPEND% app.bilibili.com,api.live.bilibili.com,api.vc.bilibili.com,api.bilibili.com, grpc.biliapi.net,api.biliapi.net,-broadcast.chat.bilibili.com,-*cdn*.biliapi.net,-*tracker*.biliapi.net
+hostname = %APPEND% *.hdslb.com,app.bilibili.com,api.live.bilibili.com,api.vc.bilibili.com,api.bilibili.com, grpc.biliapi.net,api.biliapi.net,-broadcast.chat.bilibili.com,-*cdn*.biliapi.net,-*tracker*.biliapi.net
