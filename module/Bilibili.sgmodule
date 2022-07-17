@@ -45,11 +45,11 @@ Bilibili vip unlock = type=http-response,pattern=^https?:\/\/app\.bilibili\.com\
 Bilibili 簡中cc轉繁中 = type=http-response,pattern=^https?:\/\/i.\.hdslb\.com\/bfs\/subtitle\/.+\.json$,requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Bilibili_cc.js,script-update-interval=0
 
 [Host]
-*.bilibili.com = server:34.80.2.188
-upos-hz-mirrorakam.akamaized.net = server:34.80.2.188
-upos-sz-mirrorcosov.bilivideo.com = server:34.80.2.188
-line3-h5-mobile-api.biligame.com = server:34.80.2.188
-*.hdslb.com = server:34.80.2.188
+*.bilibili.com = server:101.101.101.101
+upos-hz-mirrorakam.akamaized.net = server:101.101.101.101
+upos-sz-mirrorcosov.bilivideo.com = server:101.101.101.101
+line3-h5-mobile-api.biligame.com = server:101.101.101.101
+*.hdslb.com = server:101.101.101.101
 
 [Map Local]
 ^https?:\/\/.+\.(bilibili|biliapi)\.(com|net)\/x\/resource\/ip\? data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
