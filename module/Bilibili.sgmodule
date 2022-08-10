@@ -51,20 +51,6 @@ upos-sz-mirrorcosov.bilivideo.com = server:101.101.101.101
 line3-h5-mobile-api.biligame.com = server:101.101.101.101
 *.hdslb.com = server:101.101.101.101
 
-[Map Local]
-^https?:\/\/.+\.(bilibili|biliapi)\.(com|net)\/x\/resource\/ip\? data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https?:\/\/.+\.(bilibili|biliapi)\.(com|net)\/x\/resource\/top\/activity data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https:\/\/.+\.(bilibili|biliapi)\.(com|net)\/x\/resource\/pop\/up\? data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https:\/\/.+\.(bilibili|biliapi)\.(com|net)\/x\/resource\/show\/tab\/bubble data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https:\/\/.+\.(bilibili|biliapi)\.(com|net)\/x\/v2\/feed\/index\/story\? data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https:\/\/.+\.live\.(bilibili|biliapi)\.(com|net)\/xlive\/app-ucenter\/v1\/user_title\/GetTitles\? data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https:\/\/.+\.(bilibili|biliapi)\.(com|net)\/pgc\/app\/preload data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https:\/\/.+\.(bilibili|biliapi)\.(com|net)\/mall\/ashbringer\/app\/abtest data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https:\/\/.+\.(bilibili|biliapi)\.(com|net)\/api\/ticket\/district\/dl data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https:\/\/.+\.(bilibili|biliapi)\.(com|net)\/bilibili\.app\.listener\.v1\.Listener\/RcmdPlaylist$ data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https:\/\/.+\.(bilibili|biliapi)\.(com|net)\/x\/v2\/channel\/red data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-^https:\/\/.+\.(bilibili|biliapi)\.(com|net)\/bilibili\.app\.wall\.v1\.Wall\/RuleInfo$ data="https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Blank_Dict.json"
-
 [URL Rewrite]
 # 去除搜索中的大家都在搜
 ^https?:\/\/api\.vc\.bilibili\.com\/search_svr\/v\d\/Search\/recommend_words - reject
