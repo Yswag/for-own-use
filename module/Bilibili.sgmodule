@@ -2,7 +2,7 @@
 #!desc=去廣告
 
 [Rule]
-DOMAIN-SUFFIX,grpc.biliapi.net, REJECT-NO-DROP
+#DOMAIN-SUFFIX,grpc.biliapi.net, REJECT-NO-DROP
 DOMAIN-SUFFIX,cm.bilibili.com,REJECT
 # Reject IP 請求
 URL-REGEX,^https?:\/\/app\.bilibili\.com\/x\/resource\/ip,REJECT
