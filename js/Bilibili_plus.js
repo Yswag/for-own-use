@@ -10,7 +10,7 @@ let blacklist = [];
 if (magicJS.read(blackKey)) {
   blacklist = magicJS.read(blackKey).split(";");
 } else {
-  const defaultList = "";
+  const defaultList = "Twice";
   magicJS.write(blackKey, defaultList);
   blacklist = defaultList.split(";");
 }
