@@ -29,18 +29,25 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           let items = [];
           for (let item of obj["data"]["items"]) {
             if (item.hasOwnProperty("banner_item")) {
-              continue;
+              let bannerItems = [];
+              for (let banner of item["banner_item"]) {
+                if (banner["type"] === "ad") {
+                  continue;
+                } else if (banner["static_banner"] && banner["static_banner"]["is_ad_loc"] != true) {
+                  bannerItems.push(banner);
+                }
+              }
+              // 去除廣告後，如果banner大於等於1個才添加到response body
+              if (bannerItems.length >= 1) {
+                item["banner_item"] = bannerItems;
+                items.push(item);
+              }
             } else if (
               !item.hasOwnProperty("ad_info") &&
               !blacklist.includes(item["args"]["up_name"]) &&
               item.card_goto.indexOf("ad") === -1 &&
-              (item["card_type"] === "small_cover_v2" || item["card_type"] === "large_cover_v1")
+              (item["card_type"] === "small_cover_v2" || item["card_type"] === "large_cover_v1"|| item["card_type"] === "large_cover_single_v9")
             ) {
-              if (disableIndexStory) {
-                if (item.uri.includes("bilibili://story")) {
-                  item.uri = item.uri.replace("bilibili://story", "bilibili://video");
-                }
-              }
               items.push(item);
             }
           }
@@ -54,13 +61,19 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
       case /^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\/story\?/.test(magicJS.request.url):
         try {
           let obj = JSON.parse(magicJS.response.body);
-          let lastItem = obj["data"]["items"].pop();
-          let aid = lastItem["stat"]["aid"].toString();
-          magicJS.write(storyAidKey, aid);
+          let items = [];
+          for (let item of obj["data"]["items"]) {
+            if (
+              !item.hasOwnProperty("ad_info") &&
+              item.card_goto.indexOf("ad") === -1) {
+              items.push(item);
+            }
+          }
+          obj["data"]["items"] = items;
+          body = JSON.stringify(obj);
         } catch (err) {
           magicJS.logError(`記錄Story的aid出現異常：${err}`);
         }
-        break;
         break;
         // 開屏廣告（預加載）如果粗暴地關掉，會使用預加載的數據，導致關不掉
       case /^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list/.test(magicJS.request.url):
@@ -129,22 +142,15 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
       case /^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/mine/.test(magicJS.request.url):
         try {
           let obj = JSON.parse(magicJS.response.body);
-          // 622 為會員購中心, 425 開始為概念版id
-          /*
-            國際版
-            494 離線緩存
-            495 歷史記錄
-            496 我的收藏
-            497 稍後再看
-            500 聯繫客服
-            501 設置
-            741 我的錢包
-            742 稿件管理
-           */
-          const itemList = new Set([
-            396, 397, 398, 399, 171, 172, 534, 8, 4, 428, 352, 1, 405, 402, 404, 544, 407, 410, 425, 426, 427, 428, 171, 430, 431, 432, 494, 495, 496, 497, 500, 501, 741, 742,
-          ]);
+          
+          const itemList = new Set([396, 397, 398, 399, 402, 404, 407, 410, 425, 426, 427, 428, 430, 432, 433, 434, 494, 495, 496, 497, 500, 501]);
           obj["data"]["sections_v2"].forEach((element, index) => {
+            element["items"].forEach((e) => {
+              if (e["id"] === 622) {
+                e["title"] = "会员购";
+                e["uri"] = "bilibili://mall/home";
+              }
+            });
             let items = element["items"].filter((e) => {
               return itemList.has(e.id);
             });
@@ -152,17 +158,40 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
             delete obj["data"]["sections_v2"][index].be_up_title;
             delete obj["data"]["sections_v2"][index].tip_icon;
             delete obj["data"]["sections_v2"][index].tip_title;
-            obj["data"]["sections_v2"][index]["items"] = items;
+            
+            for (let ii = 0; ii < obj["data"]["sections_v2"].length; ii++) {
+              if(obj.data.sections_v2[ii].title=='推荐服务'||obj.data.sections_v2[ii].title=='推薦服務'){
+                //obj.data.sections_v2[ii].items[0].title='\u516C\u773E\u865F';
+                //obj.data.sections_v2[ii].items[1].title='\u58A8\u9B5A\u624B\u8A18';
+              }
+              if(obj.data.sections_v2[ii].title=='更多服務'||obj.data.sections_v2[ii].title=='更多服务'){
+                  if(obj.data.sections_v2[ii].items[0].id==500){
+                      //obj.data.sections_v2[ii].items[0].title='\u516C\u773E\u865F';
+                  }
+                  if(obj.data.sections_v2[ii].items[1].id==501){
+                      //obj.data.sections_v2[ii].items[1].title='\u58A8\u9B5A\u624B\u8A18';
+                  }
+              }
+              if(obj.data.sections_v2[ii].title=='创作中心'||obj.data.sections_v2[ii].title=='創作中心'){
+                  delete obj.data.sections_v2[ii].title;
+                  delete obj.data.sections_v2[ii].type;
+              }
 
-            if (element.title === "更多服务" && enableMall) {
-              element.items.unshift({
-                id: 999,
-                title: "会员购",
-                icon: "http://i0.hdslb.com/bfs/archive/19c794f01def1a267b894be84427d6a8f67081a9.png",
-                common_op_item: {},
-                uri: "bilibili://mall/home",
-              });
+            }      
+            delete obj.data.vip_section_v2;
+            delete obj.data.vip_section;
+            obj["data"]["sections_v2"][index]["items"] = items;
+            if(obj.data.hasOwnProperty("live_tip")){
+                obj["data"]["live_tip"]={};
             }
+            if(obj.data.hasOwnProperty("answer")){
+                obj["data"]["answer"]={};
+            }
+            obj["data"]["vip_type"] = 2;
+            obj["data"]["vip"]["type"] = 2;
+            obj["data"]["vip"]["status"] = 1;
+            obj["data"]["vip"]["vip_pay_type"] = 1;
+            obj["data"]["vip"]["due_date"] = 4669824160;
           });
           body = JSON.stringify(obj);
         } catch (err) {
@@ -238,7 +267,7 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           });
           body = JSON.stringify(obj);
         } catch (err) {
-          magicJS.logError(`播放頁去廣告出現異常：${err}`);
+          magicJS.logError(`觀影頁去廣告出現異常：${err}`);
         }
         break;
       // 動態去廣告
@@ -266,8 +295,8 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
       case /^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\?/.test(magicJS.request.url):
         try {
           let obj = JSON.parse(magicJS.response.body);
-          if (obj && obj.hasOwnProperty("data")) {
-            obj["data"]["common_equip"] = {};
+          if (obj && obj.hasOwnProperty("data")&&obj.data.hasOwnProperty("common_equip")&&obj.data.common_equip.hasOwnProperty("package_url")) {
+            //obj["data"]["common_equip"]["package_url"] = "";
           }
           body = JSON.stringify(obj);
         } catch (err) {
