@@ -1,8 +1,6 @@
 const scriptName = "BiliBili";
 const storyAidKey = "bilibili_story_aid";
 const blackKey = "bilibili_feed_black";
-const bilibili_disable_index_story = "bilibili_disable_index_story";
-const bilibili_enable_mall = "bilibili_enable_mall";
 let magicJS = MagicJS(scriptName, "INFO");
 
 //Customize blacklist
@@ -14,9 +12,6 @@ if (magicJS.read(blackKey)) {
   magicJS.write(blackKey, defaultList);
   blacklist = defaultList.split(";");
 }
-
-const disableIndexStory = Boolean(magicJS.read(bilibili_disable_index_story));
-const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
 
 (() => {
   let body = null;
@@ -37,7 +32,7 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
                   bannerItems.push(banner);
                 }
               }
-              // 去除廣告後，如果banner大於等於1個才添加到response body
+              // 去除廣告後，如果banner大於等於1個才添加到響應體
               if (bannerItems.length >= 1) {
                 item["banner_item"] = bannerItems;
                 items.push(item);
@@ -57,7 +52,7 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           magicJS.logError(`推薦去廣告出現異常：${err}`);
         }
         break;
-      // 匹配story模式，用於紀錄Story的aid
+      // 匹配story模式，用於記錄Story的aid
       case /^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\/story\?/.test(magicJS.request.url):
         try {
           let obj = JSON.parse(magicJS.response.body);
@@ -75,38 +70,20 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           magicJS.logError(`記錄Story的aid出現異常：${err}`);
         }
         break;
-        // 開屏廣告（預加載）如果粗暴地關掉，會使用預加載的數據，導致關不掉
-      case /^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list/.test(magicJS.request.url):
-        try {
-          let obj = JSON.parse(magicJS.response.body);
-          if(obj.data){
-          for (let item of obj["data"]["list"]) {
-              item["duration"] = 0;  // 顯示時間
-              // 2040 年
-              item["begin_time"] = 2240150400;
-              item["end_time"] = 2240150400;
-          }
-          }
-          body = JSON.stringify(obj);
-        } catch (err) {
-          magicJS.logError(`開屏廣告（預加載）出現異常：${err}`);
-        }
-        break;
+      
       // 標籤頁處理，如去除會員購等等
       case /^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/tab/.test(magicJS.request.url):
         try {
-          // 545 首頁追番tab，442 開始為概念版id 適配港澳台代理模式
-          const tabList = new Set([39, 40, 41, 545, 151, 442, 99, 100, 101, 554, 556]);
-          // 嘗試使用tab name直觀修改
-          const tabNameList = new Set(["直播", "推薦", "熱門", "動畫", "影視"]);
-          // 107 概念版遊戲中心，獲取修改為Story模式
-          const topList = new Set([176, 222, 107]);
-          // 102 開始為概念版id
-          const bottomList = new Set([177, 178, 179, 181, 102, 103, 104, 105, 106]);
+          
+          const tabList = new Set([39, 40, 41, 774, 857, 545, 151, 442, 99, 100, 101, 554, 556]);
+          
+          const topList = new Set([176, 107]);
+          
+          const bottomList = new Set([177, 178, 179, 181, 102,  104, 106, 486, 488, 489]);
           let obj = JSON.parse(magicJS.response.body);
           if (obj["data"]["tab"]) {
             let tab = obj["data"]["tab"].filter((e) => {
-              return tabNameList.has(e.name);
+              return tabList.has(e.id);
             });
             obj["data"]["tab"] = tab;
           }
@@ -158,7 +135,7 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
             delete obj["data"]["sections_v2"][index].be_up_title;
             delete obj["data"]["sections_v2"][index].tip_icon;
             delete obj["data"]["sections_v2"][index].tip_title;
-            
+
             for (let ii = 0; ii < obj["data"]["sections_v2"].length; ii++) {
               if(obj.data.sections_v2[ii].title=='推荐服务'||obj.data.sections_v2[ii].title=='推薦服務'){
                 //obj.data.sections_v2[ii].items[0].title='\u516C\u773E\u865F';
@@ -208,7 +185,7 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           magicJS.logError(`直播去廣告出現異常：${err}`);
         }
         break;
-        //去除熱搜
+        //屏蔽熱搜
         case /^https?:\/\/app\.bilibili\.com\/x\/v2\/search\/square/.test(magicJS.request.url):
         try {
           let obj = JSON.parse(magicJS.response.body);
@@ -221,10 +198,11 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           magicJS.logError(`熱搜去廣告出現異常：${err}`);
         }
         break;
-        // 1080p+
+        //2022-03-05 add by ddgksf2013
         case /https?:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\?/.test(magicJS.request.url):
         try {
           let obj = JSON.parse(magicJS.response.body);
+
           obj["data"]["vip"]["type"] = 2;
           obj["data"]["vip"]["status"] = 1;
           obj["data"]["vip"]["vip_pay_type"] = 1;
@@ -235,13 +213,20 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
         }
         break;
       // 追番去廣告
-      case /^https?:\/\/api\.bilibili\.com\/pgc\/page\/bangumi/.test(magicJS.request.url):
+      case /pgc\/page\/bangumi/.test(magicJS.request.url):
         try {
           let obj = JSON.parse(magicJS.response.body);
           obj.result.modules.forEach((module) => {
             // 頭部banner
             if (module.style.startsWith("banner")) {
-              module.items = module.items.filter((i) => !(i.source_content && i.source_content.ad_content));
+              //i.source_content && i.source_content.ad_content
+              module.items = module.items.filter((i) => !(i.link.indexOf("play")==-1));
+            }
+            if (module.style.startsWith("function")) {
+              module.items = module.items.filter((i) => (i.blink.indexOf("www.bilibili.com")==-1));
+            }
+            if (module.style.startsWith("tip")) {
+              module.items = null;
             }
           });
           body = JSON.stringify(obj);
@@ -249,7 +234,7 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           magicJS.logError(`追番去廣告出現異常：${err}`);
         }
         break;
-        // 播放頁去廣告
+        // 觀影頁去廣告
       case /pgc\/page\/cinema\/tab\?/.test(magicJS.request.url):
         try {
           let obj = JSON.parse(magicJS.response.body);
@@ -303,12 +288,29 @@ const enableMall = Boolean(magicJS.read(bilibili_enable_mall));
           magicJS.logError(`去除強制設置的皮膚出現異常：${err}`);
         }
         break;
+        // 開屏廣告（預加載）如果粗暴地關掉，那麼就使用預加載的數據，就會導致關不掉
+      case /^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list/.test(magicJS.request.url):
+        try {
+          let obj = JSON.parse(magicJS.response.body);
+          if(obj.data){
+          for (let item of obj["data"]["list"]) {
+              item["duration"] = 0;  // 顯示時間
+              // 2040 年
+              item["begin_time"] = 2240150400;
+              item["end_time"] = 2240150400;
+          }
+          }
+          body = JSON.stringify(obj);
+        } catch (err) {
+          magicJS.logError(`開屏廣告（預加載）出現異常：${err}`);
+        }
+        break;
       default:
-        magicJS.logWarning("觸發意外的請求處理，請確認腳本或覆寫配置正常。");
+        magicJS.logWarning("觸發意外的請求處理，請確認腳本或復寫配置正常。");
         break;
     }
   } else {
-    magicJS.logWarning("觸發意外的請求處理，請確認腳本或覆寫配置正常。");
+    magicJS.logWarning("觸發意外的請求處理，請確認腳本或復寫配置正常。");
   }
   if (body) {
     magicJS.done({ body });
