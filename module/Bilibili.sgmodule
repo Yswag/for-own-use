@@ -2,6 +2,7 @@
 #!desc=去廣告
 
 [Rule]
+URL-REGEX,^https?:\/\/api\.bilibili\.com\/pgc\/activity\/deliver\/material\/receive,REJECT
 DOMAIN-SUFFIX,cm.bilibili.com,REJECT
 # Reject IP 請求
 URL-REGEX,^https?:\/\/app\.bilibili\.com\/x\/resource\/ip,REJECT
