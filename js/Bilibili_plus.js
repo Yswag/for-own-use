@@ -191,7 +191,7 @@ if (magicJS.read(blackKey)) {
           let obj = JSON.parse(magicJS.response.body);
           obj.data={
       "type": "history",
-      "title": "搜索历史",
+      "title": "搜尋歷史",
       "search_hotword_revision": 2
     };
           body = JSON.stringify(obj);
