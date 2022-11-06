@@ -83,29 +83,6 @@ if (magicJS.read(blackKey)) {
                     const topList = new Set([176, 107]);
                     const bottomList = new Set([177, 178, 179, 181, 102, 104, 106, 486, 488, 489]);
                     let obj = JSON.parse(magicJS.response.body);
-                    if (obj["data"]["tab"]) {
-                        let tab = obj["data"]["tab"].filter((e) => {
-                            return tabList.has(e.id);
-                        });
-                        obj["data"]["tab"] = tab;
-                    }
-                    // 將 id（222 & 107）調整為Story功能按鈕
-                    let storyAid = magicJS.read(storyAidKey);
-                    if (!storyAid) {
-                        storyAid = "246834163";
-                    }
-                    if (obj["data"]["top"]) {
-                        let top = obj["data"]["top"].filter((e) => {
-                            if (e.id === 222 || e.id === 107) {
-                                e.uri = `bilibili://story/${storyAid}`;
-                                e.icon = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/bilibili/bilibili_icon.png";
-                                e.tab_id = "Story_Top";
-                                e.name = "Story";
-                            }
-                            return topList.has(e.id);
-                        });
-                        obj["data"]["top"] = top;
-                    }
                     if (obj["data"]["bottom"]) {
                         let bottom = obj["data"]["bottom"].filter((e) => {
                             return bottomList.has(e.id);
