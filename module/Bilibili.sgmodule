@@ -2,6 +2,7 @@
 #!desc=去廣告
 
 [Rule]
+DOMAIN,grpc.biliapi.net,REJECT
 # Reject IP 請求
 URL-REGEX,^https?:\/\/app\.bilibili\.com\/x\/resource\/ip,REJECT
 # Reject DefaultWords
