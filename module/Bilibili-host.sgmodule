@@ -1,0 +1,9 @@
+#!name=Bilibili host
+#!desc=指定我覺得快的伺服器
+
+[Host]
+i?.hdslb.com = 210.61.207.134
+*bilibili.com = 164.52.33.178
+upos-sz-staticcos-cmask.bilivideo.com = 61.54.7.252
+upos-sz-mirrorcosov.bilivideo.com = 101.33.17.139
+upos-hz-mirrorakam.akamaized.net = 104.116.243.73
