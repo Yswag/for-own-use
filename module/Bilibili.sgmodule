@@ -8,6 +8,7 @@ URL-REGEX,^https?:\/\/app\.bilibili\.com\/x\/resource\/ip,REJECT
 URL-REGEX,^https:\/\/grpc\.biliapi\.net\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$,REJECT
 URL-REGEX,^https:\/\/app\.bilibili\.com\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$,REJECT
 URL-REGEX,^https?:\/\/api\.bilibili\.com\/pgc\/activity\/deliver\/material\/receive,REJECT
+URL-REGEX,^https://app.bilibili.com/x/v2/splash/show,REJECT
 
 [Script]
 # 推薦頁去廣告
@@ -20,6 +21,7 @@ bili-cc = type=http-response,pattern=^https?:\/\/i.\.hdslb\.com\/bfs\/subtitle\/
 bili-熱搜 = type=http-response,pattern=^https://app.bilibili.com/x/v2/search/square,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Bilibili_plus.js,script-update-interval=0
 bili-tabs = type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/tab,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Bilibili_plus.js,script-update-interval=0
 bili-我的頁面 = type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/mine,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Bilibili_plus.js,script-update-interval=0
+bili-開屏廣告 = type=http-response,pattern=^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list,requires-body=1,max-size=0,script-path=https://github.com/ddgksf2013/Scripts/raw/master/bilibili_json.js,script-update-interval=0
 
 [Map Local]
 ^https?:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v\d\/ecommerce-user\/get_shopping_info\? data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
