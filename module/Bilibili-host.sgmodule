@@ -6,6 +6,7 @@ force-http-engine-hosts =  %APPEND% upos*:0
 
 [Rule]
 #IP-CIDR,203.107.1.1/24,REJECT,no-resolve
+OR,((DOMAIN-SUFFIX,szbdyd.com), (DOMAIN-SUFFIX,mcdn.bilivideo.com), (DEST-PORT,4480)),REJECT,notification-text="已禁用b站垃圾cdn" // 禁用b站垃圾cdn
 
 [URL Rewrite]
 #UposRedirect
