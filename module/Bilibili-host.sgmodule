@@ -1,9 +1,23 @@
-#!name=Bilibili host
-#!desc=指定我覺得快的伺服器
+#!name=Bilibili
+#!desc=實驗一下
+
+[General]
+force-http-engine-hosts =  %APPEND% upos*:0
+
+[Rule]
+#IP-CIDR,203.107.1.1/24,REJECT,no-resolve
+
+[URL Rewrite]
+#UposRedirect
+^https?:\/\/upos-hz-mirrorakam\.akamaized\.net\/(.*) https://upos-sz-mirrorcosov.bilivideo.com/$1 302
+^https?:\/\/upos-sz-staticcos-cmask\.bilivideo\.com\/(.*) https://upos-sz-mirrorcosov.bilivideo.com/upgcxcode/ 302
 
 [Host]
 i?.hdslb.com = 210.61.207.134
 *bilibili.com = 164.52.33.178
-upos-sz-staticcos-cmask.bilivideo.com = 61.54.7.252
-upos-sz-mirrorcosov.bilivideo.com = 101.33.17.139
-upos-hz-mirrorakam.akamaized.net = 104.116.243.73
+#upos-sz-staticcos-cmask.bilivideo.com = 61.54.7.252
+upos-sz-mirrorcosov.bilivideo.com = 1.9.250.39
+#upos-hz-mirrorakam.akamaized.net = 104.116.243.154
+
+[MITM]
+hostname = %APPEND% upos-hz-mirrorakam.akamaized.net,upos-sz-mirrorcos.bilivideo.com,upos-sz-mirrorcosov.bilivideo.com,upos-sz-staticcos-cmask.bilivideo.com
