@@ -6,7 +6,6 @@ force-http-engine-hosts =  %APPEND% upos*:0,cn*.bilivideo.com
 
 [Rule]
 IP-CIDR,192.169.122.226/32,REJECTnotification-text="米阿內米阿內哈幾麻"
-#IP-CIDR,203.107.1.1/24,REJECT,no-resolve
 OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bilivideo.c))), (DOMAIN-SUFFIX,szbdyd.com), (DEST-PORT,4480)), REJECT-NO-DROP,notification-text="已禁用b站垃圾cdn" // 禁用b站垃圾cdn
 
 [URL Rewrite]
