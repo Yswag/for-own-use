@@ -2,23 +2,25 @@
 #!desc=實驗一下
 
 [General]
-force-http-engine-hosts =  %APPEND% upos*:0
+force-http-engine-hosts =  %APPEND% upos*:0,cn*.bilivideo.com
 
 [Rule]
+IP-CIDR,192.169.122.226/32,REJECTnotification-text="米阿內米阿內哈幾麻"
 #IP-CIDR,203.107.1.1/24,REJECT,no-resolve
-OR,((DOMAIN-SUFFIX,szbdyd.com), (DOMAIN-SUFFIX,mcdn.bilivideo.com), (DEST-PORT,4480)),REJECT,notification-text="已禁用b站垃圾cdn" // 禁用b站垃圾cdn
+OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bilivideo.c))), (DOMAIN-SUFFIX,szbdyd.com), (DEST-PORT,4480)), REJECT-NO-DROP,notification-text="已禁用b站垃圾cdn" // 禁用b站垃圾cdn
 
 [URL Rewrite]
+cn.*bilivideo.com - reject
 #UposRedirect
 ^https?:\/\/upos-hz-mirrorakam\.akamaized\.net\/(.*) https://upos-sz-mirrorcosov.bilivideo.com/$1 302
-^https?:\/\/upos-sz-staticcos-cmask\.bilivideo\.com\/(.*) https://upos-sz-mirrorcosov.bilivideo.com/upgcxcode/ 302
+^https?:\/\/upos-sz-staticcos-cmask\.bilivideo\.com\/(.*) https://upos-sz-mirrorcosov.bilivideo.com/$1 302
 
 [Host]
-i?.hdslb.com = 210.61.207.134
+#i?.hdslb.com = 210.61.207.134
 *bilibili.com = 164.52.33.178
 #upos-sz-staticcos-cmask.bilivideo.com = 61.54.7.252
 upos-sz-mirrorcosov.bilivideo.com = 1.9.250.39
 #upos-hz-mirrorakam.akamaized.net = 104.116.243.154
 
 [MITM]
-hostname = %APPEND% upos-hz-mirrorakam.akamaized.net,upos-sz-mirrorcos.bilivideo.com,upos-sz-mirrorcosov.bilivideo.com,upos-sz-staticcos-cmask.bilivideo.com
+hostname = %APPEND% upos-hz-mirrorakam.akamaized.net,upos-sz-mirrorcos.bilivideo.com,upos-sz-mirrorcosov.bilivideo.com,upos-sz-staticcos-cmask.bilivideo.com,cn*.bilivideo.com
