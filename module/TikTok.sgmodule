@@ -1,9 +1,25 @@
 #!name=TikTok
 #!desc=新版TikTok禁止MITM,需先降為21.1.0
 
+[Rule]
+DOMAIN,p16-tiktokcdn-com.akamaized.net,TikTok
+DOMAIN-SUFFIX,byteoversea.com,TikTok
+DOMAIN-SUFFIX,ibytedtos.com,TikTok
+DOMAIN-SUFFIX,ibyteimg.com,TikTok
+DOMAIN-SUFFIX,ipstatp.com,TikTok
+DOMAIN-SUFFIX,muscdn.com,TikTok
+DOMAIN-SUFFIX,musical.ly,TikTok
+DOMAIN-SUFFIX,sgpstatp.com,TikTok
+DOMAIN-SUFFIX,snssdk.com,TikTok
+DOMAIN-SUFFIX,tik-tokapi.com,TikTok
+DOMAIN-SUFFIX,tiktok.com,TikTok
+DOMAIN-SUFFIX,tiktokcdn.com,TikTok
+DOMAIN-SUFFIX,tiktokv.com,TikTok
+DOMAIN-KEYWORD,-tiktokcdn-com,TikTok
+USER-AGENT,TikTok*,TikTok
+
 [URL Rewrite]
 (?<=_region=)TW(?=&) KR 307
-(?<=_region=)tw(?=&) kr 307
 (?<=&mcc_mnc=)4 2 307
 ^(https?:\/\/(tnc|dm)[\w-]+\.\w+\.com\/.+)(\?)(.+) $1$3 302
 (^https?:\/\/*\.\w{4}okv.com\/.+&.+)(\d{2}\.3\.\d)(.+) $118.0$3 302
