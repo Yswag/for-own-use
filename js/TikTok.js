@@ -1,5 +1,5 @@
 /*
-作者Tartarus2014
+Tartarus2014
 */
 var watermark = (data) => {
     try {
