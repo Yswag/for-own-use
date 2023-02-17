@@ -37,7 +37,7 @@ if (body) {
         case /^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/tab/.test($request.url):
             try {
           const tabList = new Set([39, 40, 41, 545, 151, 442, 99, 100, 101, 554, 556]);
-          const tabNameList = new Set(["直播", "推薦", "IVE", "LESSERAFIM", "韓綜", "動畫"]);
+          const tabNameList = new Set(["直播", "推薦", "IVE", "LESSERAFIM", "韓綜", "STAYC"]);
           const topList = new Set([176]);
           const bottomList = new Set([177, 178, 179, 181, 690, 102, 103, 104, 105, 106]);
           let obj = JSON.parse(body);
