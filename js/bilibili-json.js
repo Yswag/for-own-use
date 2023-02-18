@@ -89,7 +89,7 @@ if (body) {
         case /^https?:\/\/app\.bilibili\.com\/x\/resource\/top\/activity/.test($request.url):
             try {
                 let v = JSON.parse(body);
-                v.data && (v.data.hash = "ddgksf2013", v.data.online.icon = ""), body = JSON.stringify(v)
+                v.data && (v.data.hash = "9453", v.data.online.icon = ""), body = JSON.stringify(v)
             } catch (_) {
                 console.log("bilibili right corner:" + _)
             }
