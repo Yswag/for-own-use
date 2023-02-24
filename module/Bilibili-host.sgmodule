@@ -5,8 +5,6 @@
 force-http-engine-hosts =  %APPEND% upos*:0,cn*.bilivideo.com
 
 [Rule]
-IP-CIDR,43.132.81.19/32,REJECT,notification-text="米阿內米阿內哈幾麻"
-IP-CIDR,192.169.122.226/32,REJECT,notification-text="米阿內米阿內哈幾麻"
 OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bilivideo.c))), (DOMAIN-SUFFIX,szbdyd.com), (DEST-PORT,4480)), REJECT-NO-DROP,notification-text="已禁用b站垃圾cdn" // 禁用b站垃圾cdn
 
 [URL Rewrite]
@@ -19,7 +17,7 @@ cn.*bilivideo.com - reject
 #i?.hdslb.com = 210.61.207.134
 *bilibili.com = 164.52.33.178
 #upos-sz-staticcos-cmask.bilivideo.com = 61.54.7.252
-upos-sz-mirrorcosov.bilivideo.com = 1.9.250.39
+upos-sz-mirrorcosov.bilivideo.com = 203.205.136.140
 #upos-hz-mirrorakam.akamaized.net = 104.116.243.154
 
 [MITM]
