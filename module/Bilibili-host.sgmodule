@@ -1,9 +1,6 @@
 #!name=Bilibili
 #!desc=實驗一下
 
-[General]
-force-http-engine-hosts =  %APPEND% upos*:0,cn*.bilivideo.com
-
 [Rule]
 OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bilivideo.c))), (DOMAIN-SUFFIX,szbdyd.com), (DEST-PORT,4480)), REJECT-NO-DROP,notification-text="已禁用b站垃圾cdn" // 禁用b站垃圾cdn
 
@@ -19,4 +16,4 @@ cn.*bilivideo.com - reject
 upos-sz-mirrorcosov.bilivideo.com = 203.205.136.140
 
 [MITM]
-hostname = %APPEND% upos-hz-mirrorakam.akamaized.net,upos-sz-mirrorcos.bilivideo.com,upos-sz-mirrorcosov.bilivideo.com,upos-sz-staticcos-cmask.bilivideo.com,cn*.bilivideo.com
+hostname = %APPEND% upos-sz-mirrorcosov.bilivideo.com,upos-hz-mirrorakam.akamaized.net,upos-sz-staticcos-cmask.bilivideo.com,cn*.bilivideo.com
