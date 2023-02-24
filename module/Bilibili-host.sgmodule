@@ -1,6 +1,9 @@
 #!name=Bilibili
 #!desc=實驗一下
 
+[General]
+force-http-engine-hosts =  %APPEND% upos*:0,cn*.bilivideo.com
+
 [Rule]
 OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bilivideo.c))), (DOMAIN-SUFFIX,szbdyd.com), (DEST-PORT,4480)), REJECT-NO-DROP,notification-text="已禁用b站垃圾cdn" // 禁用b站垃圾cdn
 
