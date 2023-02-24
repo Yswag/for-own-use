@@ -14,11 +14,9 @@ cn.*bilivideo.com - reject
 ^https?:\/\/upos-sz-staticcos-cmask\.bilivideo\.com\/(.*) https://upos-sz-mirrorcosov.bilivideo.com/$1 302
 
 [Host]
-#i?.hdslb.com = 210.61.207.134
-*bilibili.com = 164.52.33.178
-#upos-sz-staticcos-cmask.bilivideo.com = 61.54.7.252
+#i?.hdslb.com = 210.61.207.134,45.116.83.9,163.171.193.139
+*bilibili.com = 118.193.16.42,118.193.23.2,164.52.33.178
 upos-sz-mirrorcosov.bilivideo.com = 203.205.136.140
-#upos-hz-mirrorakam.akamaized.net = 104.116.243.154
 
 [MITM]
 hostname = %APPEND% upos-hz-mirrorakam.akamaized.net,upos-sz-mirrorcos.bilivideo.com,upos-sz-mirrorcosov.bilivideo.com,upos-sz-staticcos-cmask.bilivideo.com,cn*.bilivideo.com
