@@ -36,8 +36,8 @@ if (body) {
             break;
         case /^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/tab/.test($request.url):
             try {
-          const tabList = new Set([39, 40, 41, 545, 151, 442, 99, 100, 101, 554, 556, 1049, 801, 1050, 1271, 1272]);
-          const tabNameList = new Set(["直播", "推薦", "IVE", "LESSERAFIM", "韓綜", "動畫", "STAYC"]);
+          const tabList = new Set([2036, 2037, 774, 801]);
+          const tabNameList = new Set(["直播", "推薦", "韓綜", "動畫"]);
           const topList = new Set([176]);
           const bottomList = new Set([177, 178, 179, 181, 690, 102, 103, 104, 105, 106]);
           let obj = JSON.parse(body);
@@ -45,6 +45,32 @@ if (body) {
             let tab = obj["data"]["tab"].filter((e) => {
               return tabNameList.has(e.name) || tabList.has(e.id);
             });
+            let newTab = [
+                {
+                 "id": 1050,
+                 "icon": "http:\/\/i0.hdslb.com\/bfs\/archive\/38d2c2669a68eae8a53fc9afaa193aafa5265a78.png",
+                 "tab_id": "ive",
+                 "name": "IVE",
+                 "uri": "bilibili:\/\/pegasus\/vertical\/168073",
+                 "pos": 3
+                },
+                {
+                 "id": 1272,
+                 "icon": "http:\/\/i0.hdslb.com\/bfs\/archive\/38d2c2669a68eae8a53fc9afaa193aafa5265a78.png",
+                 "tab_id": "stayc",
+                 "name": "STAYC",
+                 "uri": "bilibili:\/\/pegasus\/vertical\/16961522",
+                 "pos": 4
+                },
+                {
+                 "id": 1271,
+                 "icon": "http:\/\/i0.hdslb.com\/bfs\/archive\/38d2c2669a68eae8a53fc9afaa193aafa5265a78.png",
+                 "tab_id": "le",
+                 "name": "LESSERAFIM",
+                 "uri": "bilibili:\/\/pegasus\/vertical\/25270553",
+                 "pos": 5
+                }];
+            tab.splice(2, 0, ...newTab);
             obj["data"]["tab"] = tab;
           }
           if (obj["data"]["top"]) {
