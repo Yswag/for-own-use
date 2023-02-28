@@ -96,7 +96,7 @@ if (body) {
                     f = new Set([396, 397, 398, 399, 410, 425, 426, 427, 428, 430, 432, 433, 434, 494, 495, 496, 497, 500, 501]);
                 u.data.sections_v2.forEach((t, i) => {
                     let a = t.items.filter(t => f.has(t.id));
-                    u.data.sections_v2[i].items = a, u.data.sections_v2[i].button = {}, delete u.data.sections_v2[i].be_up_title, delete u.data.sections_v2[i].tip_icon, delete u.data.sections_v2[i].tip_title, "创作中心" && "推薦服務" == u.data.sections_v2[i].title && (delete u.data.sections_v2[i].title, delete u.data.sections_v2[i].type)
+                    u.data.sections_v2[i].items = a, u.data.sections_v2[i].button = {}, delete u.data.sections_v2[i].be_up_title, delete u.data.sections_v2[i].tip_icon, delete u.data.sections_v2[i].up_title,delete u.data.sections_v2[i].tip_title, "創作中心" == u.data.sections_v2[i].title && (delete u.data.sections_v2[i].title, delete u.data.sections_v2[i].type),"推薦服務" == u.data.sections_v2[i].title && (delete u.data.sections_v2[i].title, delete u.data.sections_v2[i].type)
                 }), delete u.data.vip_section_v2, delete u.data.vip_section, u.data.hasOwnProperty("live_tip") && (u.data.live_tip = {}), u.data.hasOwnProperty("answer") && (u.data.answer = {}), u.data.vip_type = 2, u.data.vip.type = 2, u.data.vip.status = 1, u.data.vip.vip_pay_type = 1, u.data.vip.due_date = 4669824160, body = JSON.stringify(u)
             } catch (h) {
                 console.log("bilibili mypage:" + h)
