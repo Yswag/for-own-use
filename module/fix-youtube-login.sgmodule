@@ -1,0 +1,8 @@
+#!name=Youtube login
+#!desc=解決 uyou,cercube 等無法登入的問題
+
+[Script]
+fix-youtube-login = type=http-request,pattern=^https:\/\/accounts\.google\.com\/embedded\/setup\/v2\/safarivc,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/fix-youtube-login.js
+
+[MITM]
+hostname = %APPEND% accounts.google.com
