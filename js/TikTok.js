@@ -51,6 +51,8 @@ function video_lists(lists) {
     lists.status.reviewed = 1;
     lists.video_control.allow_download = true;
     lists.video_control.prevent_download_type = 0;
+    lists.video_control.show_progress_bar = 1;
+    lists.video_control.draft_progress_bar = 1;
     delete lists.video.misc_download_addrs;
     lists.video.download_addr = lists.video.play_addr;
     lists.video.download_suffix_logo_addr = lists.video.play_addr;
