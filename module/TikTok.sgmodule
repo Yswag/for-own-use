@@ -1,5 +1,5 @@
 #!name=TikTok
-#!desc=新版TikTok禁止MITM,需先降為21.1.0
+#!desc=新版 TikTok 禁止 MITM ,需先降為21.1.0
 
 [Rule]
 DOMAIN,p16-tiktokcdn-com.akamaized.net,TikTok
