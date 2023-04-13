@@ -92,12 +92,42 @@ if (body) {
             break;
         case /^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/mine/.test($request.url):
             try {
-                let u = JSON.parse(body),
+                let obj = JSON.parse(body),
                     f = new Set([396, 397, 398, 399, 410, 425, 426, 427, 428, 430, 432, 433, 434, 494, 495, 496, 497, 500, 501]);
-                u.data.sections_v2.forEach((t, i) => {
-                    let a = t.items.filter(t => f.has(t.id));
-                    u.data.sections_v2[i].items = a, u.data.sections_v2[i].button = {}, delete u.data.sections_v2[i].be_up_title, delete u.data.sections_v2[i].tip_icon, delete u.data.sections_v2[i].up_title,delete u.data.sections_v2[i].tip_title, "創作中心" == u.data.sections_v2[i].title && (delete u.data.sections_v2[i].title, delete u.data.sections_v2[i].type),"推薦服務" == u.data.sections_v2[i].title && (delete u.data.sections_v2[i].title, delete u.data.sections_v2[i].type)
-                }), delete u.data.vip_section_v2, delete u.data.vip_section, u.data.hasOwnProperty("live_tip") && (u.data.live_tip = {}), u.data.hasOwnProperty("answer") && (u.data.answer = {}), u.data.vip_type = 2, u.data.vip.type = 2, u.data.vip.status = 1, u.data.vip.vip_pay_type = 1, u.data.vip.due_date = 4669824160, body = JSON.stringify(u)
+                if (obj.data?.sections_v2) {
+                  obj.data.sections_v2.forEach((element, index) => {
+                    let items = element.items.filter((e) => f.has(e.id));
+                    obj.data.sections_v2[index].button = {};
+                    obj.data.sections_v2[index].tip_icon = "";
+                    obj.data.sections_v2[index].be_up_title = "";
+                    obj.data.sections_v2[index].tip_title = "";
+                    if (
+                      obj.data.sections_v2[index].title === "推荐服务" ||
+                      obj.data.sections_v2[index].title === "更多服务" ||
+                      obj.data.sections_v2[index].title === "创作中心"
+                    ) {
+                      obj.data.sections_v2[index].title = "";
+                      obj.data.sections_v2[index].type = "";
+                    }
+
+                    obj.data.sections_v2[index].items = items;
+                    obj.data.vip_section_v2 = "";
+                    obj.data.vip_section = "";
+                    obj.data.live_tip = "";
+                    obj.data.answer = "";
+
+                    if (obj.data.vip.status) {
+                      return false;
+                    } else {
+                        obj.data.vip_type = 2;
+                        obj.data.vip.type = 2;
+                        obj.data.vip.status = 1;
+                        obj.data.vip.vip_pay_type = 1;
+                        obj.data.vip.due_date = 2208960000; // Unix 时间戳 2040-01-01 00:00:00
+                    }
+                  });
+                }
+                body = JSON.stringify(obj);
             } catch (h) {
                 console.log("bilibili mypage:" + h)
             }

@@ -1,0 +1,31 @@
+#!name=Safari Search Add-ons
+#!desc=須將預設搜尋引擎改為Duckduckgo
+
+[URL Rewrite]
+# DeepL 翻譯為中文 觸發詞: dl DeepL
+^https:\/\/duckduckgo\.com\/\?q=(?i:dl|DeepL)\+([^&]+)&.+ https://www.deepl.com/translator#../zh/$1 302
+^https:\/\/duckduckgo\.com\/\?q=(.+)\+(?i:dl|DeepL)&.+ https://www.deepl.com/translator#../zh/$1 302
+# DeepL 翻譯為英語 觸發詞: dle dlen
+^https:\/\/duckduckgo\.com\/\?q=(?i:dlen?)\+([^&]+)&.+ https://www.deepl.com/translator#../en/$1 302
+^https:\/\/duckduckgo\.com\/\?q=(.+)\+(?i:dlen?)&.+ https://www.deepl.com/translator#../en/$1 302
+# wk xxx/xxx wk (搜尋wiki)
+^https:\/\/duckduckgo.com\/\?q=wk\+([^&]+).+ https://zh.wikipedia.org/wiki/$1 302
+^https:\/\/duckduckgo.com\/\?q=([^+]+)\+wk.+ https://zh.wikipedia.org/wiki/$1 302
+# trc xxx/xxx trc (Google翻譯成繁體中文)
+^https:\/\/duckduckgo.com\/\?q=([^+]+)\+trc.+ https://translate.google.com/#view=home&op=translate&sl=auto&tl=zh-TW&text=$1 302
+^https:\/\/duckduckgo.com\/\?q=trc\+([^&]+).+ https://translate.google.com/#view=home&op=translate&sl=auto&tl=zh-TW&text=$1 302
+# tw (App store台區)
+^https:\/\/duckduckgo.com\/\?q=tw&.+ https://itunes.apple.com/WebObjects/MZStore.woa/wa/resetAndRedirect?dsf=143470&mt=8&url=/WebObjects/MZStore.woa/wa/viewSoftware?mt=8&id=1108187390&cc=tw&urlDesc= 302
+# us (App store美區)
+^https:\/\/duckduckgo.com\/\?q=us&.+ https://itunes.apple.com/WebObjects/MZStore.woa/wa/resetAndRedirect?dsf=143441&mt=8&url=/WebObjects/MZStore.woa/wa/viewSoftware?mt=8&id=1108187390&cc=us&urlDesc= 302
+# jp (App store日區)
+^https:\/\/duckduckgo.com\/\?q=jp&.+ https://itunes.apple.com/WebObjects/MZStore.woa/wa/resetAndRedirect?dsf=143462&mt=8&url=/WebObjects/MZStore.woa/wa/viewSoftware?mt=8&id=1108187390&cc=jp&urlDesc= 302
+# kr (App store韓區)
+^https:\/\/duckduckgo.com\/\?q=kr&.+ https://itunes.apple.com/WebObjects/MZStore.woa/wa/resetAndRedirect?dsf=143466&mt=8&url=/WebObjects/MZStore.woa/wa/viewSoftware?mt=8&id=1108187390&cc=kr&urlDesc= 302
+# tr (App store土區)
+^https:\/\/duckduckgo.com\/\?q=tr&.+ https://itunes.apple.com/WebObjects/MZStore.woa/wa/resetAndRedirect?dsf=143480&mt=8&url=/WebObjects/MZStore.woa/wa/viewSoftware?mt=8&id=1108187390&cc=tr&urlDesc= 302
+# 預設Google搜尋
+^https:\/\/duckduckgo.com\/\?q=([^&]+).+ https://www.google.com/search?q=$1 302
+
+[MITM]
+hostname = %APPEND% duckduckgo.com

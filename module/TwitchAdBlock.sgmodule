@@ -1,0 +1,9 @@
+#!name=Twitch去廣告
+#!desc=Avoid Twitch ads by grabbing video playlists from Russia
+# Proxy servers 來由 @TTV-LOL, @AlyoshaVasilieva
+
+[Script]
+Twitch去廣告 = type=http-request,pattern=https://usher.ttvnw.net/api/channel/hls,requires-body=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/twitchAdBlock.js,script-update-interval=0
+
+[MITM]
+hostname = %APPEND% usher.ttvnw.net, api.ttv.lol, eu.luminous.dev

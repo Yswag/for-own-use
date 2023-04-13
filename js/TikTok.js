@@ -1,16 +1,14 @@
-/*
-Tartarus2014
-*/
-var watermark = (data) => {
+var watermark = body => {
     try {
-        let body = JSON.parse(data);
-        if (body.data) body.data = Follow(body.data);
-        if (body.aweme_list) body.aweme_list = Feed(body.aweme_list);
-        if (body.aweme_detail) body.aweme_detail = Share(body.aweme_detail);
-        if (body.aweme_details) body.aweme_details = Feed(body.aweme_details);
-        $done({ body: JSON.stringify(body) });
+        body.replace(/\"room_id\":(\d{2,})/g, '"room_id":"$1"');
+        let obj = JSON.parse(body);
+        if (obj.data) obj.data = Follow(obj.data);
+        if (obj.aweme_list) obj.aweme_list = Feed(obj.aweme_list);
+        if (obj.aweme_detail) obj.aweme_detail = Share(obj.aweme_detail);
+        if (obj.aweme_details) obj.aweme_details = Feed(obj.aweme_details);
+        $done({ body: JSON.stringify(obj) });
 } catch (err) {
-        console.log("替換異常\n" + err);
+        console.log("替換錯誤：" + err);
         $done({});
     }
 }
