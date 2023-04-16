@@ -7,7 +7,7 @@ force-http-engine-hosts =  %APPEND% upos*:0,cn*.bilivideo.com,203.107.1.*:80
 [Rule]
 DOMAIN,cm.bilibili.com,REJECT
 DOMAIN,httpdns.bilivideo.com,REJECT
-OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bilivideo.c))), (DOMAIN-SUFFIX,szbdyd.com), (DEST-PORT,4480)), REJECT-NO-DROP // 禁用b站垃圾cdn
+OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bilivideo.c))), (DOMAIN-SUFFIX,szbdyd.com), (DEST-PORT,4480)), REJECT-NO-DROP
 
 [URL Rewrite]
 # block httpdns
@@ -25,7 +25,8 @@ OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bi
 ^https?:\/\/upos-sz-mirroraliov\.bilivideo\.com\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
 
 [Script]
-bilibili-json = type=http-response, pattern=^https?:\/\/(api|app|api\.live)\.bili(bili|api)\.(com|net)\/(x|pgc|xlive)\/(resource|v2|page|app-interface|app-room)\/(show|top|splash|account|search|feed|cinema|v2\/index|v1\/index)\/(activity|list|myinfo|mine|square|index|tab|feed|getInfoByRoom), requires-body=true, max-size=0, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/bilibili-json.js, script-update-interval=0
+# Modified from @app2smile
+bilibili-json = type=http-response, pattern=^https?:\/\/app\.bilibili\.com\/x\/(v2|resource)\/(feed|account|search|splash|show|top)\/(index|index\/story|mine|teenagers\/status|myinfo|square|list|tab\/v2|activity)\?, requires-body=true, max-size=0, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/bilibili-json.js, script-update-interval=0
 bilibili-proto = type=http-response,pattern=^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.(view\.v1\.View\/View|dynamic\.v2\.Dynamic\/DynAll|playurl\.v1\.PlayURL\/PlayView)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/bilibili-proto.js,script-update-interval=0
 bilibili-字幕簡轉繁 = type=http-response,pattern=^https:\/\/aisubtitle\.hdslb\.com\/bfs\/subtitle\/.+\.json,requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Bilibili_cc.js,script-update-interval=0
 
@@ -40,12 +41,12 @@ bilibili-字幕簡轉繁 = type=http-response,pattern=^https:\/\/aisubtitle\.hds
 ^https?:\/\/grpc\.biliapi\.net\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$ data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
 
 [Host]
-*.bilibili.com = server:syslib // BiliBili
-*.biliapi.com = server:syslib // BiliBili API
-*.biliapi.net = server:syslib // BiliBili API
-*.bilicdn?.com = server:syslib // BiliBili CDN
-*.hdslb.com = server:syslib // BiliBili 靜態資源
-*.hdslb.net = server:syslib // BiliBili 靜態資源
+*.bilibili.com = server:syslib
+*.biliapi.com = server:syslib
+*.biliapi.net = server:syslib
+*.bilicdn?.com = server:syslib
+*.hdslb.com = server:syslib
+*.hdslb.net = server:syslib
 
 [MITM]
-hostname = %APPEND% *.bilibili.com, aisubtitle.hdslb.com, grpc.biliapi.net, -broadcast.chat.bilibili.com, -*cdn*.biliapi.net, -*tracker*.biliapi.net
+hostname = %APPEND% app.bilibili.com, aisubtitle.hdslb.com, grpc.biliapi.net, -broadcast.chat.bilibili.com, -*cdn*.biliapi.net, -*tracker*.biliapi.net
