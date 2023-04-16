@@ -49,4 +49,4 @@ bilibili-字幕簡轉繁 = type=http-response,pattern=^https:\/\/aisubtitle\.hds
 *.hdslb.net = server:syslib
 
 [MITM]
-hostname = %APPEND% app.bilibili.com, aisubtitle.hdslb.com, grpc.biliapi.net, -broadcast.chat.bilibili.com, -*cdn*.biliapi.net, -*tracker*.biliapi.net
+hostname = %APPEND% ap*.bilibili.com, aisubtitle.hdslb.com, grpc.biliapi.net, api.live.bilibili.com
