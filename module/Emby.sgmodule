@@ -1,7 +1,7 @@
 #!name=Emby Plugin
 #!desc=Emby 官方客戶端內調用外部播放器，Web新增下載選項
 # 原作者 @renzhipengBot, @AppleArcade
-# 此版本僅做學習用途
+# 此版本僅做學習用途，不保證可用性
 # 1. Emby 官方 iOS/macOS 客戶端播放權限解鎖；2. 瀏覽器中下載影片或外掛字幕 ( 如果影片有外掛字幕且選中，則下載外掛字幕文件，否則下載影片文件 )、使用 Shu 下載 ( 如果影片有外掛字幕，則下載全部外掛字幕 )、使用 iOS 版 VLC 下載 ( 如果影片有外掛字幕且選中，則下載外掛字幕文件，否則下載影片文件 )、使用 iOS 版 nPlayer 播放 ( 不支持外掛字幕 )、使用 VLC 播放 ( 支持選中的外掛字幕 )、使用 iOS 和 macOS 版 Infuse 播放 ( 不支持外掛字幕 )。
 # 地址是 HTTPS 的Emby server，需自行在 MitM 里添加域名。Surge 需要開啓 「用於 TCP 連接」 的 HTTPS 解密。Surge macOS 需開啓 「增強模式」。
 
