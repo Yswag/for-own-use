@@ -26,7 +26,7 @@ OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bi
 
 [Script]
 # Modified from @app2smile
-bilibili-json = type=http-response, pattern=^https?:\/\/app\.bilibili\.com\/x\/(v2|resource)\/(feed|account|search|splash|show|top)\/(index|index\/story|mine|teenagers\/status|myinfo|square|list|tab\/v2|activity)\?, requires-body=true, max-size=0, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/bilibili-json.js, script-update-interval=0
+bilibili-json = type=http-response, pattern=^https?:\/\/app\.bilibili\.com\/x\/(v2|resource)\/(feed|account|search|splash|show|top)\/(index|index\/story|mine|myinfo|square|list|tab\/v2|activity)\?, requires-body=true, max-size=0, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/bilibili-json.js, script-update-interval=0
 bilibili-proto = type=http-response,pattern=^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.(view\.v1\.View\/View|dynamic\.v2\.Dynamic\/DynAll|playurl\.v1\.PlayURL\/PlayView)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/bilibili-proto.js,script-update-interval=0
 bilibili-字幕簡轉繁 = type=http-response,pattern=^https:\/\/aisubtitle\.hdslb\.com\/bfs\/subtitle\/.+\.json,requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Bilibili_cc.js,script-update-interval=0
 
