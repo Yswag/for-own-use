@@ -23,7 +23,7 @@ if(requestURL.indexOf(addLink) != -1){  // 添加外部播放器連結
       let fileName = item['Path'] ? item['Path'].substring(item['Path'].lastIndexOf('/') + 1) : obj.Name;
       let videoUrl = host + '/Videos/'+ obj.Id +'/stream/' + encodeURIComponent(fileName) + '?MediaSourceId='+ item.Id +'&Static=true&api_key='+ query['X-Emby-Token'] + '&filename=' + encodeURIComponent(fileName);
       let shuInfo = [{
-        'header': header,
+        'headers': header,
         'url': videoUrl,
         'name': fileName,
         'suspend': false,
@@ -44,7 +44,7 @@ if(requestURL.indexOf(addLink) != -1){  // 添加外部播放器連結
         if(t['Type'] === 'Subtitle' && t['IsExternal'] && t['Path']){
         let subtitleFileName = t['Path'].substring(t['Path'].lastIndexOf('/') + 1)
           shuInfo.push({
-            'header': header,
+            'headers': header,
             'url': host + '/Videos/'+ obj.Id +'/' + item.Id + '/Subtitles/' + t['Index'] + '/Stream.' + t['Codec'] + '/' + encodeURIComponent(subtitleFileName) + '?api_key=' + query['X-Emby-Token'] + '&filename=' + encodeURIComponent(subtitleFileName),
             'name': subtitleFileName,
             'suspend': false,
