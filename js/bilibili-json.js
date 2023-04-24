@@ -75,7 +75,7 @@ if (url.includes("x/resource/top/activity")) {
 			$notification.post(notifyTitle, "tab", "top字段錯誤");
 		} else {
 			body.data.top = body.data.top.filter((item) => {
-				if (item.name === "游戏中心") {
+				if (item.name === "游戏中心" || item.name === "遊戲中心") {
 					// console.log("去除右上角遊戲中心");
 					return false;
 				}
