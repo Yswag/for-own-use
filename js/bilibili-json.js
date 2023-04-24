@@ -129,8 +129,8 @@ if (url.includes("x/resource/top/activity")) {
 			$notification.post(notifyTitle, "tab", "bottom字段錯誤");
 		} else {
 			body.data.bottom = body.data.bottom.filter((item) => {
-				if (item.name === "发布") {
-					// console.log("去除發布");
+				if (item.name === "发布"|"發佈") {
+					// console.log("去除發佈按鈕");
 					return false;
 				} else if (item.name === "会员购") {
 					// console.log("去除會員購");
