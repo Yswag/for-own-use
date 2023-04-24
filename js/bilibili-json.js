@@ -43,8 +43,11 @@ if (url.includes("x/resource/top/activity")) {
 				body.data.sections_v2[index].tip_title = "";
 				if (
 					body.data.sections_v2[index].title === "推荐服务" ||
+					body.data.sections_v2[index].title === "推薦服務" ||
 					body.data.sections_v2[index].title === "更多服务" ||
-					body.data.sections_v2[index].title === "创作中心"
+					body.data.sections_v2[index].title === "更多服務" ||
+					body.data.sections_v2[index].title === "创作中心" ||
+					body.data.sections_v2[index].title === "創作中心"
 				) {
 					body.data.sections_v2[index].title = "";
 					body.data.sections_v2[index].type = "";
