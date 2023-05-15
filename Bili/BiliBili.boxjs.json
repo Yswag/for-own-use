@@ -92,6 +92,10 @@
 							"label": "數碼"
 						},
 						{
+						    "key": "kpop",
+						    "label": "kpop"
+						},
+						{
 						    "key": "ive",
 						    "label": "IVE"
 						},
@@ -102,6 +106,10 @@
 						{
 						    "key": "le",
 						    "label": "LESSERAFIM"
+						},
+						{
+						    "key": "gidle"
+						    "label": "(G)I-DLE"
 						},
 						{
 							"key": "165",
@@ -178,6 +186,10 @@
 							"label": "數碼"
 						},
 						{
+						    "key": "kpop"
+						    "label": "kpop"
+						},
+						{
 						    "key": "ive",
 						    "label": "IVE"
 						},
@@ -188,6 +200,10 @@
 						{
 						    "key": "le",
 						    "label": "LESSERAFIM"
+						},
+						{
+						    "key": "gidle"
+						    "label": "(G)I-DLE"
 						},
 						{
 							"key": "165",
