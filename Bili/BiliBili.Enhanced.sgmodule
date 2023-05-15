@@ -1,16 +1,54 @@
 #!name=📺 BiliBili: ⚙ Enhanced
-#!desc=嗶哩嗶哩：增強模式（功能增強及UI自定義）
-#!openUrl=http://boxjs.com/#/app/BiliBili.Enhanced
-#!author=VirgilClyne
-#!homepage=https://enhanced.biliuniverse.io
-#!manual=https://manual.biliuniverse.io
-#!icon=https://github.com/BiliUniverse/Enhanced/raw/main/database/icon_108x.png
+#!desc=嗶哩嗶哩UI自定義及去廣告
+#!references=VirgilClyne、app2smile、RuCu6,ClydeTime
+
+[Rule]
+DOMAIN,cm.bilibili.com,REJECT
+DOMAIN,httpdns.bilivideo.com,REJECT
+OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bilivideo.c))), (DOMAIN-SUFFIX,szbdyd.com), (DEST-PORT,4480)), REJECT-NO-DROP // 禁用b站垃圾cdn
+
+[URL Rewrite]
+# block httpdns
+^http:\/\/203\.107\.1\.65\/\d+\/resolve - reject
+^http:\/\/203\.107\.1\.66\/\d+\/resolve - reject
+^http:\/\/203\.107\.1\.33\/\d+\/resolve - reject
+^http:\/\/203\.107\.1\.34\/\d+\/resolve - reject
+# Reject IP 請求
+#^https?:\/\/app\.bilibili\.com\/x\/resource\/ip - reject
+# 去除DefaultWords
+^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$ - reject
+# UposRedirect
+#^https?:\/\/upos-hz-mirrorakam\.akamaized\.net\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
+#^https?:\/\/upos-sz-staticcos-cmask\.bilivideo\.com\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
+#^https?:\/\/upos-sz-mirroraliov\.bilivideo\.com\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
+
+[Map Local]
+# 去除搜索中的大家都在搜
+^https?:\/\/api\.vc\.bilibili\.com\/search_svr\/v\d\/Search\/recommend_words data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
+# 去除動態中的話題
+^https?:\/\/api\.vc\.bilibili\.com\/topic_svr\/v1\/topic_svr data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
+# 去除動態中的最常訪問
+^https?:\/\/api\.vc\.bilibili\.com\/dynamic_svr\/v1\/dynamic_svr\/mix_uplist data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
+# 可能的一些推廣(beta)
+^https?:\/\/api\.bili(bili\.com|api\.net)\/pgc\/season\/app\/related\/recommend\? data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
+# BiliBili漫畫去廣告
+^https?:\/\/manga\.bilibili\.com\/twirp\/comic\.v\d\.Comic\/Flash data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
+^https?:\/\/manga\.bilibili\.com\/twirp\/comic\.v\d\.Comic\/ListFlash data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
+^https:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v1\/ecommerce-user\/get_shopping_info\? data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
 
 [Script]
 BiliBili.Enhanced.x.resource.show.tab.v2 = type=http-response, pattern=^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/resource\/show\/tab\/v2(\?.+)?$, requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.Enhanced.response.js, argument=
 BiliBili.Enhanced.x.v2.account.mine = type=http-response, pattern=^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/account\/mine(\?.+)?$, requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.Enhanced.response.js, argument=
 BiliBili.Enhanced.x.v2.region.index = type=http-response, pattern=^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/region\/index(\?.+)?$, requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.Enhanced.response.js, argument=
 BiliBili.Enhanced.x.v2.channel.region.list = type=http-response, pattern=^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/channel\/region\/list(\?.+)?$, requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.Enhanced.response.js, argument=
+BiliBili.Enhanced.右上角活動 = type=http-response, pattern=^https://app.bilibili.com/x/resource/top/activity, requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.Enhanced.response.js, argument=
+#去廣告
+BiliBili.AdBlock.response.json = type=http-response, pattern=^https?:\/\/api\.live\.bilibili\.com\/xlive\/app-room\/v1\/index\/getInfoByRoom, requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.ADBlock.response.js
+BiliBili.AdBlock.response.json = type=http-response, pattern=^https:\/\/api\.bili(bili\.com|api\.net)\/pgc\/page\/(bangumi|cinema\/tab\?), requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.ADBlock.response.js
+BiliBili.AdBlock.response.json = type=http-response, pattern=^https:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/(splash\/(brand\/list|event\/list2|list|show)|feed\/index(\/story)?), requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.ADBlock.response.js
+BiliBili.AdBlock.myinfo/square = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/v2\/(account|search)\/(square|myinfo), requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.ADBlock.response.js
+BiliBili.AdBlock.response.proto = type=http-response, pattern=^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.(view\.v1\.View\/View|dynamic\.v2\.Dynamic\/DynAll|playurl\.v1\.PlayURL\/PlayView)$, requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.ADBlock.response.js
+bilibili-字幕簡轉繁 = type=http-response,pattern=^https:\/\/aisubtitle\.hdslb\.com\/bfs\/subtitle\/.+\.json,requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Bilibili_cc.js,script-update-interval=0
 
 [MITM]
-hostname = %APPEND% app.bilibili.com, app.biliapi.net
+hostname = %APPEND% app.bilibili.com, app.biliapi.net, manga.bilibili.com, api.live.bilibili.com, api.vc.bilibili.com, api.bilibili.com, api.biliapi.net, grpc.biliapi.net, aisubtitle.hdslb.com
