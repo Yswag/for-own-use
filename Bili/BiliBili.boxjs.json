@@ -102,8 +102,9 @@
                     "id": "@BiliBili.Optional.Tab",
                     "name": "手動填入標籤頁",
                     "val": "",
-                    "type": "text",
+                    "type": "textarea",
                     "placeholder": "",
+                    "autoGrow": true,
                     "desc": ""
                 },
 				{
