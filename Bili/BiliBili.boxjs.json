@@ -14,6 +14,7 @@
 			],
 			"keys": [
 				"@BiliBili.Enhanced.Settings.Home",
+				"@BiliBili.Optional.Tab",
 				"@BiliBili.Enhanced.Caches"
 			],
 			"settings": [
@@ -97,6 +98,14 @@
 					],
 					"desc": "選擇啓用的首頁標籤頁，建議不超過7個"
 				},
+				{
+                    "id": "@BiliBili.Optional.Tab",
+                    "name": "手動填入標籤頁",
+                    "val": "",
+                    "type": "text",
+                    "placeholder": "",
+                    "desc": ""
+                },
 				{
 					"id": "@BiliBili.Enhanced.Settings.Home.Tab_default",
 					"name": "首頁: 默認標籤頁",
