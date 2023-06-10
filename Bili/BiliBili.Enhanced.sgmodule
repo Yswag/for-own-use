@@ -2,6 +2,9 @@
 #!desc=嗶哩嗶哩UI自定義及去廣告
 #!references=VirgilClyne、app2smile、RuCu6,ClydeTime
 
+[General]
+force-http-engine-hosts = upos*
+
 [Rule]
 DOMAIN,cm.bilibili.com,REJECT
 DOMAIN,httpdns.bilivideo.com,REJECT
@@ -18,9 +21,9 @@ OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bi
 # 去除DefaultWords
 ^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$ - reject
 # UposRedirect
-#^https?:\/\/upos-hz-mirrorakam\.akamaized\.net\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
-#^https?:\/\/upos-sz-staticcos-cmask\.bilivideo\.com\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
-#^https?:\/\/upos-sz-mirroraliov\.bilivideo\.com\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
+^https?:\/\/upos-hz-mirrorakam\.akamaized\.net\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
+^https?:\/\/upos-sz-staticcos-cmask\.bilivideo\.com\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
+^https?:\/\/upos-sz-mirroraliov\.bilivideo\.com\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
 
 [Map Local]
 # 去除搜索中的大家都在搜
