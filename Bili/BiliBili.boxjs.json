@@ -854,7 +854,7 @@
 				},
 				{
 					"id": "@BiliBili.ADBlock.Settings.Detail.activity",
-					"name": "[推薦]去除"活動大圖"",
+					"name": "[推薦]去除活動大圖",
 					"val": false,
 					"type": "boolean",
 					"desc": "是否啓用關閉廣告"
@@ -917,21 +917,21 @@
 				},
 				{
 					"id": "@BiliBili.ADBlock.Settings.Detail.Hot_search",
-					"name": "[搜索]去除"熱搜"",
+					"name": "[搜索]去除熱搜",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否啓用關閉廣告"
 				},
 				{
 					"id": "@BiliBili.ADBlock.Settings.Detail.Hot_topics",
-					"name": "[動態]去除"熱門話題"",
+					"name": "[動態]去除熱門話題",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否啓用關閉廣告"
 				},
 				{
 					"id": "@BiliBili.ADBlock.Settings.Detail.Most_visited",
-					"name": "[動態]去除"最常訪問"",
+					"name": "[動態]去除最常訪問",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否啓用關閉廣告"
