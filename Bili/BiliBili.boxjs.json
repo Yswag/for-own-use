@@ -819,6 +819,143 @@
 				"https://github.com/BiliUniverse/Global/raw/main/database/icon_circled_108x.png",
 				"https://github.com/BiliUniverse/Global/raw/main/database/icon_circled_108x.png"
 			]
-		}
+		},
+		{
+			"id": "BiliBili.ADBlock.Detail",
+			"name": "📺 BiliBili: 🛡️ ADBlock",
+			"descs_html":[
+				"填寫完成後記得點擊此頁面底端右下角的\"保存\"。"
+			],
+			"keys":[
+				"@BiliBili.ADBlock.Settings.Detail",
+				"@BiliBili.ADBlock.Caches"
+			],
+			"settings":[
+				{
+					"id": "@BiliBili.ADBlock.Settings.Switch",
+					"name": "總功能開關",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用此修改"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.splash",
+					"name": "[開屏]去廣告",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.feed",
+					"name": "[推薦]去廣告",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.activity",
+					"name": "[推薦]去除"活動大圖"",
+					"val": false,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.story",
+					"name": "[首頁]去除短影片廣告",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.cinema",
+					"name": "[番劇電影]去除廣告",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.view",
+					"name": "[用戶投稿]去除影片廣告",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.search",
+					"name": "[搜尋]去除廣告",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.commandDms",
+					"name": "[彈幕]去除交互式彈幕",
+					"val": false,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.colorfulDms",
+					"name": "[彈幕]替換大會員彈幕",
+					"val": false,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.MainList",
+					"name": "[評論區]去除廣告",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.xlive",
+					"name": "[直播]去除廣告",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.Hot_search",
+					"name": "[搜索]去除"熱搜"",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.Hot_topics",
+					"name": "[動態]去除"熱門話題"",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.Most_visited",
+					"name": "[動態]去除"最常訪問"",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.Dynamic_adcard",
+					"name": "[動態]去除廣告動態",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否啓用關閉廣告"
+				},
+				{
+					"id": "@BiliBili.ADBlock.Settings.Detail.blockUpLiveList",
+					"name": "[推薦]移除up主直播推廣",
+					"type": "text",
+					"desc": "填寫up主uid,以英文逗號隔開"
+				}
+			],
+			"author": "@BiliUniverse",
+			"repo": "https://github.com/BiliUniverse/ADBlock",
+			"icons":[
+				"https://github.com/BiliUniverse/ADBlock/raw/main/database/icon_circled_108x.png",
+				"https://github.com/BiliUniverse/ADBlock/raw/main/database/icon_circled_108x.png"
+			]
+		}	
 	]
 }
