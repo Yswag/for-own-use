@@ -62,4 +62,5 @@ BiliBili.ADBlock.response.grpc = type=http-response, pattern=^https:\/\/(grpc\.b
 bilibili-字幕簡轉繁 = type=http-response,pattern=^https:\/\/aisubtitle\.hdslb\.com\/bfs\/subtitle\/.+\.json,requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/Bilibili_cc.js,script-update-interval=0
 
 [MITM]
+h2 = true
 hostname = %APPEND% app.bilibili.com, app.biliapi.net, manga.bilibili.com, api.live.bilibili.com, api.vc.bilibili.com, api.bilibili.com, api.biliapi.net, grpc.biliapi.net, aisubtitle.hdslb.com
