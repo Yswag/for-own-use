@@ -215,18 +215,27 @@ const DataBase = {
 											break;
 									};
 									break;
-								case "x/v2/search/square": // 搜索页
-									switch (Settings?.Detail?.Hot_search) {
-										case true:
-										default:
-											body.data = body.data.filter((i) => !(i.type === "trending"));
-											$.log(`🎉 ${$.name}`, "搜索页热搜内容去除");
-											break;
-										case false:
-											$.log(`🚧 ${$.name}`, "用户设置搜索页热搜内容不去除");
-											break;
-									}
+								case "x/v2/account/myinfo":
+									body.data.vip.type = 2;
+									body.data.vip.status = 1;
+									body.data.vip.vip_pay_type = 1;
+									body.data.vip.due_date = 4669824160;
 									break;
+								case "x/v2/search/square":
+									body.data = body.data.filter((n) => n.type == "history");
+									break;
+								//case "x/v2/search/square": // 搜索页
+									//switch (Settings?.Detail?.Hot_search) {
+										//case true:
+										//default:
+											//body.data = body.data.filter((i) => !(i.type === "trending"));
+											//$.log(`🎉 ${$.name}`, "搜索页热搜内容去除");
+											//break;
+										//case false:
+											//$.log(`🚧 ${$.name}`, "用户设置搜索页热搜内容不去除");
+											//break;
+									//}
+									//break;
 							};
 							break;
 						case "api.bilibili.com":
