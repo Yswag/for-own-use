@@ -7,13 +7,13 @@ hostname = api.stats.fm
 */
 
 
-let data = JSON.parse($response.body);
-data.item.isPro = true;
-data.item.isPlus = true;
-data.item.hasSwipefy = true;
-data.item.displayName = "iwannaknow你行不行";
-data.item.customId = "kimgiwon_04";
-#data.item.profile.bio = "";
-#data.item.profile.theme = "pink";
-#data.item.image = "https:\/\/media.discordapp.net\/attachments\/1052344286676529152\/1100829429749530694\/b99069341754db48.png";
-$done({ body: JSON.stringify(data) });
+let body = JSON.parse($response.body);
+body.item.isPro = true;
+body.item.isPlus = true;
+body.item.hasSwipefy = true;
+body.item.displayName = "栗子";
+body.item.customId = "kimgiwon04";
+#body.item.profile.bio = "";
+#body.item.profile.theme = "pink";
+#body.item.image = "https:\/\/media.discordapp.net\/attachments\/1052344286676529152\/1100829429749530694\/b99069341754db48.png";
+$done({body:JSON.stringify(body)});
