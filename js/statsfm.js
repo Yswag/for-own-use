@@ -1,3 +1,12 @@
+/*
+[Script]
+statfm = type=http-response,pattern=^https?:\/\/api\.stats\.fm\/api\/v1\/me$,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/statsfm.js,script-update-interval=0
+
+[MITM]
+hostname = api.stats.fm
+*/
+
+
 let data = JSON.parse($response.body);
 data.item.isPro = true;
 data.item.isPlus = true;
