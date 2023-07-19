@@ -12,8 +12,4 @@ body.item.isPro = true;
 body.item.isPlus = true;
 body.item.hasSwipefy = true;
 body.item.displayName = "栗子";
-body.item.customId = "kimgiwon04";
-#body.item.profile.bio = "";
-#body.item.profile.theme = "pink";
-#body.item.image = "https:\/\/media.discordapp.net\/attachments\/1052344286676529152\/1100829429749530694\/b99069341754db48.png";
 $done({body:JSON.stringify(body)});
