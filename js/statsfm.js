@@ -15,5 +15,5 @@ data.item.displayName = "iwannaknow你行不行";
 data.item.customId = "kimgiwon_04";
 #data.item.profile.bio = "";
 #data.item.profile.theme = "pink";
-data.item.image = "https:\/\/media.discordapp.net\/attachments\/1052344286676529152\/1100829429749530694\/b99069341754db48.png";
+#data.item.image = "https:\/\/media.discordapp.net\/attachments\/1052344286676529152\/1100829429749530694\/b99069341754db48.png";
 $done({ body: JSON.stringify(data) });
