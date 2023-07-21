@@ -20,7 +20,7 @@ OR,((AND,((OR,((DOMAIN-KEYWORD,cn-), (DOMAIN-KEYWORD,mcdn))), (DOMAIN-KEYWORD,bi
 # Reject DefaultWords
 ^https?:\/\/(app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.app\.interface\.v1\.Search\/Default - reject
 # UposRedirect
-#^https?:\/\/upos-hz-mirrorakam\.akamaized\.net\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
+^https?:\/\/upos-hz-mirrorakam\.akamaized\.net\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
 #^https?:\/\/upos-sz-staticcos-cmask\.bilivideo\.com\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
 #^https?:\/\/upos-sz-mirroraliov\.bilivideo\.com\/(.*) http://upos-sz-mirrorcosov.bilivideo.com/$1 302
 
