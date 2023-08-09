@@ -541,7 +541,8 @@ const DataBase = {
 															if (data.cm?.sourceContent?.length) {
 																data.cm.sourceContent = [];
 																$.log(`🎉 ${$.name}`, "up主推荐广告去除");
-																$.msg(`🎉 ${$.name}`,"", "up主推荐广告去除");
+																//$.msg(`🎉 ${$.name}`,"", "up主推荐广告去除");
+																$.msg(`🎉`,"", "up主推薦廣告去除測試");
 															}
 															body = ViewReply.toBinary(data);
 															break;
