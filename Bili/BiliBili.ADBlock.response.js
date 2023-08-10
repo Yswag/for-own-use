@@ -78,13 +78,6 @@ const DataBase = {
 									switch (Settings?.Detail?.feed) {
 										case true:
 										default:
-											
-  												for (let i = 0; i < body.data.items.length; i++) {
-    													if (body.data.items[i].uri.includes("bilibili://story")) {
-      													body.data.items[i].uri = body.data.items[i].uri.replace("bilibili://story", "bilibili://video");
-												    }
-											 	}
-											
 											if (body.data.items?.length) {
 												let params = url?.params;//区分pad与phone
 												body.data.items = await Promise.all(body.data.items.map(async item => {
