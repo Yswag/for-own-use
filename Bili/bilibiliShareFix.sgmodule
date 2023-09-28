@@ -1,15 +1,8 @@
 #!name=bilibiliShareFix
 #!desc=將 分享->複製連結 裡的b23.tv轉換為b23.wtf處理過的原始連結
 
-[General]
-ipv6 = true
-ipv6-vif = auto
-
 [Script]
 bilibiliShareFix = type=http-response,pattern=https://api.(bilibili|biliapi).(com|net)/x/share/click,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/b23.js,script-update-interval=0
-
-[Host]
-b23.wtf = 2606:4700:3034::ac43:b3d7
 
 [MITM]
 hostname = %APPEND% api.bilibili.com, api.biliapi.net, api.biliapi.com
