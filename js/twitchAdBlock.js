@@ -3,25 +3,23 @@ const newURL = removeUrlParameter(removeUrlParameter(url, "token"), "sig"); // �
 // ttv lol 的 api 需要 Twitch token 才能看 vod
 const playlist = newURL.slice("https://usher.ttvnw.net/api/channel/hls/".length);
 
-$httpClient.get("https://api.ttv.lol/ping", function (error, response, data) {
+$httpClient.get("https://as.luminous.dev/ping", function (error, response, data) {
 	if (response.status != 200) {
-		$notification.post("Twitch去廣告", "", "ttv.lol伺服器異常，嘗試luminous.dev...");
-		$httpClient.get("https://as.luminous.dev/ping", function (error, response, data) {
+		$notification.post("Twitch去廣告", "", "伺服器異常，嘗試eu.luminous.dev...");
+		$httpClient.get("https://eu.luminous.dev/ping", function (error, response, data) {
 			if (response.status != 200) {
 				$notification.post("Twitch去廣告", "", "luminous.dev伺服器異常，返回原始連結");
 				$done({});
 			} else if (response.status === 200) {
-				let proxy = "https://as.luminous.dev/playlist/" + encodeURIComponent(playlist);
+				let proxy = "https://eu.luminous.dev/playlist/" + encodeURIComponent(playlist);
 				$done({ url: proxy });
 			}
 		});
 	} else if (response.status === 200) {
-		let proxy = "https://api.ttv.lol/playlist/" + encodeURIComponent(playlist);
+		let proxy = "https://as.luminous.dev/playlist/" + encodeURIComponent(playlist);
 		$done({
 			url: proxy,
-			headers: {
-				"X-Donate-To": "https://ttv.lol/donate",
-			},
+			
 		});
 	}
 });
