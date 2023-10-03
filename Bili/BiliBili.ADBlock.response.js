@@ -230,7 +230,7 @@ const DataBase = {
 									switch (Settings?.Detail?.Hot_search) {
 										case true:
 										default:
-											body.data = body.data.filter((i) => !(i.type === "trending") !(i.type === "recommend"));
+											body.data = body.data.filter((i) => !(i.type === "trending") && !(i.type === "recommend"));
 											$.log(`🎉 ${$.name}`, "搜索页热搜内容去除");
 											break;
 										case false:
