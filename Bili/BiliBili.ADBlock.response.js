@@ -84,6 +84,16 @@ const DataBase = {
 										case true:
 										default:
 											if (body.data.items?.length) {
+												body.data.items = await Promise.all(body.data.items.map(item => {
+													if (item.uri.includes("bilibili://story")) {
+														$.log("原uri:" + item.uri.slice(0,26));
+														item.uri = item.uri.replace("bilibili://story","bilibili://video");
+														$.log("修改後:" + item.uri.slice(0,26));
+													}
+													return item;
+												}));
+											}
+											if (body.data.items?.length) {
 												//区分pad与phone
 												body.data.items = await Promise.all(body.data.items.map(async item => {
 													const { card_type: cardType, card_goto: cardGoto } = item;
@@ -225,7 +235,7 @@ const DataBase = {
 									body.data.vip.status = 1;
 									body.data.vip.vip_pay_type = 1;
 									body.data.vip.due_date = 4669824160;
-									break;	
+									break;
 								case "x/v2/search/square": // 搜索页
 									switch (Settings?.Detail?.Hot_search) {
 										case true:
@@ -509,14 +519,6 @@ const DataBase = {
 																	delete data.tIcon[i];
 																}
 															}
-															data.tab.tabModule[0].tab.introduction.modules =data.tab.tabModule[0].tab.introduction.modules.map((i) => {
-																if (i.type === 28){
-																	i.data.relates.cards = i.data.relates.cards.filter((j) => j.relateCardType !== 5);
-																	$.log(`🎉 ${$.name}`, "視頻詳情下方推薦卡廣告去除");
-																}
-																return i;
-															}
-															);
 															body = ViewReply.toBinary(data);
 															break;
 														case false:
@@ -554,8 +556,15 @@ const DataBase = {
 															if (data.cm?.sourceContent?.length) {
 																data.cm.sourceContent = [];
 																$.log(`🎉 ${$.name}`, "up主推荐广告去除");
-																//$.msg(`🎉 ${$.name}`,"", "up主推荐广告去除");
 															}
+															data.tab.tabModule[0].tab.introduction.modules =data.tab.tabModule[0].tab.introduction.modules.map((i) => {
+																if (i.type === 28){
+																	i.data.relates.cards = i.data.relates.cards.filter((j) => j.relateCardType !== 5);
+																	$.log(`🎉 ${$.name}`, "视频详情下方推荐卡广告去除");
+																}
+																return i;
+															}
+															);
 															body = ViewReply.toBinary(data);
 															break;
 														case false:
