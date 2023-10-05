@@ -12,14 +12,21 @@ $httpClient.get("https://eu.luminous.dev/ping", function (error, response, data)
 				$done({});
 			} else if (response.status === 200) {
 				let proxy = "https://eu2.luminous.dev/playlist/" + encodeURIComponent(playlist);
-				$done({ url: proxy });
+				$done({
+					status: 302,
+					headers: {
+						Location: proxy,
+					},
+				});
 			}
 		});
 	} else if (response.status === 200) {
 		let proxy = "https://eu.luminous.dev/playlist/" + encodeURIComponent(playlist);
 		$done({
-			url: proxy,
-			
+			status: 302,
+			headers: {
+				Location: proxy,
+			},
 		});
 	}
 });
