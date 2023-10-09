@@ -5,7 +5,7 @@
 # 1、開啓 surge http-api
 # 2、打開"信息獲取"腳本後打開testflight app獲取信息，然後注釋該腳本
 # 3、手動在 surge 腳本編輯器里點擊左下角設置圖標，點擊 $persistentStore ，添加命名為"APP_ID"的持久化數據，數據key（內容）為tf鏈接 https://testflight.apple.com/join/DmPnijI5 的join後的字符串（也就是此例子的"DmPnijI5,xxx,xxx多條key用,隔開"）
-# 備注：使用此捷徑並配置指令內http-api後直接分享帶有TF連結的信息到該指令運行即可替代第三步驟 https://www.icloud.com/shortcuts/a91894f2580745ba9413b05b1825dda2
+# 備注：使用此捷徑並配置指令內http-api後直接分享帶有TF連結的信息到該指令運行即可替代第三步驟 https://www.icloud.com/shortcuts/bb308bf0e8da4c62a6f56632c2611745
 
 [Script]
 信息獲取 = type=http-request,pattern=^https:\/\/testflight\.apple\.com\/v3\/accounts/.*\/apps$,requires-body=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/tf_key.js
