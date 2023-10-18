@@ -6,7 +6,7 @@
 
 [Rule]
 # 禁用 YouTube QUIC
-AND,((PROTOCOL,UDP), (DOMAIN-SUFFIX,googlevideo.com)),REJECT-NO-DROP
+AND,((OR,((DOMAIN-SUFFIX,googlevideo.com), (DOMAIN-SUFFIX,googleapis.com))), (PROTOCOL,UDP)),REJECT-NO-DROP
 
 [Script]
 youtube = type=http-request,pattern=^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting)\?,requires-body=1,max-size=-1,binary-body-mode=1,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/youtube.js
