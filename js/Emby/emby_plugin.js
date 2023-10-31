@@ -21,7 +21,7 @@ if(requestURL.indexOf(addLink) != -1){  // 添加外部播放器連結
   if(obj.MediaSources){
     obj.MediaSources.forEach((item, index) => {
       let fileName = item['Path'] ? item['Path'].substring(item['Path'].lastIndexOf('/') + 1) : obj.Name;
-      let videoUrl = host + '/Videos/'+ obj.Id +'/stream/' + encodeURIComponent(fileName) + '?MediaSourceId='+ item.Id +'&Static=true&api_key='+ query['X-Emby-Token'] + '&filename=' + encodeURIComponent(fileName);
+      let videoUrl = host + '/emby/videos/'+ obj.Id +'/' + encodeURIComponent(fileName) + '?MediaSourceId='+ item.Id +'&Static=true&api_key='+ query['X-Emby-Token'] + '&filename=' + encodeURIComponent(fileName);
       let shuInfo = [{
         'headers': header,
         'url': videoUrl,
