@@ -3,13 +3,15 @@
 #!references=VirgilClyne、app2smile、RuCu6,ClydeTime
 
 [General]
-force-http-engine-hosts = upos*
+force-http-engine-hosts = %INSERT% upos*:0
 
 [Rule]
-DOMAIN,cm.bilibili.com,REJECT
+AND,((PROTOCOL,TCP), (DOMAIN-KEYWORD,upos,extended-matching)),REJECT
+DOMAIN,cm.bilibili.com,REJECT-DROP
 # block httpdns
-DOMAIN,httpdns.bilivideo.com,REJECT
-IP-CIDR,203.107.1.0/24,REJECT,no-resolve
+DOMAIN,httpdns.bilivideo.com,REJECT,extended-matching
+# google doh
+OR,((DOMAIN-KEYWORD,dns.google), (IP-CIDR,8.8.4.4/32,no-resolve), (IP-CIDR,8.8.8.8/32,no-resolve)),REJECT
 
 [URL Rewrite]
 # Reject IP 請求
