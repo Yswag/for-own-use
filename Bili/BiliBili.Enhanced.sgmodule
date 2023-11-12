@@ -10,6 +10,7 @@ AND,((PROTOCOL,TCP), (DOMAIN-KEYWORD,upos,extended-matching)),REJECT
 DOMAIN,cm.bilibili.com,REJECT-DROP
 # block httpdns
 DOMAIN,httpdns.bilivideo.com,REJECT,extended-matching
+IP-CIDR,203.107.1.0/24,REJECT,no-resolve
 # google doh
 OR,((DOMAIN-KEYWORD,dns.google), (IP-CIDR,8.8.4.4/32,no-resolve), (IP-CIDR,8.8.8.8/32,no-resolve)),REJECT
 
