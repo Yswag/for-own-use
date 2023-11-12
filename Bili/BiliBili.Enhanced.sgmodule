@@ -6,13 +6,15 @@
 force-http-engine-hosts = %INSERT% upos*:0
 
 [Rule]
-AND,((PROTOCOL,TCP), (DOMAIN-KEYWORD,upos,extended-matching)),REJECT
+DOMAIN,dataflow.biliapi.com,REJECT-DROP
 DOMAIN,cm.bilibili.com,REJECT-DROP
 # block httpdns
 DOMAIN,httpdns.bilivideo.com,REJECT,extended-matching
 IP-CIDR,203.107.1.0/24,REJECT,no-resolve
-# google doh
+# block google doh
 OR,((DOMAIN-KEYWORD,dns.google), (IP-CIDR,8.8.4.4/32,no-resolve), (IP-CIDR,8.8.8.8/32,no-resolve)),REJECT
+# 微信定位接口? 開啟 app 後會一直請求這個域名
+DOMAIN-SUFFIX,up-hl.3g.qq.com,REJECT-DROP
 
 [URL Rewrite]
 # Reject IP 請求
