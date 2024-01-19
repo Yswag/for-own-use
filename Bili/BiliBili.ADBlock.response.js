@@ -8,7 +8,7 @@ const DataBase = {
 	"ADBlock":{
 		"Settings":{
 			"Switch":true,
-			"Detail":{"splash":true,"feed":true,"activity":false,"story":true,"cinema":true,"view":true,"search":true,"commandDms":false,"colorfulDms":false,"MainList":true,"xlive":true,"Hot_search":true,"Hot_topics":true,"Most_visited":true,"Dynamic_adcard":true}
+			"Detail":{"splash":true,"feed":true,"vertical":false,"activity":false,"story":true,"cinema":true,"view":true,"search":true,"commandDms":false,"colorfulDms":false,"MainList":true,"xlive":true,"Hot_search":true,"Hot_topics":true,"Most_visited":true,"Dynamic_adcard":true}
 		}
 	},
 	"Default": {
@@ -84,19 +84,9 @@ const DataBase = {
 										case true:
 										default:
 											if (body.data.items?.length) {
-												body.data.items = await Promise.all(body.data.items.map(item => {
-													if (item.uri.includes("bilibili://story")) {
-														$.log("原uri:" + item.uri.slice(0,26));
-														item.uri = item.uri.replace("bilibili://story","bilibili://video");
-														$.log("修改後:" + item.uri.slice(0,26));
-													}
-													return item;
-												}));
-											}
-											if (body.data.items?.length) {
 												//区分pad与phone
 												body.data.items = await Promise.all(body.data.items.map(async item => {
-													const { card_type: cardType, card_goto: cardGoto } = item;
+													const { card_type: cardType, card_goto: cardGoto, goto: Goto } = item;
 													if (cardType && cardGoto) {
 														if (['banner_v8', 'banner_ipad_v8'].includes(cardType) && cardGoto === 'banner') {
 															switch (Settings?.Detail?.activity) {
@@ -119,7 +109,7 @@ const DataBase = {
 																	break;
 															}
 														} else if (['cm_v2', 'cm_v1'].includes(cardType) && ['ad_web_s', 'ad_av', 'ad_web_gif'].includes(cardGoto)) {
-															// ad_player大视频广告 ad_web_gif大gif广告 ad_web_s普通小广告 ad_av创作推广广告 ad_inline_3d  上方大的视频3d广告 ad_inline_eggs 上方大的视频广告
+															// ad_player大视频广告 ad_web_gif大gif广告 ad_web_s普通小广告 ad_av创作推广广告 ad_inline_3d  上方大的视频3d广告 ad_inline_eggs 上方大的视频广告 ad_inline_live 华为问界
 															$.log(`🎉 ${$.name}`, `${cardGoto}广告去除`);
 															if (url?.query?.device !== "phone") {
 																return undefined;//pad直接去除
@@ -135,7 +125,7 @@ const DataBase = {
 																$.log(`🎉 ${$.name}`, `屏蔽Up主<${item?.args?.up_name}>直播推广`);
 																await fixPosition().then(result => item = result);//小广告补位
 															}
-														} else if (cardType === 'cm_v2' && ['ad_player', 'ad_inline_3d', 'ad_inline_eggs'].includes(cardGoto)) {
+														} else if (cardType === 'cm_v2' && ['ad_player', 'ad_inline_3d', 'ad_inline_eggs', 'ad_inline_live'].includes(cardGoto)) {
 															$.log(`🎉 ${$.name}`, `${cardGoto}广告去除`);
 															return undefined;//大广告直接去除
 														} else if (cardType === 'small_cover_v10' && cardGoto === 'game') {
@@ -148,6 +138,17 @@ const DataBase = {
 														} else if (cardType === 'cm_double_v9' && cardGoto === 'ad_inline_av') {
 															$.log(`🎉 ${$.name}`, "大视频广告去除");
 															return undefined;//大广告直接去除
+														} else if (Goto === 'vertical_av') {
+															switch (Settings?.Detail?.vertical) {
+																case true:
+																default:
+																	$.log(`🎉 ${$.name}`, "竖屏视频去除");
+																	await fixPosition().then(result => item = result);//小视频补位
+																	break;
+																case false:
+																	$.log(`🚧 ${$.name}`, "用户设置推荐页竖屏视频不去除");
+																	break;
+															}
 														}
 													}
 													return item;
@@ -170,17 +171,19 @@ const DataBase = {
 															const body = $.toObj(response.body)
 															if (body?.code === 0 && body?.message === "0") {
 																body.data.items = body.data.items.map(item => {
-																	const { card_type: cardType, card_goto: cardGoto } = item;
+																	const { card_type: cardType, card_goto: cardGoto, goto: Goto } = item;
 																	if (cardType && cardGoto) {
 																		if (cardType === 'banner_v8' && cardGoto === 'banner') {
 																			return undefined;
-																		} else if (cardType === 'cm_v2' && ['ad_web_s', 'ad_av', 'ad_web_gif', 'ad_player', 'ad_inline_3d', 'ad_inline_eggs'].includes(cardGoto)) {
+																		} else if (cardType === 'cm_v2' && ['ad_web_s', 'ad_av', 'ad_web_gif', 'ad_player', 'ad_inline_3d', 'ad_inline_eggs', 'ad_inline_live'].includes(cardGoto)) {
 																			return undefined;
 																		} else if (cardType === 'small_cover_v10' && cardGoto === 'game') {
 																			return undefined;
 																		} else if (cardType === 'cm_double_v9' && cardGoto === 'ad_inline_av') {
 																			return undefined;
 																		} else if (cardType === 'large_cover_v9' && cardGoto === 'inline_av_v2') {//补位不需要大视频
+																			return undefined;
+																		} else if (Goto === 'vertical_av') {//补位不需要竖屏视频
 																			return undefined;
 																		}
 																	}
@@ -240,7 +243,7 @@ const DataBase = {
 									switch (Settings?.Detail?.Hot_search) {
 										case true:
 										default:
-											body.data = body.data.filter((i) => !(i.type === "trending") && !(i.type === "recommend"));
+											body.data = body.data.filter((i) => !(i.type === "trending"));
 											$.log(`🎉 ${$.name}`, "搜索页热搜内容去除");
 											break;
 										case false:
@@ -558,8 +561,8 @@ const DataBase = {
 																$.log(`🎉 ${$.name}`, "up主推荐广告去除");
 															}
 															data.tab.tabModule[0].tab.introduction.modules =data.tab.tabModule[0].tab.introduction.modules.map((i) => {
-																if (i.type === 28){
-																	i.data.relates.cards = i.data.relates.cards.filter((j) => j.relateCardType !== 5);
+																if (i.type === 28) {
+																	i.data.relates.cards = i.data.relates.cards.filter((j) => j.relateCardType !== 5 && j.relateCardType !== 4);
 																	$.log(`🎉 ${$.name}`, "视频详情下方推荐卡广告去除");
 																}
 																return i;
@@ -690,13 +693,13 @@ const DataBase = {
 											switch (PATHs?.[1]) {
 												case "SearchAll": { // 全部结果（综合）
 													/******************  initialization start  *******************/
-													class SearchAllResponse$Type extends MessageType{constructor(){super("SearchAllResponse",[{no:4,name:"item",kind:"message",repeat:1,T:()=>Item}])}create(value){const message={item:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 4:message.item.push(Item.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.item.length;i++)Item.internalBinaryWrite(message.item[i],writer.tag(4,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const SearchAllResponse=new SearchAllResponse$Type();class Item$Type extends MessageType{constructor(){super("Item",[{no:25,name:"cm",kind:"message",oneof:"cardItem",T:()=>SearchAdCard}])}create(value){const message={cardItem:{oneofKind:undefined}};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 25:message.cardItem={oneofKind:"cm",cm:SearchAdCard.internalBinaryRead(reader,reader.uint32(),options,message.cardItem.cm)};break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.cardItem.oneofKind==="cm")SearchAdCard.internalBinaryWrite(message.cardItem.cm,writer.tag(25,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const Item=new Item$Type();class SearchAdCard$Type extends MessageType{constructor(){super("SearchAdCard",[{no:1,name:"json_str",kind:"scalar",T:9}])}create(value){const message={jsonStr:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.jsonStr=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.jsonStr!=="")writer.tag(1,WireType.LengthDelimited).string(message.jsonStr);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const SearchAdCard=new SearchAdCard$Type();
+													class Item$Type extends MessageType{constructor(){super("bilibili.polymer.app.search.v1.Item",[{no:11,name:"game",kind:"message",oneof:"cardItem",T:()=>SearchGameCard},{no:25,name:"cm",kind:"message",oneof:"cardItem",T:()=>SearchAdCard}])}create(value){const message={cardItem:{oneofKind:undefined}};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 11:message.cardItem={oneofKind:"game",game:SearchGameCard.internalBinaryRead(reader,reader.uint32(),options,message.cardItem.game)};break;case 25:message.cardItem={oneofKind:"cm",cm:SearchAdCard.internalBinaryRead(reader,reader.uint32(),options,message.cardItem.cm)};break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.cardItem.oneofKind==="game")SearchGameCard.internalBinaryWrite(message.cardItem.game,writer.tag(11,WireType.LengthDelimited).fork(),options).join();if(message.cardItem.oneofKind==="cm")SearchAdCard.internalBinaryWrite(message.cardItem.cm,writer.tag(25,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const Item=new Item$Type();class SearchAdCard$Type extends MessageType{constructor(){super("bilibili.polymer.app.search.v1.SearchAdCard",[{no:1,name:"json_str",kind:"scalar",T:9}])}create(value){const message={jsonStr:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.jsonStr=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.jsonStr!=="")writer.tag(1,WireType.LengthDelimited).string(message.jsonStr);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const SearchAdCard=new SearchAdCard$Type();class SearchGameCard$Type extends MessageType{constructor(){super("bilibili.polymer.app.search.v1.SearchGameCard",[{no:1,name:"title",kind:"scalar",T:9}])}create(value){const message={title:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.title=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.title!=="")writer.tag(1,WireType.LengthDelimited).string(message.title);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const SearchGameCard=new SearchGameCard$Type();class SearchAllResponse$Type extends MessageType{constructor(){super("bilibili.polymer.app.search.v1.SearchAllResponse",[{no:4,name:"item",kind:"message",repeat:1,T:()=>Item}])}create(value){const message={item:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 4:message.item.push(Item.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.item.length;i++)Item.internalBinaryWrite(message.item[i],writer.tag(4,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const SearchAllResponse=new SearchAllResponse$Type();
 													/******************  initialization finish  *******************/
 													switch (Settings?.Detail?.search) {
 														case true:
 														default:
 															let data = SearchAllResponse.fromBinary(body);
-															data.item = data.item.filter((i) => !(i.cardItem?.oneofKind === "cm"));
+															data.item = data.item.filter((i) => !(i.cardItem?.oneofKind === "cm" || i.cardItem?.oneofKind === "game"));
 															$.log(`🎉 ${$.name}`, "搜索页广告去除");
 															body = SearchAllResponse.toBinary(data);
 															break;
