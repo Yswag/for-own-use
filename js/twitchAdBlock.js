@@ -1,28 +1,30 @@
+const luminous = $argument;
+const ping = luminous + "/ping";
 const url = $request.url;
-const newURL = removeUrlParameters(url, ["token", "sig", "p", "play_session_id"]); // 移除網址中的敏感資訊
+const cleanURL = removeUrlParameters(url, ["token", "sig", "p", "play_session_id"]); // 移除網址中的敏感資訊
 
 if (url.includes("https://usher.ttvnw.net/api/channel/hls")) {
-	const live = newURL.slice("https://usher.ttvnw.net/api/channel/hls/".length);
-	$httpClient.get("https://eu.luminous.dev/ping", function (error, response) {
+	var live = cleanURL.slice("https://usher.ttvnw.net/api/channel/hls/".length);
+	redirect(live);
+} else if (url.includes("https://usher.ttvnw.net/vod")) {
+	var vod = cleanURL.slice("https://usher.ttvnw.net/vod/".length);
+	redirect(vod);
+}
+
+function redirect(path) {
+	$httpClient.get(ping, function (error, response) {
 		if (response.status != 200) {
 			$done({});
-		} else {
-			const proxy = `https://eu.luminous.dev/live/${encodeURIComponent(live)}`;
+		} else if (live) {
+			const proxy = `${luminous}/live/${encodeURIComponent(path)}`;
 			$done({
 				status: 302,
 				headers: {
 					Location: proxy,
 				},
 			});
-		}
-	});
-} else if (url.includes("https://usher.ttvnw.net/vod")) {
-	const vod = newURL.slice("https://usher.ttvnw.net/vod/".length);
-	$httpClient.get("https://eu.luminous.dev/ping", function (error, response) {
-		if (response.status != 200) {
-			$done({});
-		} else {
-			const proxy = `https://eu.luminous.dev/vod/${encodeURIComponent(vod)}`;
+		} else if (vod) {
+			const proxy = `${luminous}/vod/${encodeURIComponent(path)}`;
 			$done({
 				status: 302,
 				headers: {
