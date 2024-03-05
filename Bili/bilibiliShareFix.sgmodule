@@ -1,5 +1,6 @@
-#!name=bilibiliShareFix
+#!name=BilibiliShareFix
 #!desc=將 分享->複製連結 裡的b23.tv轉換為b23.wtf處理過的原始連結
+#!category=Bilibili
 #!arguments=b23:https://b23.wtf
 
 [Script]
