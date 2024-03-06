@@ -61,7 +61,7 @@ BiliBili.ADBlock.response.grpc = type=http-response, pattern=^https:\/\/(grpc\.b
 BiliBili.ADBlock.response.grpc = type=http-response, pattern=^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.main\.community\.reply\.v1\.Reply\/MainList, requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.ADBlock.response.js
 #others
 BiliBili.AdBlock.myinfo/square = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/v2\/(account|search)\/(square|myinfo), requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.ADBlock.response.js
-bilibili-字幕簡轉繁 = type=http-response,pattern=^https:\/\/aisubtitle\.hdslb\.com\/bfs\/subtitle\/.+\.json,requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.CC.FanHuaJi.js,script-update-interval=0
+bilibili-字幕簡轉繁 = type=http-response,pattern=^https:\/\/aisubtitle\.hdslb\.com\/bfs\/subtitle\/.+\.json,requires-body=1,max-size=-1,timeout=99,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.CC.FanHuaJi.js,script-update-interval=0
 BiliBili.Upos.Redirect = type=http-request,pattern=^https?:\/\/upos.*(bilivideo.com|akamaized.net),requires-body=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.Upos.Redirect.js,
 #dmview,teenager
 bilibili.helper.dmView = type=http-response,pattern=^https:\/\/grpc\.biliapi\.net\/bilibili\.community\.service\.dm\.v1\.DM\/DmView,requires-body=1,max-size=-1,binary-body-mode=1,script-path=https://raw.githubusercontent.com/Maasea/sgmodule/master/Script/Bilibili/dist/bilibili.helper.beta.js
