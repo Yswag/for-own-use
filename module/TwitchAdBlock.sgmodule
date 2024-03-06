@@ -1,6 +1,6 @@
 #!name=Twitch去廣告
 #!desc=Avoid Twitch ads by grabbing video playlists from Russia
-#!arguments=luminous:https://eu.luminous.dev
+#!arguments=luminous:https://as.luminous.dev
 #!arguments-desc=預設使用luminous-ttv作者提供的實例，更多請參考作者repo或者自建
 
 [Script]
