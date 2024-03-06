@@ -6,7 +6,7 @@
 force-http-engine-hosts = %INSERT% upos*:0
 
 [Rule]
-AND,((DEST-PORT,80), (DOMAIN-KEYWORD,upos,extended-matching)),REJECT
+#AND,((DEST-PORT,80), (DOMAIN-KEYWORD,upos,extended-matching)),REJECT
 DOMAIN,data.bilibili.com,REJECT-DROP
 DOMAIN,dataflow.biliapi.com,REJECT-DROP
 DOMAIN,cm.bilibili.com,REJECT-DROP
@@ -22,8 +22,8 @@ DOMAIN-SUFFIX,up-hl.3g.qq.com,REJECT-DROP
 # 去除DefaultWords
 ^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$ - reject
 # UposRedirect
-^https?:\/\/upos-sz-mirroraliov\.bilivideo\.com\/(.*) http://cn-hk-eq-01-13.bilivideo.com/$1 302
-^https?:\/\/upos-hz-mirrorakam\.akamaized\.net\/(.*) http://cn-hk-eq-01-13.bilivideo.com/$1 302
+#^https?:\/\/upos-sz-mirroraliov\.bilivideo\.com\/(.*) http://cn-hk-eq-01-13.bilivideo.com/$1 302
+#^https?:\/\/upos-hz-mirrorakam\.akamaized\.net\/(.*) http://cn-hk-eq-01-13.bilivideo.com/$1 302
 
 [Map Local]
 # 去除搜索中的大家都在搜
@@ -61,10 +61,11 @@ BiliBili.ADBlock.response.grpc = type=http-response, pattern=^https:\/\/(grpc\.b
 #others
 BiliBili.AdBlock.myinfo/square = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/v2\/(account|search)\/(square|myinfo), requires-body=1, script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.ADBlock.response.js
 bilibili-字幕簡轉繁 = type=http-response,pattern=^https:\/\/aisubtitle\.hdslb\.com\/bfs\/subtitle\/.+\.json,requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.CC.FanHuaJi.js,script-update-interval=0
+BiliBili.Upos.Redirect = type=http-request,pattern=^https?:\/\/upos.*(bilivideo.com|akamaized.net),requires-body=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/Bili/BiliBili.Upos.Redirect.js,
 #dmview,teenager
 bilibili.helper.dmView = type=http-response,pattern=^https:\/\/grpc\.biliapi\.net\/bilibili\.community\.service\.dm\.v1\.DM\/DmView,requires-body=1,max-size=-1,binary-body-mode=1,script-path=https://raw.githubusercontent.com/Maasea/sgmodule/master/Script/Bilibili/dist/bilibili.helper.beta.js
 #bilibili.helper.teenager = type=http-response,pattern=^https:\/\/grpc\.biliapi\.net\/bilibili\.app\.interface\.v1\.Teenagers\/ModeStatus,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/Maasea/sgmodule/master/Script/Bilibili/dist/bilibili.helper.beta.js
 
 [MITM]
-hostname = %APPEND% app.bilibili.com, app.biliapi.net, manga.bilibili.com, api.live.bilibili.com, api.vc.bilibili.com, api.bilibili.com, api.biliapi.net, grpc.biliapi.net, aisubtitle.hdslb.com, upos-hz-mirrorakam.akamaized.net, upos-sz-mirroraliov.bilivideo.com
+hostname = %APPEND% app.bilibili.com, app.biliapi.net, manga.bilibili.com, api.live.bilibili.com, api.vc.bilibili.com, api.bilibili.com, api.biliapi.net, grpc.biliapi.net, aisubtitle.hdslb.com, upos-hz-mirrorakam.akamaized.net, upos-sz-mirroraliov.bilivideo.com, upos-sz-mirrorali.bilivideo.com
 h2 = true
