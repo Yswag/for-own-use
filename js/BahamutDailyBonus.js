@@ -39,22 +39,22 @@ const $ = new Env('巴哈姆特');
 let args = getArgs();
 
 // 用戶名
-$.uid = $.getdata('@ND_BAHA.ID') || args.uid;
+$.uid = $.getdata('@ND_BAHA.ID') || args.uid || 'YourUserName';
 
 // 用戶密碼
-$.pwd = $.getdata('@ND_BAHA.PW') || args.pwd;
+$.pwd = $.getdata('@ND_BAHA.PW') || args.pwd || 'YourUserPassword';
 
 // 兩步驗證Token, 16位數, 未設置請保持默認
-$.totp = $.getdata('@ND_BAHA.TOTP') || args.totp;
+$.totp = $.getdata('@ND_BAHA.TOTP') || args.totp || '';
 
 // 是否開啓廣告簽到，true/false，默認關閉 (該功能耗時過長)
-$.needSignAds = $.getdata('@ND_BAHA.ADS') || args.needSignAds;
+$.needSignAds = $.getdata('@ND_BAHA.ADS') || args.needSignAds || false;
 
 // 是否自動簽到公會，true/false，默認開啓
-$.needSignGuild = $.getdata('@ND_BAHA.GUILD') || args.needSignGuild;
+$.needSignGuild = $.getdata('@ND_BAHA.GUILD') || args.needSignGuild || true;
 
 // 是否自動答題動畫瘋，true/false，默認開啓 (不保證100%答題正確)
-$.needAnswer = $.getdata('@ND_BAHA.ANSWER') || args.needAnswer;
+$.needAnswer = $.getdata('@ND_BAHA.ANSWER') || args.needAnswer || true;
 
 //Bark APP 通知推送Key
 $.barkKey = '';
