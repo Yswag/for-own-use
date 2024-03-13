@@ -9,11 +9,14 @@ const hk = [
 	"cn-hk-eq-01-08.bilivideo.com",
 	"cn-hk-eq-01-09.bilivideo.com",
 	"cn-hk-eq-01-10.bilivideo.com",
+	"cn-hk-eq-01-11.bilivideo.com",
+	"cn-hk-eq-01-12.bilivideo.com",
+	"cn-hk-eq-01-13.bilivideo.com",
 ];
 
-let url = new URL($request.url);
-let goodHost = hk[Math.floor(Math.random() * hk.length)];
-let newUrl = url.toString().replace(url.host, goodHost);
+let path = $request.url.split("/").slice(3).join("/");
+let newHost = hk[Math.floor(Math.random() * hk.length)];
+let newUrl = `http://${newHost}/${path}`;
 
 $done({
 	response: {
