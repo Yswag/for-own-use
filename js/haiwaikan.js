@@ -1,7 +1,6 @@
 let m3u8 = $response.body;
 let lines = m3u8.split("\n");
 
-// 需要移除的值
 let valuesToRemove = [
 	":16.0599,",
 	":15.2666,",
@@ -39,9 +38,8 @@ for (let i = lines.length - 1; i >= 0; i--) {
 }
 
 indexesToRemove.forEach((indexToRemove) => {
-	// 其實下一行一定是ts吧
 	if (indexToRemove !== -1 && lines[indexToRemove + 1].endsWith(".ts")) {
-		lines.splice(indexToRemove, 2); // 移除該行和下一行的 .ts
+		lines.splice(indexToRemove, 2);
 	}
 });
 
