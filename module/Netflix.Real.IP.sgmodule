@@ -1,0 +1,16 @@
+#!name=Netflix Real IP
+#!desc=防 ban ip 測試
+#!arguments=PROXY
+
+[General]
+always-real-ip = %INSERT% *.netflix.com, *.nflxext.com, *.nflxso.net, *.nflxvideo.net, *.us-west-2.amazonaws.com
+
+[Rule]
+RULE-SET,Netflix,{{{PROXY}}}
+
+[Ruleset Netflix]
+DOMAIN-SUFFIX,netflix.com,extended-matching
+DOMAIN-SUFFIX,nflxext.com,extended-matching
+DOMAIN-SUFFIX,nflxso.com,extended-matching
+DOMAIN-SUFFIX,nflxvideo.net,extended-matching
+DOMAIN-SUFFIX,us-west-2.amazonaws.com,extended-matching
