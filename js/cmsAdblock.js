@@ -1,7 +1,7 @@
-let m3u8 = $response.body;
-let lines = m3u8.split("\n");
+const m3u8 = $response.body;
+const lines = m3u8.split("\n");
 
-let valuesToRemove = [
+const haiwaikan = [
 	":16.0599,",
 	":15.2666,",
 	":15.1666,",
@@ -30,7 +30,22 @@ let valuesToRemove = [
 	":0.266932,",
 ];
 
+const lzzy = [
+	":7.041667,",
+	":4.166667,",
+	":2.833333,",
+	":0.458333,",
+];
+
+let valuesToRemove = [];
 let indexesToRemove = [];
+
+if ($request.url.includes("v.cdnlz")) {
+	valuesToRemove = lzzy;
+} else if ($request.url.includes("m3u.haiwaikan")) {
+	valuesToRemove = haiwaikan;
+}
+
 for (let i = lines.length - 1; i >= 0; i--) {
 	if (valuesToRemove.some((value) => lines[i].includes(value))) {
 		indexesToRemove.push(i);

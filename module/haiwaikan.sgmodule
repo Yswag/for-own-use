@@ -1,8 +1,0 @@
-#!name=海外看去廣告
-#!desc=以時間判斷去除插入式廣告
-
-[Script]
-海外看 = type=http-response,pattern=^https:\/\/m3u.haiwaikan.com\/xm3u8\/(.*).m3u8,requires-body=1,max-size=0,binary-body-mode=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/haiwaikan.js
-
-[MITM]
-hostname = %APPEND% m3u.haiwaikan.com
