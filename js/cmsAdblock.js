@@ -39,11 +39,14 @@ const lzzy = [
 
 let valuesToRemove = [];
 let indexesToRemove = [];
+let website = "";
 
 if ($request.url.includes("v.cdnlz")) {
 	valuesToRemove = lzzy;
+	website = "量子資源";
 } else if ($request.url.includes("m3u.haiwaikan")) {
 	valuesToRemove = haiwaikan;
+	website = "海外看";
 }
 
 for (let i = lines.length - 1; i >= 0; i--) {
@@ -52,12 +55,15 @@ for (let i = lines.length - 1; i >= 0; i--) {
 	}
 }
 
+let count = 0;
 indexesToRemove.forEach((indexToRemove) => {
 	if (indexToRemove !== -1 && lines[indexToRemove + 1].endsWith(".ts")) {
 		lines.splice(indexToRemove, 2);
+		count++;
 	}
 });
 
 let modifiedM3u8 = lines.join("\n");
+console.log(`移除${website}廣告${count}行`)
 
 $done({ body: modifiedM3u8 });
