@@ -41,7 +41,7 @@ let valuesToRemove = [];
 let indexesToRemove = [];
 let website = "";
 
-if ($request.url.includes("v.cdnlz")) {
+if ($request.url.includes("v.cdnlz") || $request.url.includes("lz-cdn")) {
 	valuesToRemove = lzzy;
 	website = "量子資源";
 } else if ($request.url.includes("m3u.haiwaikan")) {
