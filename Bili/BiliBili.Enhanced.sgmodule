@@ -18,6 +18,7 @@ DOMAIN,httpdns.bilivideo.com,REJECT,extended-matching
 IP-CIDR,203.107.1.0/24,REJECT,no-resolve
 # 微信定位接口? 開啟 app 後會一直請求這個域名
 DOMAIN-SUFFIX,up-hl.3g.qq.com,REJECT-DROP
+DOMAIN,upos-sz-staticcos.bilivideo.com,REJECT-DROP
 
 [Ruleset BiliBili-IP]
 DOMAIN,member.bilibili.com
@@ -40,6 +41,9 @@ URL-REGEX,https://api.bilibili.com/x/v2/reply/add
 ^https?:\/\/app\.bilibili\.com\/x\/resource\/ip - reject
 # 去除 DefaultWords
 ^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$ - reject
+# 禁止緩存，減少空間佔用
+(?=.*(hdslb\.com.*(\.zip|\.mp4)))^((?!(hdslb\.com\/bfs\/app-static\/)).)*$ - reject
+(?=resource\?resourceUrl|upos\-sz\-staticcos) - reject
 
 [Map Local]
 # 去除搜索中的大家都在搜
