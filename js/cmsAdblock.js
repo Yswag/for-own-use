@@ -1,6 +1,3 @@
-const m3u8 = $response.body;
-const lines = m3u8.split("\n");
-
 const haiwaikan = [
 	":16.0599,",
 	":15.2666,",
@@ -44,26 +41,27 @@ const lzzy = [
 const ffzy = [
 	":6.400000,",
 	":3.700000,",
-	//":3.333333,",
 	":2.800000,",
 	":1.766667,",
 ];
 
+const url = $request.url;
+const lines = $response.body.split("\n");
 let valuesToRemove = [];
 let indexesToRemove = [];
 let website = "";
 
 switch (true) {
-	case $request.url.includes("v.cdnlz"):
-	case $request.url.includes("lz-cdn"):
+	case url.includes("v.cdnlz"):
+	case url.includes("lz-cdn"):
 		valuesToRemove = lzzy;
 		website = "量子資源";
 		break;
-	case $request.url.includes("m3u.haiwaikan"):
+	case url.includes("m3u.haiwaikan"):
 		valuesToRemove = haiwaikan;
 		website = "海外看";
 		break;
-	case $request.url.includes("ffzy"):
+	case url.includes("ffzy"):
 		valuesToRemove = ffzy;
 		website = "非凡資源";
 		break;
@@ -71,21 +69,19 @@ switch (true) {
 		break;
 }
 
-for (let i = lines.length - 1; i >= 0; i--) {
-	if (valuesToRemove.some((value) => lines[i].includes(value))) {
-		indexesToRemove.push(i);
-	}
-}
-
-let count = 0;
-indexesToRemove.forEach((indexToRemove) => {
-	if (indexToRemove !== -1 && lines[indexToRemove + 1].endsWith(".ts")) {
-		lines.splice(indexToRemove, 2);
-		count++;
-	}
+lines.forEach((line, index) => {
+    if (valuesToRemove.some(value => line.includes(value))) {
+        indexesToRemove.push(index);
+    }
 });
 
-let modifiedM3u8 = lines.join("\n");
-console.log(`移除${website}廣告${count}行`);
+let count = 0;
+indexesToRemove.forEach(indexToRemove => {
+    if (indexToRemove >= 0 && indexToRemove + 1 < lines.length && lines[indexToRemove + 1].endsWith(".ts")) {
+        lines.splice(indexToRemove, 2);
+        count++;
+    }
+});
 
-$done({ body: modifiedM3u8 });
+console.log(`移除${website}廣告${count}行`);
+$done({ body: lines.join("\n") });
