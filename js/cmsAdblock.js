@@ -41,16 +41,34 @@ const lzzy = [
 	":0.458333,",
 ];
 
+const ffzy = [
+	":6.400000,",
+	":3.700000,",
+	":3.333333,",
+	":2.800000,",
+	":1.766667,",
+];
+
 let valuesToRemove = [];
 let indexesToRemove = [];
 let website = "";
 
-if ($request.url.includes("v.cdnlz") || $request.url.includes("lz-cdn")) {
-	valuesToRemove = lzzy;
-	website = "量子資源";
-} else if ($request.url.includes("m3u.haiwaikan")) {
-	valuesToRemove = haiwaikan;
-	website = "海外看";
+switch (true) {
+	case $request.url.includes("v.cdnlz"):
+	case $request.url.includes("lz-cdn"):
+		valuesToRemove = lzzy;
+		website = "量子資源";
+		break;
+	case $request.url.includes("m3u.haiwaikan"):
+		valuesToRemove = haiwaikan;
+		website = "海外看";
+		break;
+	case $request.url.includes("ffzy"):
+		valuesToRemove = ffzy;
+		website = "非凡資源";
+		break;
+	default:
+		break;
 }
 
 for (let i = lines.length - 1; i >= 0; i--) {
@@ -68,6 +86,6 @@ indexesToRemove.forEach((indexToRemove) => {
 });
 
 let modifiedM3u8 = lines.join("\n");
-console.log(`移除${website}廣告${count}行`)
+console.log(`移除${website}廣告${count}行`);
 
 $done({ body: modifiedM3u8 });

@@ -4,6 +4,7 @@
 [Script]
 去廣告｜海外看 = type=http-response,pattern=^https?:\/\/m3u\.haiwaikan\.com\/xm3u8\/(.+).m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 去廣告｜量子資源 = type=http-response,pattern=^https?:\/\/(v\.cdnlz\d+\.com|vip.*\.lz-cdn\d+\.com)\/(.+)\/hls\/(.+).m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜非凡資源 = type=http-response,pattern=^https?:\/\/(super|svipsvip|vip)\.ffzy[A-Za-z0-9-]+\.com\/(.+)\/hls\/(.+)\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 
 [MITM]
-hostname = %APPEND% m3u.haiwaikan.com, v.cdnlz*.com, vip*.lz-cdn*.com
+hostname = %APPEND% m3u.haiwaikan.com, v.cdnlz*.com, vip*.lz-cdn*.com, *.ffzy*.com
