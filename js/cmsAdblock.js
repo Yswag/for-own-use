@@ -12,19 +12,26 @@ const haiwaikan = [
 	":7.907899,",
 	":5.939267,",
 	":5.538866,",
+	":5.53,",
 	":3.970633,",
 	":3.937267,",
+	":3.93,",
 	":3.136466,",
 	":3.103100,",
+	":3.10,",
 	":2.936266,",
 	":2.602600,",
 	":2.235567,",
 	":2.002000,",
+	":2.00,",
 	":1.968633,",
+	":1.96,",
+	":1.36,",
 	":1.334666,",
 	":1.768432,",
 	":1.368033,",
 	":0.266932,",
+	":0.26,",
 ];
 
 const lzzy = [
@@ -69,18 +76,18 @@ switch (true) {
 		break;
 }
 
-lines.forEach((line, index) => {
-    if (valuesToRemove.some(value => line.includes(value))) {
-        indexesToRemove.push(index);
-    }
-});
+for (let i = lines.length - 1; i >= 0; i--) {
+	if (valuesToRemove.some((value) => lines[i].includes(value))) {
+		indexesToRemove.push(i);
+	}
+}
 
 let count = 0;
-indexesToRemove.forEach(indexToRemove => {
-    if (indexToRemove >= 0 && indexToRemove + 1 < lines.length && lines[indexToRemove + 1].endsWith(".ts")) {
-        lines.splice(indexToRemove, 2);
-        count++;
-    }
+indexesToRemove.forEach((indexToRemove) => {
+	if (indexToRemove !== -1 && lines[indexToRemove + 1].endsWith(".ts")) {
+		lines.splice(indexToRemove, 2);
+		count++;
+	}
 });
 
 console.log(`移除${website}廣告${count}行`);
