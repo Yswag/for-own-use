@@ -67,12 +67,12 @@ switch (true) {
 function filterAds(valuesToRemove) {
 	for (let i = lines.length - 1; i >= 0; i--) {
 		if (valuesToRemove.some((value) => lines[i].includes(value))) {
+			console.log("Ad found:" + valuesToRemove.find(value => lines[i].includes(value)));
 			if (lines[i].endsWith(".ts")) {
 				console.log("Remove ad(by host):" + lines[i]);
 				lines.splice(i - 1, 2);
 				adCount++;
-			}
-			if (lines[i + 1].endsWith(".ts")) {
+			}else if (lines[i + 1].endsWith(".ts")) {
 				console.log("Remove ad(by duration):" + lines[i + 1]);
 				lines.splice(i, 2);
 				adCount++;
