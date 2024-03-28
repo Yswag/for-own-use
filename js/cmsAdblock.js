@@ -84,7 +84,7 @@ function haiwaikanHostsCount() {
 	const hostsCount = {};
 	lines.forEach((line) => {
 		if (line.includes(".ts")) {
-			const hostname = new URL(line).hostname;
+			const hostname = getHost(line);
 			hostsCount[hostname] = (hostsCount[hostname] || 0) + 1;
 		}
 	});
@@ -93,4 +93,8 @@ function haiwaikanHostsCount() {
 	if (keys.length > 1) {
 		haiwaikan.push(keys[1]);
 	} else return;
+}
+
+function getHost(url) {
+  return url.toLowerCase().match(/^https?:\/\/(.*?)\//)[1];
 }
