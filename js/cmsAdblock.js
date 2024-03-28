@@ -68,12 +68,12 @@ function filterAds(valuesToRemove) {
 	for (let i = lines.length - 1; i >= 0; i--) {
 		if (valuesToRemove.some((value) => lines[i].includes(value))) {
 			if (lines[i].endsWith(".ts")) {
-				console.log("Remove ad:" + line[i]);
+				console.log("Remove ad:" + lines[i]);
 				lines.splice(i - 1, 2);
 				adCount++;
 			}
 			if (lines[i + 1].endsWith(".ts")) {
-				console.log("Remove ad:" + line[i + 1]);
+				console.log("Remove ad:" + lines[i + 1]);
 				lines.splice(i, 2);
 				adCount++;
 			}
