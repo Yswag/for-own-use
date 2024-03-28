@@ -35,28 +35,13 @@ const haiwaikan = [
 	":0.26,",
 ];
 
-const lzzy = [
-	":7.166667,",
-	":7.041667,",
-	//":4.800000,",
-	":4.166667,",
-	":2.833333,",
-	":2.733333,",
-	":2.500000,",
-	":0.458333,",
-];
+const lzzy = [":7.166667,", ":7.041667,", ":4.166667,", ":2.833333,", ":2.733333,", ":2.500000,", ":0.458333,"];
 
-const ffzy = [
-	":6.400000,",
-	":3.700000,",
-	":2.800000,",
-	":1.766667,",
-];
+const ffzy = [":6.400000,", ":3.700000,", ":2.800000,", ":1.766667,"];
 
 const url = $request.url;
 const lines = $response.body.split("\n");
 
-let indexesToRemove = [];
 let website = "";
 let adCount = 0;
 
@@ -64,18 +49,15 @@ switch (true) {
 	case url.includes("v.cdnlz"):
 	case url.includes("lz-cdn"):
 		filterAds(lzzy);
-		removeAds();
 		website = "量子資源";
 		break;
 	case url.includes("m3u.haiwaikan"):
 		haiwaikanHostsCount();
 		filterAds(haiwaikan);
-		removeAds();
 		website = "海外看";
 		break;
 	case url.includes("ffzy"):
 		filterAds(ffzy);
-		removeAds();
 		website = "非凡資源";
 		break;
 	default:
@@ -85,23 +67,21 @@ switch (true) {
 function filterAds(valuesToRemove) {
 	for (let i = lines.length - 1; i >= 0; i--) {
 		if (valuesToRemove.some((value) => lines[i].includes(value))) {
-			indexesToRemove.push(i);
+			if (lines[i].endsWith(".ts")) {
+				console.log("Remove ad:" + line[i]);
+				lines.splice(i - 1, 2);
+				adCount++;
+			}
+			if (lines[i + 1].endsWith(".ts")) {
+				console.log("Remove ad:" + line[i + 1]);
+				lines.splice(i, 2);
+				adCount++;
+			}
 		}
 	}
-}
-
-function removeAds() {
-	indexesToRemove.forEach((indexToRemove) => {
-		if (indexToRemove !== -1 && lines[indexToRemove].endsWith(".ts")) {
-			//hostname
-			lines.splice(indexToRemove - 1, 2);
-			adCount++;
-		} else if (indexToRemove !== -1 && lines[indexToRemove + 1].endsWith(".ts")) {
-			//duration
-			lines.splice(indexToRemove, 2);
-			adCount++;
-		}
-	});
+	
+	console.log(`移除${website}廣告${adCount}行`);
+	$done({ body: lines.join("\n") });
 }
 
 function haiwaikanHostsCount() {
@@ -118,6 +98,3 @@ function haiwaikanHostsCount() {
 		haiwaikan.push(keys[1]);
 	} else return;
 }
-
-console.log(`移除${website}廣告${adCount}行`);
-$done({ body: lines.join("\n") });
