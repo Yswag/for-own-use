@@ -42,8 +42,6 @@ const ffzy = [":6.400000,", ":3.700000,", ":2.800000,", ":1.766667,"];
 const url = $request.url;
 const lines = $response.body.split("\n");
 
-let adCount = 0;
-
 switch (true) {
 	case url.includes("v.cdnlz"):
 	case url.includes("lz-cdn"):
@@ -61,21 +59,33 @@ switch (true) {
 }
 
 function filterAds(valuesToRemove) {
+	let adCount = 0;
+	let indexToRemove = [];
+
 	for (let i = lines.length - 1; i >= 0; i--) {
 		if (valuesToRemove.some((value) => lines[i].includes(value))) {
-			console.log("Match:" + valuesToRemove.find(value => lines[i].includes(value)));
+			console.log("Match:" + valuesToRemove.find((value) => lines[i].includes(value)));
 			if (lines[i].endsWith(".ts")) {
 				console.log("Remove ad(by host):" + lines[i]);
-				lines.splice(i - 1, 2);
+				indexToRemove.push(i);
+				indexToRemove.push(i - 1);
 				adCount++;
-			} else if (lines[i + 1].endsWith(".ts")) {
+			} else if (i < lines.length - 1 && lines[i + 1].endsWith(".ts")) {
 				console.log("Remove ad(by duration):" + lines[i + 1]);
-				lines.splice(i, 2);
+				indexToRemove.push(i);
+				indexToRemove.push(i + 1);
 				adCount++;
 			}
 		}
 	}
-	
+
+	// 從大到小排序，避免刪錯行
+	indexToRemove.sort((a, b) => b - a);
+
+	for (let index of indexToRemove) {
+		lines.splice(index, 1);
+	}
+
 	console.log(`移除廣告${adCount}行`);
 	$done({ body: lines.join("\n") });
 }
@@ -96,5 +106,5 @@ function haiwaikanHostsCount() {
 }
 
 function getHost(url) {
-  return url.toLowerCase().match(/^https?:\/\/(.*?)\//)[1];
+	return url.toLowerCase().match(/^https?:\/\/(.*?)\//)[1];
 }
