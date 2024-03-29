@@ -61,7 +61,7 @@ switch (true) {
 }
 
 function filterAds(valuesToRemove) {
-	for (let i = 0; i < lines.length; i++) {
+	for (let i = lines.length - 1; i >= 0; i--) {
 		if (valuesToRemove.some((value) => lines[i].includes(value))) {
 			console.log("Match:" + valuesToRemove.find(value => lines[i].includes(value)));
 			if (lines[i].endsWith(".ts")) {
