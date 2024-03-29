@@ -1,3 +1,4 @@
+// 海外看
 const haiwaikan = [
 	":16.0599,",
 	":15.2666,",
@@ -35,6 +36,7 @@ const haiwaikan = [
 	":0.26,",
 ];
 
+// 量子資源
 const lzzy = [
 	":7.166667,",
 	":7.041667,",
@@ -45,6 +47,7 @@ const lzzy = [
 	":0.458333,"
 ];
 
+// 非凡資源
 const ffzy = [
 	":6.400000,",
 	":3.700000,",
@@ -52,20 +55,28 @@ const ffzy = [
 	":1.766667,"
 ];
 
+// 暴風影視
+const bfeng = ["/adjump/"];
+
 const url = $request.url;
 const lines = $response.body.split("\n");
 
+let adCount = 0;
+
 switch (true) {
-	case url.includes("v.cdnlz"):
-	case url.includes("lz-cdn"):
-		filterAds(lzzy);
-		break;
 	case url.includes("m3u.haiwaikan"):
 		haiwaikanHostsCount();
 		filterAds(haiwaikan);
 		break;
+	case url.includes("v.cdnlz"):
+	case url.includes("lz-cdn"):
+		filterAds(lzzy);
+		break;
 	case url.includes("ffzy"):
 		filterAds(ffzy);
+		break;
+	case url.includes("bfengbf.com"):
+		filterAds(bfeng);
 		break;
 	default:
 		break;
@@ -97,7 +108,7 @@ function haiwaikanHostsCount() {
 	const hostsCount = {};
 	lines.forEach((line) => {
 		if (line.includes(".ts")) {
-			const hostname = getHost(line);
+			const hostname = line.toLowerCase().match(/^https?:\/\/(.*?)\//)[1];
 			hostsCount[hostname] = (hostsCount[hostname] || 0) + 1;
 		}
 	});
@@ -106,8 +117,4 @@ function haiwaikanHostsCount() {
 	if (keys.length > 1) {
 		haiwaikan.push(keys[1]);
 	} else return;
-}
-
-function getHost(url) {
-	return url.toLowerCase().match(/^https?:\/\/(.*?)\//)[1];
 }
