@@ -35,9 +35,22 @@ const haiwaikan = [
 	":0.26,",
 ];
 
-const lzzy = [":7.166667,", ":7.041667,", ":4.166667,", ":2.833333,", ":2.733333,", ":2.500000,", ":0.458333,"];
+const lzzy = [
+	":7.166667,",
+	":7.041667,",
+	":4.166667,",
+	":2.833333,",
+	":2.733333,",
+	":2.500000,",
+	":0.458333,"
+];
 
-const ffzy = [":6.400000,", ":3.700000,", ":2.800000,", ":1.766667,"];
+const ffzy = [
+	":6.400000,",
+	":3.700000,",
+	":2.800000,",
+	":1.766667,"
+];
 
 const url = $request.url;
 const lines = $response.body.split("\n");
@@ -60,30 +73,20 @@ switch (true) {
 
 function filterAds(valuesToRemove) {
 	let adCount = 0;
-	let indexToRemove = [];
 
 	for (let i = lines.length - 1; i >= 0; i--) {
 		if (valuesToRemove.some((value) => lines[i].includes(value))) {
 			console.log("Match:" + valuesToRemove.find((value) => lines[i].includes(value)));
 			if (lines[i].endsWith(".ts")) {
 				console.log("Remove ad(by host):" + lines[i]);
-				indexToRemove.push(i);
-				indexToRemove.push(i - 1);
+				lines.splice(i - 1, 2);
 				adCount++;
 			} else if (i < lines.length - 1 && lines[i + 1].endsWith(".ts")) {
 				console.log("Remove ad(by duration):" + lines[i + 1]);
-				indexToRemove.push(i);
-				indexToRemove.push(i + 1);
+				lines.splice(i, 2);
 				adCount++;
 			}
 		}
-	}
-
-	// 從大到小排序，避免刪錯行
-	indexToRemove.sort((a, b) => b - a);
-
-	for (let index of indexToRemove) {
-		lines.splice(index, 1);
 	}
 
 	console.log(`移除廣告${adCount}行`);
