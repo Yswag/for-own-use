@@ -58,6 +58,8 @@ const ffzy = [
 // 暴風影視
 const bfeng = ["/adjump/"];
 
+if ($response.body === undefined || !$response.body.includes("#EXTM3U")) $done({});
+
 const url = $request.url;
 const lines = $response.body.split("\n");
 
@@ -86,7 +88,9 @@ function filterAds(valuesToRemove) {
 	let adCount = 0;
 
 	for (let i = lines.length - 1; i >= 0; i--) {
-		if (valuesToRemove.some((value) => lines[i].includes(value))) {
+		if (lines[i].includes("#EXT-X-DISCONTINUITY")) {
+			lines.splice(i, 1);
+		} else if (valuesToRemove.some((value) => lines[i].includes(value))) {
 			console.log("Match:" + valuesToRemove.find((value) => lines[i].includes(value)));
 			if (lines[i].endsWith(".ts")) {
 				console.log("Remove ad(by host):" + lines[i]);
