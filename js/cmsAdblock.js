@@ -83,7 +83,7 @@ switch (true) {
 	case url.includes("bfengbf.com"):
 		filterAds(bfeng);
 		break;
-	case url.includes("kuaikan-cdn"):
+	case url.includes("kuaikan"):
 		hostsCount(kuaikan, /(.+)\/hls\//);
 		filterAds(kuaikan);
 		break;
