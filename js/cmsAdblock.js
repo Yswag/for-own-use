@@ -1,5 +1,5 @@
 // 海外看
-const haiwaikan = [
+let haiwaikan = [
 	":16.0599,",
 	":15.2666,",
 	":15.1666,",
@@ -37,26 +37,29 @@ const haiwaikan = [
 ];
 
 // 量子資源
-const lzzy = [
+let lzzy = [
 	":7.166667,",
 	":7.041667,",
 	":4.166667,",
 	":2.833333,",
 	":2.733333,",
 	":2.500000,",
-	":0.458333,"
+	":0.458333,",
 ];
 
 // 非凡資源
-const ffzy = [
+let ffzy = [
 	":6.400000,",
 	":3.700000,",
 	":2.800000,",
-	":1.766667,"
+	":1.766667,",
 ];
 
 // 暴風影視
-const bfeng = ["/adjump/"];
+let bfeng = ["/adjump/"];
+
+// 快看資源
+let kuaikan = [];
 
 if ($response.body === undefined || !$response.body.includes("#EXTM3U")) $done({});
 
@@ -67,7 +70,7 @@ let adCount = 0;
 
 switch (true) {
 	case url.includes("m3u.haiwaikan"):
-		haiwaikanHostsCount();
+		hostsCount(haiwaikan, /^https?:\/\/(.*?)\//);
 		filterAds(haiwaikan);
 		break;
 	case url.includes("v.cdnlz"):
@@ -79,6 +82,10 @@ switch (true) {
 		break;
 	case url.includes("bfengbf.com"):
 		filterAds(bfeng);
+		break;
+	case url.includes("kuaikan-cdn"):
+		hostsCount(kuaikan, /(.+)\/hls\//);
+		filterAds(kuaikan);
 		break;
 	default:
 		break;
@@ -108,17 +115,17 @@ function filterAds(valuesToRemove) {
 	$done({ body: lines.join("\n") });
 }
 
-function haiwaikanHostsCount() {
+function hostsCount(name, regex) {
 	const hostsCount = {};
 	lines.forEach((line) => {
 		if (line.includes(".ts")) {
-			const hostname = line.toLowerCase().match(/^https?:\/\/(.*?)\//)[1];
+			const hostname = line.match(regex)[1];
 			hostsCount[hostname] = (hostsCount[hostname] || 0) + 1;
 		}
 	});
 
 	const keys = Object.keys(hostsCount);
 	if (keys.length > 1) {
-		haiwaikan.push(keys[1]);
+		name.push(keys[1]);
 	} else return;
 }
