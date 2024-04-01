@@ -4,7 +4,7 @@
 #!arguments-desc=填入 Netflix 的策略組或代理名稱，直連為 DIRECT
 
 [General]
-always-real-ip = %APPEND% ios.prod.ftl.netflix.com, ios.prod.cloud.netflix.com, ios.ngp.prod.cloud.netflix.com, appboot.netflix.com
+always-real-ip = %APPEND% ios.prod.cloud.netflix.com, appboot.netflix.com
 hijack-dns = %APPEND% 8.8.8.8:53, 8.8.4.4:53
 
 [Rule]
@@ -12,7 +12,5 @@ RULE-SET,Netflix,{{{PROXY}}}
 RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Netflix/Netflix.list,{{{PROXY}}}
 
 [Ruleset Netflix]
-DOMAIN,ios.prod.ftl.netflix.com,extended-matching
 DOMAIN,ios.prod.cloud.netflix.com,extended-matching
-DOMAIN,ios.ngp.prod.cloud.netflix.com,extended-matching
 DOMAIN,appboot.netflix.com,extended-matching
