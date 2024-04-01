@@ -1,16 +1,17 @@
 #!name=Netflix Real IP
-#!desc=防 ban ip 測試
+#!desc=防 ban ip
 #!arguments=PROXY
+#!arguments-desc=填入 Netflix 策略組或代理名稱，直連為DIRECT
 
 [General]
-always-real-ip = %INSERT% *.netflix.com, *.nflxext.com, *.nflxso.net, *.nflxvideo.net, *.us-west-2.amazonaws.com
+always-real-ip = %APPEND% ios.prod.ftl.netflix.com, ios.prod.cloud.netflix.com, ios.ngp.prod.cloud.netflix.com, appboot.netflix.com
+hijack-dns = %APPEND% 8.8.8.8:53, 8.8.4.4:53
 
 [Rule]
 RULE-SET,Netflix,{{{PROXY}}}
 
 [Ruleset Netflix]
-DOMAIN-SUFFIX,netflix.com,extended-matching
-DOMAIN-SUFFIX,nflxext.com,extended-matching
-DOMAIN-SUFFIX,nflxso.com,extended-matching
-DOMAIN-SUFFIX,nflxvideo.net,extended-matching
-DOMAIN-SUFFIX,us-west-2.amazonaws.com,extended-matching
+DOMAIN,ios.prod.ftl.netflix.com,extended-matching
+DOMAIN,ios.prod.cloud.netflix.com,extended-matching
+DOMAIN,ios.ngp.prod.cloud.netflix.com,extended-matching
+DOMAIN,appboot.netflix.com,extended-matching
