@@ -53,16 +53,16 @@ let lzzy = [
 
 // 非凡資源
 let ffzy = [
-	":6.400000,",
-	":3.700000,",
-	":2.800000,",
-	":1.766667,",
+	//":6.400000,",
+	//":3.700000,",
+	//":2.800000,",
+	//":1.766667,",
 ];
 
 // 暴風影視
 let bfeng = ["/adjump/"];
 
-// 快看資源
+// 快看影視
 let kuaikan = [];
 
 if ($response.body === undefined || !$response.body.includes("#EXTM3U")) $done({});
@@ -82,6 +82,7 @@ switch (true) {
 		filterAds(lzzy);
 		break;
 	case url.includes("ffzy"):
+		vodId(ffzy);
 		filterAds(ffzy);
 		break;
 	case url.includes("bfengbf.com"):
@@ -100,11 +101,11 @@ function filterAds(valuesToRemove) {
 
 	for (let i = lines.length - 1; i >= 0; i--) {
 		if (lines[i].includes("#EXT-X-DISCONTINUITY")) {
-			lines.splice(i, 1);
+			//lines.splice(i, 1);
 		} else if (valuesToRemove.some((value) => lines[i].includes(value))) {
 			console.log("Match:" + valuesToRemove.find((value) => lines[i].includes(value)));
 			if (lines[i].endsWith(".ts")) {
-				console.log("Remove ad(by host):" + lines[i]);
+				console.log("Remove ad(by .ts):" + lines[i]);
 				lines.splice(i - 1, 2);
 				adCount++;
 			} else if (i < lines.length - 1 && lines[i + 1].endsWith(".ts")) {
@@ -129,6 +130,21 @@ function hostsCount(name, regex) {
 	});
 
 	const keys = Object.keys(hostsCount);
+	if (keys.length > 1) {
+		name.push(keys[1]);
+	} else return;
+}
+
+function vodId(name) {
+	const vodIds = {};
+	lines.forEach((line) => {
+		if (line.includes(".ts")) {
+			const vodId = line.slice(0, 10);
+			vodIds[vodId] = (vodIds[vodId] || 0) + 1;
+		}
+	});
+
+	const keys = Object.keys(vodIds);
 	if (keys.length > 1) {
 		name.push(keys[1]);
 	} else return;
