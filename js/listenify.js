@@ -3,7 +3,7 @@ const $ = new Env('lyrics')
 const url = $request.url
 const params = url.split('?')[1].split('&')
 const artist = params[0].split('=')[1]
-const title = params[1].split('=')[1]
+const title = params[1] ? params[1].split('=')[1] : ''
 const s = `${artist}%20${title}`
 const host = 'https://music.163.com'
 const headers = {
