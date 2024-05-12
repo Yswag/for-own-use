@@ -26,7 +26,8 @@ function getID(req) {
             $.done()
         } else {
             let obj = JSON.parse(resp.body)
-            if (!obj.result.songs) $.done()
+            //if (!obj.result.hasOwnProperty(songs)) $.done()
+            if (obj.result.songs === undefined) $.done()
             id = obj.result.songs[0].id
             getLyrics(id)
         }
