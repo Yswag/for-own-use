@@ -50,7 +50,7 @@ function getLyrics(id) {
             $.done({
                 response: {
                     status: 200,
-                    body: '[00:00.00] 歌詞來源:網易雲\n' + lyrics
+                    body: lyrics + '\n[99:00.00] 歌詞來源:網易雲'
                 }
             })
         }
