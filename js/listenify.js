@@ -7,54 +7,69 @@ const title = params[1] ? params[1].split('=')[1] : ''
 const s = `${artist}%20${title}`
 const host = 'https://music.163.com'
 const headers = {
-    accept: 'application/json',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0',
-    cookie: 'os=ios; __remember_me=true; NMTID=xxx',
-    referer: host
+	'accept': 'application/json',
+	'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0',
+	'cookie': 'os=ios; __remember_me=true; NMTID=xxx',
+	'referer': host,
 }
-let search = {
-    url: `${host}/api/cloudsearch/pc?type=1&limit=1&offset=0&s=${s}`,
-    headers: headers
+const search = {
+	url: `${host}/api/cloudsearch/pc?type=1&limit=1&offset=0&s=${s}`,
+	headers: headers,
 }
 
-getID(search)
+;(async () => {
+	try {
+		const id = await getID(search)
+		const lyrics = await getLyrics(id)
+		$.done({
+			response: {
+				status: 200,
+				body: lyrics + '\n[99:00.00] 歌詞來源:網易雲',
+			},
+		})
+	} catch (err) {
+		$.logErr(err)
+		$.done()
+	}
+})()
 
 function getID(req) {
-    $.get(req, function (err, resp) {
-        if (err) {
-            $.logErr(err)
-            $.done()
-        } else {
-            let obj = JSON.parse(resp.body)
-            //if (!obj.result.hasOwnProperty(songs)) $.done()
-            if (obj.result.songs === undefined) $.done()
-            id = obj.result.songs[0].id
-            getLyrics(id)
-        }
-    })
+	return new Promise((resolve, reject) => {
+		$.get(req, function (err, resp) {
+			if (err) {
+				$.logErr(err)
+				reject(err)
+			} else {
+				const obj = JSON.parse(resp.body)
+				if (obj.result.songs === undefined) {
+					reject('No songs found')
+				} else {
+					const id = obj.result.songs[0].id
+					resolve(id)
+				}
+			}
+		})
+	})
 }
 
 function getLyrics(id) {
-    let req = {
-        url: `${host}/api/song/lyric?id=${id}&lv=0&yv=0&tv=0`,
-        headers: headers
-    }
+	return new Promise((resolve, reject) => {
+		let req = {
+			url: `${host}/api/song/lyric?id=${id}&lv=0&yv=0&tv=0`,
+			headers: headers,
+		}
 
-    $.get(req, function (err, resp) {
-        if (err) {
-            $.logErr(err)
-            $.done()
-        } else {
-            let obj = JSON.parse(resp.body)
-            lyrics = obj.lrc.lyric
-            $.done({
-                response: {
-                    status: 200,
-                    body: lyrics + '\n[99:00.00] 歌詞來源:網易雲'
-                }
-            })
-        }
-    })
+		$.get(req, function (err, resp) {
+			if (err) {
+				$.logErr(err)
+				reject(err)
+			} else {
+				const obj = JSON.parse(resp.body)
+				const lyrics = obj.lrc.lyric
+				resolve(lyrics)
+			}
+		})
+	})
 }
 
 //prettier-ignore
