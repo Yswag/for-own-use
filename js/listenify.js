@@ -102,7 +102,9 @@ function getLyrics(id) {
 			} else {
 				const obj = JSON.parse(resp.body)
 				const lyrics = obj.lrc.lyric
-				resolve(lyrics)
+				if (lyrics === '') {
+					reject('No lyrics found')
+				} else resolve(lyrics)
 			}
 		})
 	})
