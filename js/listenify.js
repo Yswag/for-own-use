@@ -1,3 +1,26 @@
+/*
+在 listenify 的歌詞 api 處填入 https://api.lrc.cx/lyrics
+Surge:
+[Script]
+lyrics = type=http-request,pattern=https:\/\/api\.lrc\.cx\/lyrics,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/listenify.js,script-update-interval=0
+
+[MITM]
+hostname = api.lrc.cx
+
+Loon:
+[Script]
+http-request https:\/\/api\.lrc\.cx\/lyrics script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/listenify.js, timeout=10, tag=lyrics
+
+[Mitm]
+hostname = api.lrc.cx
+
+QX:
+[rewrite_local]
+https:\/\/api.lrc.cx\/lyrics url script-echo-response https://raw.githubusercontent.com/Yswag/for-own-use/main/js/listenify.js
+
+[mitm]
+hostname = api.lrc.cx
+*/
 const $ = new Env('lyrics')
 
 const url = $request.url
@@ -35,7 +58,14 @@ const search = {
 			  })
 	} catch (err) {
 		$.logErr(err)
-		$.isQuanX() ? $done() : $.done()
+		if ($.isQuanX()) {
+			let originalResp = await getOriginal()
+			$.done({
+				status: 'HTTP/1.1 200',
+				headers: { 'Content-Type': 'text/html' },
+				body: originalResp,
+			})
+		} else $.done()
 	}
 })()
 
@@ -73,6 +103,24 @@ function getLyrics(id) {
 				const obj = JSON.parse(resp.body)
 				const lyrics = obj.lrc.lyric
 				resolve(lyrics)
+			}
+		})
+	})
+}
+
+function getOriginal() {
+	return new Promise((resolve, reject) => {
+		let req = {
+			url: $request.url,
+			headers: $request.headers,
+		}
+
+		$.get(req, function (err, resp) {
+			if (err) {
+				$.logErr(err)
+				reject(err)
+			} else {
+				resolve(resp.body)
 			}
 		})
 	})
