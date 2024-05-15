@@ -48,12 +48,12 @@ const search = {
 			? $.done({
 					status: 'HTTP/1.1 200',
 					headers: { 'Content-Type': 'text/html' },
-					body: lyrics,
+					body: lyrics + '\n[99:00.00] 歌詞來源:網易雲',
 			  })
 			: $.done({
 					response: {
 						status: 200,
-						body: lyrics,
+						body: lyrics + '\n[99:00.00] 歌詞來源:網易雲',
 					},
 			  })
 	} catch (err) {
@@ -102,13 +102,12 @@ function getLyrics(id) {
 			} else {
 				const obj = JSON.parse(resp.body)
 				const lyrics = obj.lrc.lyric
-				if (lyrics === '') {
-					reject('No lyrics found')
-				} else {
-					$.log("Lyrics found, replace original with Netease")
-					resolve(lyrics)
-				}
-				
+				// empty lyrics
+				if (lyrics === '') reject('No lyrics found')
+				// check if lyrics are plain text, if true return to lrc.cx
+				if (!/^\[\d{2,3}:\d{2,3}\.\d{2,3}\].+/.test(lyrics)) reject('Plain text lyrics, return to original')
+
+				resolve(lyrics)
 			}
 		})
 	})
