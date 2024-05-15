@@ -21,12 +21,17 @@ const search = {
 	try {
 		const id = await getID(search)
 		const lyrics = await getLyrics(id)
-		$.done({
-			response: {
-				status: 200,
-				body: lyrics + '\n[99:00.00] 歌詞來源:網易雲',
-			},
-		})
+		$.isQuanX()
+			? $.done({
+					status: 200,
+					body: lyrics + '\n[99:00.00] 歌詞來源:網易雲',
+			  })
+			: $.done({
+					response: {
+						status: 200,
+						body: lyrics + '\n[99:00.00] 歌詞來源:網易雲',
+					},
+			  })
 	} catch (err) {
 		$.logErr(err)
 		$.done()
