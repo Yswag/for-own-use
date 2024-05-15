@@ -24,7 +24,7 @@ const search = {
 		$.isQuanX()
 			? $.done({
 					status: 'HTTP/1.1 200',
-					headers: {'Content-Type':'text/html'},
+					headers: { 'Content-Type': 'text/html' },
 					body: lyrics + '\n[99:00.00] 歌詞來源:網易雲',
 			  })
 			: $.done({
@@ -35,7 +35,7 @@ const search = {
 			  })
 	} catch (err) {
 		$.logErr(err)
-		$.done()
+		$.isQuanX() ? $.done({ url: $request.url, headers: $request.headers }) : $.done()
 	}
 })()
 
