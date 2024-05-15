@@ -23,7 +23,8 @@ const search = {
 		const lyrics = await getLyrics(id)
 		$.isQuanX()
 			? $.done({
-					status: 200,
+					status: 'HTTP/1.1 200',
+					headers: {'Content-Type':'text/html'},
 					body: lyrics + '\n[99:00.00] 歌詞來源:網易雲',
 			  })
 			: $.done({
