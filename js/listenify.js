@@ -35,7 +35,7 @@ const search = {
 			  })
 	} catch (err) {
 		$.logErr(err)
-		$.isQuanX() ? $.done({ url: $request.url, headers: $request.headers }) : $.done()
+		$.isQuanX() ? $done() : $.done()
 	}
 })()
 
