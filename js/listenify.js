@@ -1,134 +1,170 @@
 /*
-在 listenify 的歌詞 api 處填入 https://api.lrc.cx/lyrics
+listenify 從網易雲音樂獲取歌詞與藝人封面
+歌詞 api 處填入 https://api.lrc.cx/lyrics
+封面 api 處填入 https://api.lrc.cx/cover
 Surge:
 [Script]
-lyrics = type=http-request,pattern=https:\/\/api\.lrc\.cx\/lyrics,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/listenify.js,script-update-interval=0
+listenify = type=http-request,pattern=https:\/\/api\.lrc\.cx\/(lyrics|cover),script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/listenify.js,script-update-interval=0
 
 [MITM]
 hostname = api.lrc.cx
 
 Loon:
 [Script]
-http-request https:\/\/api\.lrc\.cx\/lyrics script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/listenify.js, timeout=10, tag=lyrics
+http-request https:\/\/api\.lrc\.cx\/(lyrics|cover) script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/listenify.js, timeout=10, tag=lyrics
 
 [Mitm]
 hostname = api.lrc.cx
 
 QX:
 [rewrite_local]
-https:\/\/api.lrc.cx\/lyrics url script-echo-response https://raw.githubusercontent.com/Yswag/for-own-use/main/js/listenify.js
+https:\/\/api\.lrc\.cx\/(lyrics|cover) url script-echo-response https://raw.githubusercontent.com/Yswag/for-own-use/main/js/listenify.js
 
 [mitm]
 hostname = api.lrc.cx
 */
 const $ = new Env('lyrics')
 
-const url = $request.url
-const params = url.split('?')[1].split('&')
-const artist = params[0].split('=')[1]
-const title = params[1] ? params[1].split('=')[1] : ''
-const s = `${artist}%20${title}`
 const host = 'https://music.163.com'
 const headers = {
-	'accept': 'application/json',
-	'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0',
-	'cookie': 'os=ios; __remember_me=true; NMTID=xxx',
-	'referer': host,
+    accept: 'application/json',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0',
+    cookie: 'os=ios; __remember_me=true; NMTID=xxx',
+    referer: host
 }
-const search = {
-	url: `${host}/api/cloudsearch/pc?type=1&limit=1&offset=0&s=${s}`,
-	headers: headers,
-}
+const url = $request.url
 
-;(async () => {
-	try {
-		const id = await getID(search)
-		const lyrics = await getLyrics(id)
-		$.isQuanX()
-			? $.done({
-					status: 'HTTP/1.1 200',
-					headers: { 'Content-Type': 'text/html' },
-					body: lyrics + '\n[99:00.00] 歌詞來源:網易雲',
-			  })
-			: $.done({
-					response: {
-						status: 200,
-						body: lyrics + '\n[99:00.00] 歌詞來源:網易雲',
-					},
-			  })
-	} catch (err) {
-		$.logErr(err)
-		if ($.isQuanX()) {
-			let originalResp = await getOriginal()
-			$.done({
-				status: 'HTTP/1.1 200',
-				headers: { 'Content-Type': 'text/html' },
-				body: originalResp,
-			})
-		} else $.done()
-	}
-})()
+if (url.includes('lyrics')) {
+    const params = url.split('?')[1].split('&')
+    const artist = params[0].split('=')[1]
+    const title = params[1] ? params[1].split('=')[1] : ''
+    const s = `${artist}%20${title}`
+    const search = {
+        url: `${host}/api/cloudsearch/pc?type=1&limit=1&offset=0&s=${s}`,
+        headers: headers
+    }
+
+    ;(async () => {
+        try {
+            const id = await getID(search)
+            const lyrics = await getLyrics(id)
+            $.isQuanX()
+                ? $.done({
+                      status: 'HTTP/1.1 200',
+                      headers: { 'Content-Type': 'text/html' },
+                      body: lyrics + '\n[99:00.00] 歌詞來源:網易雲'
+                  })
+                : $.done({
+                      response: {
+                          status: 200,
+                          body: lyrics + '\n[99:00.00] 歌詞來源:網易雲'
+                      }
+                  })
+        } catch (err) {
+            $.logErr(err)
+            if ($.isQuanX()) {
+                let originalResp = await getOriginal()
+                $.done({
+                    status: 'HTTP/1.1 200',
+                    headers: { 'Content-Type': 'text/html' },
+                    body: originalResp
+                })
+            } else $.done({})
+        }
+    })()
+} else if (url.includes('cover')) {
+    const params = url.split('?')[1].split('&')
+    if (params.includes('title') || params.includes('album')) $.done({})
+
+    const artist = params[0].split('=')[1]
+    const search = {
+        url: `${host}/api/cloudsearch/pc?type=100&limit=1&offset=0&s=${artist}`,
+        headers: headers
+    }
+    $.get(search, (err, resp) => {
+        if (err) {
+            $.logErr(err)
+            $.done({})
+        } else {
+            const body = JSON.parse(resp.body)
+            artistPic = body.result.artists ? body.result.artists[0].picUrl : ''
+            if (artistPic === '') $.done({})
+
+            $.isQuanX()
+                ? $.done({
+                      status: 'HTTP/1.1 302',
+                      headers: { Location: artistPic }
+                  })
+                : $.done({
+                      response: {
+                          status: 302,
+                          headers: { Location: artistPic }
+                      }
+                  })
+        }
+    })
+}
 
 function getID(req) {
-	return new Promise((resolve, reject) => {
-		$.get(req, function (err, resp) {
-			if (err) {
-				$.logErr(err)
-				reject(err)
-			} else {
-				const obj = JSON.parse(resp.body)
-				if (obj.result.songs === undefined) {
-					reject('No songs found')
-				} else {
-					const id = obj.result.songs[0].id
-					resolve(id)
-				}
-			}
-		})
-	})
+    return new Promise((resolve, reject) => {
+        $.get(req, function (err, resp) {
+            if (err) {
+                $.logErr(err)
+                reject(err)
+            } else {
+                const obj = JSON.parse(resp.body)
+                if (obj.result.songs === undefined) {
+                    reject('No songs found')
+                } else {
+                    const id = obj.result.songs[0].id
+                    resolve(id)
+                }
+            }
+        })
+    })
 }
 
 function getLyrics(id) {
-	return new Promise((resolve, reject) => {
-		let req = {
-			url: `${host}/api/song/lyric?id=${id}&lv=0&yv=0&tv=0`,
-			headers: headers,
-		}
+    return new Promise((resolve, reject) => {
+        let req = {
+            url: `${host}/api/song/lyric?id=${id}&lv=0&yv=0&tv=0`,
+            headers: headers
+        }
 
-		$.get(req, function (err, resp) {
-			if (err) {
-				$.logErr(err)
-				reject(err)
-			} else {
-				const obj = JSON.parse(resp.body)
-				const lyrics = obj.lrc.lyric
-				// empty lyrics
-				if (lyrics === '') reject('No lyrics found')
-				// check if lyrics are plain text, if true return to lrc.cx
-				if (!/^\[\d{2,3}:\d{2,3}\.\d{2,3}\].+/.test(lyrics)) reject('Plain text lyrics, return to original')
+        $.get(req, function (err, resp) {
+            if (err) {
+                $.logErr(err)
+                reject(err)
+            } else {
+                const obj = JSON.parse(resp.body)
+                const lyrics = obj.lrc.lyric
+                // empty lyrics
+                if (lyrics === '') reject('No lyrics found')
+                // check if lyrics are plain text, if true return to lrc.cx
+                if (!/^\[\d{2,3}:\d{2,3}\.\d{2,3}\].+/.test(lyrics)) reject('Plain text lyrics, return to original')
 
-				resolve(lyrics)
-			}
-		})
-	})
+                resolve(lyrics)
+            }
+        })
+    })
 }
 
 function getOriginal() {
-	return new Promise((resolve, reject) => {
-		let req = {
-			url: $request.url,
-			headers: $request.headers,
-		}
+    return new Promise((resolve, reject) => {
+        let req = {
+            url: $request.url,
+            headers: $request.headers
+        }
 
-		$.get(req, function (err, resp) {
-			if (err) {
-				$.logErr(err)
-				reject(err)
-			} else {
-				resolve(resp.body)
-			}
-		})
-	})
+        $.get(req, function (err, resp) {
+            if (err) {
+                $.logErr(err)
+                reject(err)
+            } else {
+                resolve(resp.body)
+            }
+        })
+    })
 }
 
 //prettier-ignore
