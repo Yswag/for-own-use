@@ -141,7 +141,9 @@ function hostsCount(name, regex) {
 
 	const keys = Object.keys(hostsCount);
 	if (keys.length > 1) {
-		name.push(keys[1]);
+		//name.push(keys[1]);
+		let temp = keys.slice(1)
+		name.push(...temp)
 	} else return;
 }
 
