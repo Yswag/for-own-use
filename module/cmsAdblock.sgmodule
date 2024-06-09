@@ -11,6 +11,10 @@
 去廣告｜非凡資源 = type=http-response,pattern=^https?:\/\/(super|svipsvip|vip)\.ffzy[A-Za-z0-9-]+\.com\/(.+)\/hls\/(.+)\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 去廣告｜暴風影視 = type=http-response,pattern=^https?:\/\/s\d+\.bfengbf\.com\/video\/(.+)\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 去廣告｜快看資源 = type=http-response,pattern=^https?:\/\/vip\.kuaikan-(cdn|play)\d+\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜ikun = type=http-response,pattern=^https:\/\/bfikuncdn\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜魔都動漫 = type=http-response,pattern=^https:\/\/play\.modujx\d+\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜360 = type=http-response,pattern=^https:\/\/vod\.lyhuicheng\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜U酷資源 = type=http-response,pattern=^https:\/\/ukzy\.ukubf\d+\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 
 [MITM]
-hostname = %APPEND% m3u.haiwaikan.com, v.cdnlz*.com, vip*.lz-cdn*.com, *.ffzy*.com, s*.bfengbf.com, vip.kuaikan*.com
+hostname = %APPEND% m3u.haiwaikan.com, v.cdnlz*.com, vip*.lz-cdn*.com, *.ffzy*.com, s*.bfengbf.com, vip.kuaikan*.com, bfikuncdn.com, play.modujx*.com, vod.lyhuicheng.com, ukzy.ukubf*.com

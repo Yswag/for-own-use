@@ -75,89 +75,122 @@ let bfeng = ["/adjump/"];
 // 快看影視
 let kuaikan = [];
 
-if ($response.body === undefined || !$response.body.includes("#EXTM3U")) $done({});
+// ikun
+let ikun = ['9898kb']
 
-const url = $request.url;
-const lines = $response.body.split("\n");
+// 魔都
+let modu = ['11425kb']
 
-let adCount = 0;
+// 360
+let lyhuicheng = ['11978kb']
+
+// U酷資源
+let ukzy = []
+
+if ($response.body === undefined || !$response.body.includes('#EXTM3U')) $done({})
+
+const url = $request.url
+const lines = $response.body.split('\n')
+
+let adCount = 0
 
 switch (true) {
-	case url.includes("m3u.haiwaikan"):
-		hostsCount(haiwaikan, /^https?:\/\/(.*?)\//);
-		filterAds(haiwaikan);
-		break;
-	case url.includes("v.cdnlz"):
-	case url.includes("lz-cdn"):
-		filterAds(lzzy);
-		break;
-	case url.includes("ffzy"):
-		vodId(ffzy);
-		filterAds(ffzy);
-		break;
-	case url.includes("bfengbf.com"):
-		filterAds(bfeng);
-		break;
-	case url.includes("kuaikan"):
-		hostsCount(kuaikan, /(.+)\/hls\//);
-		filterAds(kuaikan);
-		break;
+	case url.includes('m3u.haiwaikan'):
+		hostsCount(haiwaikan, /^https?:\/\/(.*?)\//)
+		filterAds(haiwaikan)
+		break
+	case url.includes('v.cdnlz'):
+	case url.includes('lz-cdn'):
+		filterAds(lzzy)
+		break
+	case url.includes('ffzy'):
+		vodId(ffzy, 13)
+		filterAds(ffzy)
+		break
+	case url.includes('bfengbf.com'):
+		filterAds(bfeng)
+		break
+	case url.includes('kuaikan'):
+		hostsCount(kuaikan, /(.+)\/hls\//)
+		filterAds(kuaikan)
+		break
+	case url.includes('bfikuncdn'):
+		vodId(ikun, 15)
+		filterAds(ikun)
+		break
+	case url.includes('modujx'):
+		vodId(modu, 15)
+		filterAds(modu)
+		break
+	case url.includes('lyhuicheng'):
+		vodId(lyhuicheng, 15)
+		filterAds(lyhuicheng)
+		break
+	case url.includes('ukzy'):
+		vodId(ukzy, 15)
+		filterAds(ukzy)
 	default:
-		break;
+		break
 }
 
 function filterAds(valuesToRemove) {
-	let adCount = 0;
+	let adCount = 0
 
 	for (let i = lines.length - 1; i >= 0; i--) {
-		if (lines[i].includes("#EXT-X-DISCONTINUITY")) {
-			//lines.splice(i, 1);
-		} else if (valuesToRemove.some((value) => lines[i].includes(value))) {
-			console.log("Match:" + valuesToRemove.find((value) => lines[i].includes(value)));
-			if (lines[i].endsWith(".ts")) {
-				console.log("Remove ad(by .ts):" + lines[i]);
-				lines.splice(i - 1, 2);
-				adCount++;
-			} else if (i < lines.length - 1 && lines[i + 1].endsWith(".ts")) {
-				console.log("Remove ad(by duration):" + lines[i + 1]);
-				lines.splice(i, 2);
-				adCount++;
+		if (valuesToRemove.some((value) => lines[i].includes(value))) {
+			let value = valuesToRemove.find((value) => lines[i].includes(value))
+			console.log('Match:' + value)
+			if (value.includes('kb')) {
+				console.log('Remove ad(by bitrate):' + lines[i])
+				lines.splice(i - 1, 2)
+				adCount++
+			} else if (lines[i].endsWith('.ts') || lines[i].endsWith('.jpg')) {
+				console.log('Remove ad(by .ts):' + lines[i])
+				lines.splice(i - 1, 2)
+				adCount++
+			} else if (i < lines.length - 1 && lines[i + 1].endsWith('.ts')) {
+				console.log('Remove ad(by duration):' + lines[i + 1])
+				lines.splice(i, 2)
+				adCount++
 			}
 		}
 	}
 
-	console.log(`移除廣告${adCount}行`);
-	$done({ body: lines.join("\n") });
+	console.log(`移除廣告${adCount}行`)
+	$done({ body: lines.join('\n') })
 }
 
 function hostsCount(name, regex) {
-	const hostsCount = {};
+	const hostsCount = {}
 	lines.forEach((line) => {
-		if (line.includes(".ts")) {
-			const hostname = line.match(regex)[1];
-			hostsCount[hostname] = (hostsCount[hostname] || 0) + 1;
+		if (line.includes('.ts')) {
+			const hostname = line.match(regex)[1]
+			hostsCount[hostname] = (hostsCount[hostname] || 0) + 1
 		}
-	});
+	})
 
-	const keys = Object.keys(hostsCount);
+	const keys = Object.keys(hostsCount)
 	if (keys.length > 1) {
-		//name.push(keys[1]);
+		keys.sort((a, b) => hostsCount[b] - hostsCount[a])
 		let temp = keys.slice(1)
 		name.push(...temp)
-	} else return;
+	} else return
 }
 
-function vodId(name) {
-	const vodIds = {};
+function vodId(name, length) {
+	const vodIds = {}
 	lines.forEach((line) => {
-		if (line.includes(".ts")) {
-			const vodId = line.slice(0, 10);
-			vodIds[vodId] = (vodIds[vodId] || 0) + 1;
+		if (line.includes('.ts') || line.includes('.jpg')) {
+			const vodId = line.slice(0, length)
+			vodIds[vodId] = (vodIds[vodId] || 0) + 1
 		}
-	});
+	})
+	console.log(vodIds)
+	const keys = Object.keys(vodIds)
 
-	const keys = Object.keys(vodIds);
 	if (keys.length > 1) {
-		name.push(keys[1]);
-	} else return;
+		keys.sort((a, b) => vodIds[b] - vodIds[a])
+		let temp = keys.slice(1)
+		name.push(...temp)
+	} else return
 }
