@@ -87,6 +87,9 @@ let lyhuicheng = ['11978kb']
 // U酷資源
 let ukzy = []
 
+// 櫻花資源
+let yhzy = []
+
 if ($response.body === undefined || !$response.body.includes('#EXTM3U')) $done({})
 
 const url = $request.url
@@ -98,6 +101,10 @@ switch (true) {
 	case url.includes('m3u.haiwaikan'):
 		hostsCount(haiwaikan, /^https?:\/\/(.*?)\//)
 		filterAds(haiwaikan)
+		break
+    	case url.includes('wgslsw'):
+		hostsCount(yhzy, /^https?:\/\/(.*?)\//)
+		filterAds(yhzy)
 		break
 	case url.includes('v.cdnlz'):
 	case url.includes('lz-cdn'):
@@ -144,8 +151,8 @@ function filterAds(valuesToRemove) {
 				console.log('Remove ad(by bitrate):' + lines[i])
 				lines.splice(i - 1, 2)
 				adCount++
-			} else if (lines[i].endsWith('.ts') || lines[i].endsWith('.jpg')) {
-				console.log('Remove ad(by .ts):' + lines[i])
+			} else if (!lines[i].startsWith('#')) {
+				console.log('Remove ad(by url):' + lines[i])
 				lines.splice(i - 1, 2)
 				adCount++
 			} else if (i < lines.length - 1 && lines[i + 1].endsWith('.ts')) {
