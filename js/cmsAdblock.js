@@ -102,7 +102,7 @@ switch (true) {
 		hostsCount(haiwaikan, /^https?:\/\/(.*?)\//)
 		filterAds(haiwaikan)
 		break
-    	case url.includes('wgslsw'):
+	case url.includes('wgslsw'):
 		hostsCount(yhzy, /^https?:\/\/(.*?)\//)
 		filterAds(yhzy)
 		break
@@ -111,7 +111,7 @@ switch (true) {
 		filterAds(lzzy)
 		break
 	case url.includes('ffzy'):
-		vodId(ffzy, 13)
+		length(ffzy)
 		filterAds(ffzy)
 		break
 	case url.includes('bfengbf.com'):
@@ -136,13 +136,12 @@ switch (true) {
 	case url.includes('ukzy'):
 		vodId(ukzy, 15)
 		filterAds(ukzy)
+		break
 	default:
 		break
 }
 
 function filterAds(valuesToRemove) {
-	let adCount = 0
-
 	for (let i = lines.length - 1; i >= 0; i--) {
 		if (valuesToRemove.some((value) => lines[i].includes(value))) {
 			let value = valuesToRemove.find((value) => lines[i].includes(value))
@@ -176,6 +175,7 @@ function hostsCount(name, regex) {
 		}
 	})
 
+	console.log(hostsCount)
 	const keys = Object.keys(hostsCount)
 	if (keys.length > 1) {
 		keys.sort((a, b) => hostsCount[b] - hostsCount[a])
@@ -199,5 +199,29 @@ function vodId(name, length) {
 		keys.sort((a, b) => vodIds[b] - vodIds[a])
 		let temp = keys.slice(1)
 		name.push(...temp)
+	} else return
+}
+
+function length(name) {
+	const fileLength = {}
+	let files = lines.filter((i) => !i.startsWith('#'))
+
+	files.forEach((file) => {
+		fileLength[file.length] = (fileLength[file.length] || 0) + 1
+	})
+	console.log(fileLength)
+
+	const keys = Object.keys(fileLength)
+	if (keys.length > 1) {
+		keys.sort((a, b) => fileLength[b] - fileLength[a])
+		let ad = keys.slice(1)[0]
+		console.log(ad)
+		for (let i = lines.length - 1; i >= 0; i--) {
+			if (lines[i].length == ad && lines[i].endsWith('.ts')) {
+				console.log('Remove ad(by file length):' + lines[i])
+				lines.splice(i - 1, 2)
+				adCount++
+			}
+		}
 	} else return
 }
