@@ -44,22 +44,7 @@ let haiwaikan = [
 ];
 
 // 量子資源
-let lzzy = [
-	":7.166667,",
-	":7.041667,",
-	//":5.600000,",
-	":5.533333,",
-	//":4.800000,",
-	":4.700000,",
-	":4.166667,",
-	":4.100000,",
-	":4.066667,",
-	":2.866667,",
-	":2.833333,",
-	":2.733333,",
-	":2.500000,",
-	":0.458333,",
-];
+let lzzy = [];
 
 // 非凡資源
 let ffzy = [
@@ -109,10 +94,11 @@ switch (true) {
 	case url.includes('v.cdnlz'):
 	case url.includes('lz-cdn'):
 	case url.includes('lzcdn'):
+		length()
 		filterAds(lzzy)
 		break
 	case url.includes('ffzy'):
-		length(ffzy)
+		length()
 		filterAds(ffzy)
 		break
 	case url.includes('bfengbf.com'):
@@ -203,7 +189,7 @@ function vodId(name, length) {
 	} else return
 }
 
-function length(name) {
+function length() {
 	const fileLength = {}
 	let files = lines.filter((i) => !i.startsWith('#'))
 
