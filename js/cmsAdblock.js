@@ -75,6 +75,9 @@ let ukzy = []
 // 櫻花資源
 let yhzy = []
 
+// 91麻豆
+let t097img = ['y.ts']
+
 if ($response.body === undefined || !$response.body.includes('#EXTM3U')) $done({})
 
 const url = $request.url
@@ -124,7 +127,39 @@ switch (true) {
 		vodId(ukzy, 15)
 		filterAds(ukzy)
 		break
+	case url.includes('askzy'):
+		vodId(ukzy, 15)
+		filterAds(ukzy)
+		break
+	case url.includes('97img'):
+		filterAds(t097img)
+		break
+	case url.includes('bfbfhao'):
+		vodId(ukzy, 15)
+		filterAds(ukzy)
+		break
+	case url.includes('cl9987'):
+		vodId(ukzy, 15)
+		filterAds(ukzy)
+		break
+	case url.includes('ykv3'):
+		vodId(ukzy, 15)
+		filterAds(ukzy)
+		break
+	case url.includes('sybf'):
+		vodId(ukzy, 15)
+		filterAds(ukzy)
+		break
+	case url.includes('bfnxxcdn'):
+		vodId(ukzy, 15)
+		filterAds(ukzy)
+		break
+	case url.includes('huangguam3u'):
+		vodId(ukzy, 15)
+		filterAds(ukzy)
+		break
 	default:
+		$done({})
 		break
 }
 

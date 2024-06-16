@@ -17,5 +17,14 @@
 去廣告｜U酷資源 = type=http-response,pattern=^https:\/\/ukzy\.ukubf\d+\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 去廣告｜櫻花資源 = type=http-response,pattern=^https:\/\/.+\.wgslsw\.com\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 
+去廣告｜奧斯卡資源 = type=http-response,pattern=^https:\/\/askzycdn\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜91麻豆 = type=http-response,pattern=^https:\/\/.+\.97img\.com\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜番號資源 = type=http-response,pattern=^https:\/\/.+\.bfbfhao\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜草榴資源 = type=http-response,pattern=^https:\/\/player\.cl9987\.com:188\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜易看資源 = type=http-response,pattern=^https:\/\/v\.ykv3\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜鯊魚資源 = type=http-response,pattern=^https:\/\/.+\.3sybf\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜奶香香 = type=http-response,pattern=^https:\/\/bfnxxcdn\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜黃瓜資源 = type=http-response,pattern=^https:\/\/player\.huangguam3u\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+
 [MITM]
-hostname = %APPEND% m3u.haiwaikan.com, v.cdnlz*.com, vip*.lz-cdn*.com, vip.lzcdn*.com, *.ffzy*.com, s*.bfengbf.com, vip.kuaikan*.com, bfikuncdn.com, play.modujx*.com, vod.lyhuicheng.com, ukzy.ukubf*.com, *.wgslsw.com
+hostname = %APPEND% m3u.haiwaikan.com, v.cdnlz*.com, vip*.lz-cdn*.com, vip.lzcdn*.com,*.ffzy*.com, s*.bfengbf.com, vip.kuaikan*.com, bfikuncdn.com, play.modujx*.com, vod.lyhuicheng.com, ukzy.ukubf*.com, *.wgslsw.com, askzycdn.com, t0.97img.com, *.bfbfhao.com, player.cl9987.com:188, v.ykv3.com, *.3sybf.com, bfnxxcdn.com, player.huangguam3u.com
