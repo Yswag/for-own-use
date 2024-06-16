@@ -47,9 +47,9 @@ let haiwaikan = [
 let lzzy = [
 	":7.166667,",
 	":7.041667,",
-	":5.600000,",
+	//":5.600000,",
 	":5.533333,",
-	":4.800000,",
+	//":4.800000,",
 	":4.700000,",
 	":4.166667,",
 	":4.100000,",
@@ -108,6 +108,7 @@ switch (true) {
 		break
 	case url.includes('v.cdnlz'):
 	case url.includes('lz-cdn'):
+	case url.includes('lzcdn'):
 		filterAds(lzzy)
 		break
 	case url.includes('ffzy'):
