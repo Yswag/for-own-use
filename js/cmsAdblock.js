@@ -93,6 +93,7 @@ const requestUrl = jx + url
 $.get(requestUrl, (err, resp) => {
 	if (err) {
 		$.logErr('解析失敗' + err)
+		removeAds()
 	} else {
 		const body = JSON.parse(resp.body)
 		if (body.code === 200 && body.url !== $request.url) {
