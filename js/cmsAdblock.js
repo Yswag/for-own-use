@@ -103,10 +103,8 @@ $.get(requestUrl, (err, resp) => {
 						headers: { Location: body.url },
 				  })
 				: $.done({
-						response: {
-							status: 302,
-							headers: { Location: body.url },
-						},
+						status: 302,
+						headers: { Location: body.url },
 				  })
 		} else removeAds()
 	}
