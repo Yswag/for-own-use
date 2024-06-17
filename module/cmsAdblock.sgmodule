@@ -16,6 +16,7 @@
 去廣告｜360 = type=http-response,pattern=^https:\/\/vod\.lyhuicheng\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 去廣告｜U酷資源 = type=http-response,pattern=^https:\/\/ukzy\.ukubf\d+\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 去廣告｜櫻花資源 = type=http-response,pattern=^https:\/\/.+\.wgslsw\.com\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
+去廣告｜樂視資源 = type=http-response,pattern=^https:\/\/leshiyuncdn\.36s\.top\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 
 去廣告｜奧斯卡資源 = type=http-response,pattern=^https:\/\/askzycdn\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 去廣告｜91麻豆 = type=http-response,pattern=^https:\/\/.+\.97img\.com\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
@@ -27,4 +28,4 @@
 去廣告｜黃瓜資源 = type=http-response,pattern=^https:\/\/player\.huangguam3u\.com\/.+\/hls\/.+\.m3u8,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js
 
 [MITM]
-hostname = %APPEND% m3u.haiwaikan.com, v.cdnlz*.com, v.lzcdn*.com, vip*.lz-cdn*.com, vip.lzcdn*.com,*.ffzy*.com, s*.bfengbf.com, vip.kuaikan*.com, bfikuncdn.com, play.modujx*.com, vod.lyhuicheng.com, ukzy.ukubf*.com, *.wgslsw.com, askzycdn.com, t0.97img.com, *.bfbfhao.com, player.cl9987.com:188, v.ykv3.com, *.3sybf.com, bfnxxcdn.com, player.huangguam3u.com
+hostname = %APPEND% m3u.haiwaikan.com, v.cdnlz*.com, v.lzcdn*.com, vip*.lz-cdn*.com, vip.lzcdn*.com,*.ffzy*.com, s*.bfengbf.com, vip.kuaikan*.com, bfikuncdn.com, play.modujx*.com, vod.lyhuicheng.com, ukzy.ukubf*.com, *.wgslsw.com, askzycdn.com, t0.97img.com, *.bfbfhao.com, player.cl9987.com:188, v.ykv3.com, *.3sybf.com, bfnxxcdn.com, player.huangguam3u.com, leshiyuncdn.36s.top

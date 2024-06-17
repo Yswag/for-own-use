@@ -162,6 +162,7 @@ function removeAds() {
 		case url.includes('sybf'):
 		case url.includes('bfnxxcdn'):
 		case url.includes('huangguam3u'):
+		case url.includes('leshiyuncdn'):
 			vodId(ukzy, 15)
 			filterAds(ukzy)
 			break
