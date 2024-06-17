@@ -192,7 +192,6 @@ function filterAds(valuesToRemove) {
 		}
 	}
 
-	$notification.post('test', `移除廣告${adCount}行`)
 	$.log(`移除廣告${adCount}行`)
 	$.done({ body: lines.join('\n') })
 }
