@@ -63,22 +63,24 @@ let bfeng = ['/adjump/']
 let kuaikan = []
 
 // ikun
-let ikun = ['9898kb']
+//let ikun = ['9898kb']
 
 // 魔都
-let modu = ['11425kb']
+//let modu = ['11425kb']
 
 // 360
-let lyhuicheng = ['11978kb']
+//let lyhuicheng = ['11978kb']
 
 // U酷資源
-let ukzy = []
+//let ukzy = []
 
 // 櫻花資源
 let yhzy = []
 
 // 91麻豆
 let t097img = ['y.ts']
+
+let temp = []
 
 if ($response.body === undefined || !$response.body.includes('#EXTM3U')) $.done({})
 
@@ -87,33 +89,7 @@ const lines = $response.body.trim().split('\n')
 
 let adCount = 0
 
-const jx = 'https://jscdn.centos.chat/bilfun.php/?url='
-const requestUrl = jx + url
-
-//$.get(requestUrl, (err, resp) => {
-//	if (err) {
-//		$.logErr('解析失敗' + err)
-//		removeAds()
-//	} else {
-//		const body = JSON.parse(resp.body)
-//		if (body.code === 200 && body.url !== $request.url) {
-//			$.log('Redirect to', body.url)
-//			$.msg('Redirect to', body.url)
-//			$.isQuanX()
-//				? $.done({
-//						status: 'HTTP/1.1 302',
-//						headers: { Location: body.url },
-//				  })
-//				: $.done({
-//						status: 302,
-//						headers: { Location: body.url },
-//				  })
-//		} else removeAds()
-//	}
-//})
-removeAds()
-
-function removeAds() {
+;(async () => {
 	switch (true) {
 		case url.includes('m3u.haiwaikan'):
 			hostsCount(haiwaikan, /^https?:\/\/(.*?)\//)
@@ -126,10 +102,12 @@ function removeAds() {
 		case url.includes('v.cdnlz'):
 		case url.includes('lz-cdn'):
 		case url.includes('lzcdn'):
+			await fetchJxResult()
 			length()
 			filterAds(lzzy)
 			break
 		case url.includes('ffzy'):
+			await fetchJxResult()
 			length()
 			filterAds(ffzy)
 			break
@@ -137,24 +115,16 @@ function removeAds() {
 			filterAds(bfeng)
 			break
 		case url.includes('kuaikan'):
+			await fetchJxResult()
 			hostsCount(kuaikan, /(.+)\/hls\//)
 			filterAds(kuaikan)
-			break
-		case url.includes('bfikuncdn'):
-			vodId(ikun, 15)
-			filterAds(ikun)
-			break
-		case url.includes('modujx'):
-			vodId(modu, 15)
-			filterAds(modu)
-			break
-		case url.includes('lyhuicheng'):
-			vodId(lyhuicheng, 15)
-			filterAds(lyhuicheng)
 			break
 		case url.includes('97img'):
 			filterAds(t097img)
 			break
+		case url.includes('bfikuncdn'):
+		case url.includes('modujx'):
+		case url.includes('lyhuicheng'):
 		case url.includes('ukzy'):
 		case url.includes('askzy'):
 		case url.includes('bfbfhao'):
@@ -164,14 +134,15 @@ function removeAds() {
 		case url.includes('bfnxxcdn'):
 		case url.includes('huangguam3u'):
 		case url.includes('leshiyuncdn'):
-			vodId(ukzy, 15)
-			filterAds(ukzy)
+			await fetchJxResult()
+			vodId(temp, 15)
+			filterAds(temp)
 			break
 		default:
 			$.done({})
 			break
 	}
-}
+})()
 
 function filterAds(valuesToRemove) {
 	for (let i = lines.length - 1; i >= 0; i--) {
@@ -256,6 +227,33 @@ function length() {
 			}
 		}
 	} else return
+}
+
+async function fetchJxResult() {
+	const jx = 'https://jscdn.centos.chat/bilfun.php/?url='
+	const requestUrl = jx + url
+	if (url.includes('hls')) return
+
+	try {
+		const resp = await $.http.get(requestUrl)
+		const body = JSON.parse(resp.body)
+
+		if (body.code === 200 && body.url !== $request.url) {
+			$.log('Redirect to', body.url)
+			$.isQuanX()
+				? $.done({
+						status: 'HTTP/1.1 302',
+						headers: { Location: body.url },
+				  })
+				: $.done({
+						status: 302,
+						headers: { Location: body.url },
+				  })
+		} else $.done({})
+	} catch (e) {
+		$.log(e)
+		$.done({})
+	}
 }
 
 //prettier-ignore
