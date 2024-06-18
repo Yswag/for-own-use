@@ -90,26 +90,28 @@ let adCount = 0
 const jx = 'https://jscdn.centos.chat/bilfun.php/?url='
 const requestUrl = jx + url
 
-$.get(requestUrl, (err, resp) => {
-	if (err) {
-		$.logErr('解析失敗' + err)
-		removeAds()
-	} else {
-		const body = JSON.parse(resp.body)
-		if (body.code === 200 && body.url !== $request.url) {
-			$.log('Redirect to', body.url)
-			$.isQuanX()
-				? $.done({
-						status: 'HTTP/1.1 302',
-						headers: { Location: body.url },
-				  })
-				: $.done({
-						status: 302,
-						headers: { Location: body.url },
-				  })
-		} else removeAds()
-	}
-})
+//$.get(requestUrl, (err, resp) => {
+//	if (err) {
+//		$.logErr('解析失敗' + err)
+//		removeAds()
+//	} else {
+//		const body = JSON.parse(resp.body)
+//		if (body.code === 200 && body.url !== $request.url) {
+//			$.log('Redirect to', body.url)
+//			$.msg('Redirect to', body.url)
+//			$.isQuanX()
+//				? $.done({
+//						status: 'HTTP/1.1 302',
+//						headers: { Location: body.url },
+//				  })
+//				: $.done({
+//						status: 302,
+//						headers: { Location: body.url },
+//				  })
+//		} else removeAds()
+//	}
+//})
+removeAds()
 
 function removeAds() {
 	switch (true) {
