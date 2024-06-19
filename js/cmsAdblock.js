@@ -122,6 +122,10 @@ let adCount = 0
 		case url.includes('97img'):
 			filterAds(t097img)
 			break
+		case url.includes('feidaozy'):
+			vodId(temp, 10)
+			filterAds(temp)
+			break
 		case url.includes('bfikuncdn'):
 		case url.includes('modujx'):
 		case url.includes('lyhuicheng'):
@@ -139,7 +143,9 @@ let adCount = 0
 			filterAds(temp)
 			break
 		default:
-			$.done({})
+			await fetchJxResult()
+			vodId(temp, 10)
+			filterAds(temp)
 			break
 	}
 })()
@@ -190,12 +196,12 @@ function hostsCount(name, regex) {
 function vodId(name, length) {
 	const vodIds = {}
 	lines.forEach((line) => {
-		if (line.includes('.ts') || line.includes('.jpg')) {
+		if (!line.startsWith('#')) {
 			const vodId = line.slice(0, length)
 			vodIds[vodId] = (vodIds[vodId] || 0) + 1
 		}
 	})
-	$.log(vodIds)
+	$.log(JSON.stringify(vodIds))
 	const keys = Object.keys(vodIds)
 
 	if (keys.length > 1) {
@@ -212,7 +218,7 @@ function length() {
 	files.forEach((file) => {
 		fileLength[file.length] = (fileLength[file.length] || 0) + 1
 	})
-	$.log(fileLength)
+	$.log(JSON.stringify(fileLength))
 
 	const keys = Object.keys(fileLength)
 	if (keys.length > 1) {
