@@ -92,6 +92,7 @@ let adCount = 0
 ;(async () => {
 	switch (true) {
 		case url.includes('m3u.haiwaikan'):
+			await fetchJxResult()
 			hostsCount(haiwaikan, /^https?:\/\/(.*?)\//)
 			filterAds(haiwaikan)
 			break
@@ -236,15 +237,43 @@ function length() {
 }
 
 async function fetchJxResult() {
-	const jx = 'https://jscdn.centos.chat/bilfun.php/?url='
-	const requestUrl = jx + url
 	if (url.includes('hls')) return
 
-	try {
-		const resp = await $.http.get(requestUrl)
-		const body = JSON.parse(resp.body)
+	let jx
+	if (url.includes('haiwaikan')) {
+		jx = 'https://tang.hz.cz/jx/hwk?url='
+		const requestUrl = jx + url
+		const req = {
+			url: requestUrl,
+			timeout: 5000,
+		}
+		try {
+			const resp = await $.http.get(req)
+			const body = JSON.parse(resp.body)
+			$.log(resp.body)
+			if (body.url !== $request.url) {
+				const content = await $.http.get(body.url)
+				$.log('Modified by '+ body.url)
+				$.done({body:content.body})
+			} else return
+		} catch (e) {
+			$.log(e)
+			return
+		}
+	}
 
-		if (body.code === 200 && body.url !== $request.url) {
+	jx = 'https://jscdn.centos.chat/bilfun.php/?url='
+
+	const requestUrl = jx + url
+	const req = {
+		url: requestUrl,
+		timeout: 5000,
+	}
+	try {
+		const resp = await $.http.get(req)
+		const body = JSON.parse(resp.body)
+		$.log(resp.body)
+		if (body.url !== $request.url) {
 			$.log('Redirect to', body.url)
 			$.isQuanX()
 				? $.done({
