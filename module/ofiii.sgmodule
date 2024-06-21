@@ -1,0 +1,17 @@
+#!name=去廣告｜ofiii
+#!desc=移除歐飛廣告，需重新安裝
+
+[Rule]
+# APP 啟動廣告
+URL-REGEX,^https:\/\/acs2\.svc\.litv\.tv\/api\/v1\/banner$,REJECT-TINYGIF
+
+[Body Rewrite]
+# 播放前廣告與暫停廣告
+http-response https:\/\/acs2\.svc\.litv\.tv\/api\/v1\/(detail|channel) elements _elements
+
+[Script]
+# 移除輪播圖不是 VOD 的內容
+ofiii = type=http-response,pattern=^https:\/\/fino\.svc\.litv\.tv\/ofiii\/mobile\/topic\/1\.json$,requires-body=1,max-size=0,binary-body-mode=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/ofiii.js
+
+[MITM]
+hostname = %APPEND% fino.svc.litv.tv, acs2.svc.litv.tv
