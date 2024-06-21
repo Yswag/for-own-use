@@ -11,7 +11,7 @@ http-response https:\/\/acs2\.svc\.litv\.tv\/api\/v1\/(detail|channel) elements 
 
 [Script]
 # 移除輪播圖不是 VOD 的內容
-ofiii = type=http-response,pattern=^https:\/\/fino\.svc\.litv\.tv\/ofiii\/mobile\/topic\/1\.json$,requires-body=1,max-size=0,binary-body-mode=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/ofiii.js
+ofiii = type=http-response,pattern=^https:\/\/fino\.svc\.litv\.tv\/ofiii\/mobile\/topic\/\d+\.json$,requires-body=1,max-size=0,binary-body-mode=0,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/ofiii.js
 
 [MITM]
 hostname = %APPEND% fino.svc.litv.tv, acs2.svc.litv.tv
