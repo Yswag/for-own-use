@@ -1,0 +1,52 @@
+#!name=去廣告｜CMS
+#!desc=去除插入式廣告
+#!icon=https://github.com/Toperlock/Quantumult/raw/main/icon/Doraemon/Doraemon-1061.png
+#!select=去廣告方法,原始方法,道長去廣告
+
+[Rewrite]
+# 暴風跑馬燈
+(^https?:\/\/s\d+\.bfengbf\.com\/video)(.+)_z5q\.ts $1$2.ts 302
+
+[Script]
+http-response ^https?:\/\/m3u\.haiwaikan\.com\/xm3u8\/(.+).m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜海外看
+
+http-response ^https?:\/\/((?:v\.lzcdn|v\.cdnlz|vip.*\.lz[-]?cdn)\d+\.com)\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜量子資源
+
+http-response ^https?:\/\/(super|svipsvip|vip)\.ffzy[A-Za-z0-9-]+\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜非凡資源
+
+http-response ^https?:\/\/s\d+\.bfengbf\.com\/video\/(.+)\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜暴風影視
+
+http-response ^https?:\/\/vip\.kuaikan-(cdn|play)\d+\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜快看資源
+
+http-response ^https:\/\/bfikuncdn\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜ikun
+
+http-response ^https:\/\/play\.modujx\d+\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜魔都動漫
+
+http-response ^https:\/\/vod\.lyhuicheng\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜360
+
+http-response ^https:\/\/ukzy\.ukubf\d+\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜U酷資源
+
+http-response ^https:\/\/.+\.wgslsw\.com\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜櫻花資源
+
+http-response ^https:\/\/leshiyuncdn\.36s\.top\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜樂視資源
+
+http-response ^https:\/\/.+\.feidaozy\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜飛刀資源
+
+http-response ^https:\/\/askzycdn\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜奧斯卡資源
+
+http-response ^https:\/\/.+\.97img\.com\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜91麻豆
+
+http-response ^https:\/\/.+\.bfbfhao\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜番號資源
+
+http-response ^https:\/\/player\.cl9987\.com:188\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜草榴資源
+
+http-response ^https:\/\/v\.ykv3\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜易看資源
+
+http-response ^https:\/\/.+\.3sybf\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜鯊魚資源
+
+http-response ^https:\/\/bfnxxcdn\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜奶香香
+
+http-response ^https:\/\/player\.huangguam3u\.com\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜黃瓜資源
+
+[MITM]
+hostname = m3u.haiwaikan.com, v.cdnlz*.com, v.lzcdn*.com, vip*.lz-cdn*.com, vip.lzcdn*.com, *.ffzy*.com, s*.bfengbf.com, vip.kuaikan*.com, bfikuncdn.com, play.modujx*.com, vod.lyhuicheng.com, ukzy.ukubf*.com, *.wgslsw.com, askzycdn.com, t0.97img.com, *.bfbfhao.com, player.cl9987.com:188, v.ykv3.com, *.3sybf.com, bfnxxcdn.com, player.huangguam3u.com, leshiyuncdn.36s.top, cs1.feidaozy.com

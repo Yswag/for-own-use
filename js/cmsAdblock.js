@@ -299,6 +299,10 @@ async function fetchJxResult() {
 }
 
 function getArg() {
+	if($.isLoon()) {
+		let method = $persistentStore.read('去廣告方法')
+		return method === '原始方法' ? '1' : '2'
+	}
 	if (typeof $argument === 'undefined') {
 		return '1'
 	}
