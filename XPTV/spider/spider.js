@@ -16,7 +16,7 @@ const $ = new Env('XPTV-sources', { logLevel: 'debug' })
     )
 
     const URI = new URIs()
-    let { url } = $request
+    const { url } = $request
     const queryParams = URI.parse(url).query
     let spiderInstance
     switch (true) {
@@ -25,6 +25,9 @@ const $ = new Env('XPTV-sources', { logLevel: 'debug' })
             break
         case url.includes('saohuo'):
             spiderInstance = new saohuoClass()
+            break
+        case url.includes('getJSON'):
+            getJSON()
             break
         default:
             $.logErr('No matching spiderInstance found for the URL: ' + url)
@@ -95,6 +98,20 @@ async function handleRequest(spiderInstance, queryParams) {
                   },
               })
     }
+}
+
+function getJSON() {
+    const subs = {
+        sites: [
+            { name: '(beta)兩個BT', type: 1, api: `https://ykusu.ykusu/bttwoo/provide/vod` },
+            { name: '(beta)燒火電影', type: 1, api: `https://ykusu.ykusu/saohuo/provide/vod` },
+            { name: '(beta)素白白影視', type: 1, api: `https://ykusu.ykusu/subaibai/provide/vod` },
+            { name: '(beta)含羞草研究所', type: 1, api: `https://ykusu.ykusu/hanxiucao/provide/vod` },
+        ],
+    }
+    return $.isQuanX()
+        ? $.done({ status: 'HTTP/1.1 200', body: JSON.stringify(subs) })
+        : $.done({ response: { status: 200, body: JSON.stringify(subs) } })
 }
 
 function bttwoClass() {
