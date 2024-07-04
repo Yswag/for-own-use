@@ -14,6 +14,7 @@ const $ = new Env('XPTV-sources', { logLevel: 'debug' })
         'createCheerio',
         'cheerio'
     )
+    await importRemoteUtils('https://cdn.jsdelivr.net/gh/Yuheng0101/X@main/Utils/Buffer.min.js', 'loadBuffer', 'Buffer')
 
     const URI = new URIs()
     const { url } = $request
@@ -655,7 +656,6 @@ function saohuoClass() {
                         let vodPic = _$(element).find('img').attr('data-original') || ''
                         let vodName = _$(element).find('a').attr('title') || ''
                         let vodDiJiJi = _$(element).find('.v_note').text() || ''
-                        $.log('vodurl=' + vodUrl)
 
                         let videoDet = {}
                         videoDet.vod_id = +vodUrl.match(/movie\/(.+)\.html/)[1]
@@ -869,11 +869,54 @@ function saohuoClass() {
         async searchVideo(queryParams) {
             const pg = queryParams.pg
             const wd = queryParams.wd
+            let ocrApi = 'https://api.nn.ci/ocr/b64/json'
+            let validate = this.url + '/include/vdimgck.php'
             let backData = {}
-            // let url = this.removeTrailingSlash(this.url) + `/xssssearch?q=${wd}$f=_all&p=${pg}`;
 
             try {
                 // 搜尋需要通過圖形驗證碼
+                let img = await $.http.get({ url: validate, headers: this.headers, 'binary-mode': true })
+                // $.log(JSON.stringify(img))
+                let b64 = $.Buffer.from(img.body).toString('base64')
+                // $.log(b64)
+                let ocrRes = await $.http.post({
+                    url: ocrApi,
+                    headers: { headers: this.headers },
+                    body: b64,
+                })
+                let vd = JSON.parse(ocrRes.body).result
+                let searchUrl =
+                    this.url +
+                    '/search.php?scheckAC=check&page=&searchtype=&order=&tid=&area=&year=&letter=&yuyan=&state=&money=&ver=&jq='
+                let searchRes = await $.http.post({
+                    url: searchUrl,
+                    headers: this.headers,
+                    body: `searchword=${wd}&validate=${vd}`,
+                })
+                let _$ = $.cheerio.load(searchRes.body)
+                let videos = []
+                let allVideo = _$('ul.v_list div.v_img')
+                allVideo.each((index, element) => {
+                    let vodUrl = _$(element).find('a').attr('href') || ''
+                    let vodPic = _$(element).find('img').attr('data-original') || ''
+                    let vodName = _$(element).find('a').attr('title') || ''
+                    let vodDiJiJi = _$(element).find('.v_note').text() || ''
+
+                    let videoDet = {}
+                    videoDet.vod_id = +vodUrl.match(/movie\/(.+)\.html/)[1]
+                    videoDet.vod_pic = vodPic
+                    videoDet.vod_name = vodName
+                    videoDet.vod_remarks = vodDiJiJi.trim()
+                    videos.push(videoDet)
+                })
+
+                backData.code = 1
+                backData.msg = '數據列表'
+                backData.page = pg
+                // backData.pagecount = +lastPage
+                backData.limit = videos.length.toString()
+                // backData.total = videos.length * lastPage
+                backData.list = videos
             } catch (e) {
                 backData.error = e.message
             }
