@@ -103,7 +103,7 @@ async function handleRequest(spiderInstance, queryParams) {
 function getJSON() {
     const subs = {
         sites: [
-            { name: '(beta)兩個BT', type: 1, api: `https://ykusu.ykusu/bttwoo/provide/vod` },
+            { name: '(beta)兩個BT', type: 1, api: `https://ykusu.ykusu/bttwo/provide/vod` },
             { name: '(beta)燒火電影', type: 1, api: `https://ykusu.ykusu/saohuo/provide/vod` },
             { name: '(beta)素白白影視', type: 1, api: `https://ykusu.ykusu/subaibai/provide/vod` },
             { name: '(beta)含羞草研究所', type: 1, api: `https://ykusu.ykusu/hanxiucao/provide/vod` },
