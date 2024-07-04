@@ -301,10 +301,10 @@ class bttwoClass {
                 } else {
                     $.msg('該片在線播放需要兩個BT的VIP會員')
                     // backData.error = '該片需兩個BT的VIP會員才能收看'
-                    backData.data = 'https://bit.ly/3BlS71b'
+                    backData.data = 'https://shattereddisk.github.io/rickroll/rickroll.mp4'
                 }
                 // } else backData.data = 'https://bit.ly/3BlS71b'
-            } else backData.data = 'https://bit.ly/3BlS71b'
+            } else backData.data = 'https://shattereddisk.github.io/rickroll/rickroll.mp4'
         } catch (error) {
             $.logErr(error)
             backData.error = error.message
