@@ -1,0 +1,8 @@
+#!name=XPTV Sources
+#!desc=Format video data into CMS api structure
+
+[Script]
+BTTwo = type=http-request,pattern=https?:\/\/ykusu\.ykusu\/bttwo\/provide\/vod,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/bttwo.js,script-update-interval=0,requires-body=0
+
+[MITM]
+hostname = %APPEND% ykusu.ykusu
