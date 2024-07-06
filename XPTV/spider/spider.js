@@ -21,11 +21,17 @@ const $ = new Env('XPTV-sources', { logLevel: 'debug' })
     const queryParams = URI.parse(url).query
     let spiderInstance
     switch (true) {
-        case url.includes('bttwo'):
+        case url.includes('/bttwo/'):
             spiderInstance = new bttwoClass()
             break
-        case url.includes('saohuo'):
+        case url.includes('/saohuo/'):
             spiderInstance = new saohuoClass()
+            break
+        case url.includes('/subaibai/'):
+            spiderInstance = new sbbClass()
+            break
+        case url.includes('/hjkk/'):
+            spiderInstance = new hjkkClass()
             break
         case url.includes('getJSON'):
             getJSON()
@@ -107,7 +113,7 @@ function getJSON() {
             { name: '(beta)兩個BT', type: 1, api: `https://ykusu.ykusu/bttwo/provide/vod` },
             { name: '(beta)燒火電影', type: 1, api: `https://ykusu.ykusu/saohuo/provide/vod` },
             { name: '(beta)素白白影視', type: 1, api: `https://ykusu.ykusu/subaibai/provide/vod` },
-            { name: '(beta)含羞草研究所', type: 1, api: `https://ykusu.ykusu/hanxiucao/provide/vod` },
+            { name: '(beta)韓劇看看', type: 1, api: `https://ykusu.ykusu/hjkk/provide/vod` },
         ],
     }
     return $.isQuanX()
@@ -295,89 +301,18 @@ function bttwoClass() {
                         total: 1,
                         list: [
                             {
-                                vod_id: 4561,
-                                type_id: 40,
-                                type_id_1: 4,
-                                group_id: 0,
+                                vod_id: 1,
                                 vod_name: '',
-                                vod_sub: '',
-                                vod_en: '',
-                                vod_status: 1,
-                                vod_letter: '',
-                                vod_color: '',
-                                vod_tag: '',
-                                vod_class: '',
                                 vod_pic: '',
-                                vod_pic_thumb: '',
-                                vod_pic_slide: '',
-                                vod_pic_screenshot: '',
+                                vod_remarks: '',
+                                type_name: '',
+                                vod_year: '',
+                                vod_area: '',
                                 vod_actor: '',
                                 vod_director: '',
-                                vod_writer: '',
-                                vod_behind: '',
-                                vod_blurb: '',
-                                vod_remarks: '',
-                                vod_pubdate: '',
-                                vod_total: 0,
-                                vod_serial: '0',
-                                vod_tv: '',
-                                vod_weekday: '',
-                                vod_area: '',
-                                vod_lang: '',
-                                vod_year: '',
-                                vod_version: '',
-                                vod_state: '',
-                                vod_author: '',
-                                vod_jumpurl: '',
-                                vod_tpl: '',
-                                vod_tpl_play: '',
-                                vod_tpl_down: '',
-                                vod_isend: 1,
-                                vod_lock: 0,
-                                vod_level: 0,
-                                vod_copyright: 0,
-                                vod_points: 0,
-                                vod_points_play: 0,
-                                vod_points_down: 0,
-                                vod_hits: 70,
-                                vod_hits_day: 152,
-                                vod_hits_week: 19,
-                                vod_hits_month: 61,
-                                vod_duration: '',
-                                vod_up: 705,
-                                vod_down: 150,
-                                vod_score: '10.0',
-                                vod_score_all: 7060,
-                                vod_score_num: 706,
-                                vod_time: '2024-04-17 21:02:46',
-                                vod_time_add: 1708587661,
-                                vod_time_hits: 0,
-                                vod_time_make: 0,
-                                vod_trysee: 0,
-                                vod_douban_id: 0,
-                                vod_douban_score: '0.0',
-                                vod_reurl: '',
-                                vod_rel_vod: '',
-                                vod_rel_art: '',
-                                vod_pwd: '',
-                                vod_pwd_url: '',
-                                vod_pwd_play: '',
-                                vod_pwd_play_url: '',
-                                vod_pwd_down: '',
-                                vod_pwd_down_url: '',
                                 vod_content: '',
                                 vod_play_from: '',
-                                vod_play_server: '',
-                                vod_play_note: '',
                                 vod_play_url: '',
-                                vod_down_from: '',
-                                vod_down_server: '',
-                                vod_down_note: '',
-                                vod_down_url: '',
-                                vod_plot: 0,
-                                vod_plot_name: '',
-                                vod_plot_detail: '',
-                                type_name: '',
                             },
                         ],
                     }
@@ -524,7 +459,7 @@ function bttwoClass() {
 }
 
 function saohuoClass() {
-    return new (class saohuoClass {
+    return new (class {
         constructor() {
             this.url = 'https://saohuo.tv'
             this.headers = {
@@ -727,89 +662,18 @@ function saohuoClass() {
                         total: 1,
                         list: [
                             {
-                                vod_id: 4561,
-                                type_id: 40,
-                                type_id_1: 4,
-                                group_id: 0,
+                                vod_id: 1,
                                 vod_name: '',
-                                vod_sub: '',
-                                vod_en: '',
-                                vod_status: 1,
-                                vod_letter: '',
-                                vod_color: '',
-                                vod_tag: '',
-                                vod_class: '',
                                 vod_pic: '',
-                                vod_pic_thumb: '',
-                                vod_pic_slide: '',
-                                vod_pic_screenshot: '',
+                                vod_remarks: '',
+                                type_name: '',
+                                vod_year: '',
+                                vod_area: '',
                                 vod_actor: '',
                                 vod_director: '',
-                                vod_writer: '',
-                                vod_behind: '',
-                                vod_blurb: '',
-                                vod_remarks: '',
-                                vod_pubdate: '',
-                                vod_total: 0,
-                                vod_serial: '0',
-                                vod_tv: '',
-                                vod_weekday: '',
-                                vod_area: '',
-                                vod_lang: '',
-                                vod_year: '',
-                                vod_version: '',
-                                vod_state: '',
-                                vod_author: '',
-                                vod_jumpurl: '',
-                                vod_tpl: '',
-                                vod_tpl_play: '',
-                                vod_tpl_down: '',
-                                vod_isend: 1,
-                                vod_lock: 0,
-                                vod_level: 0,
-                                vod_copyright: 0,
-                                vod_points: 0,
-                                vod_points_play: 0,
-                                vod_points_down: 0,
-                                vod_hits: 70,
-                                vod_hits_day: 152,
-                                vod_hits_week: 19,
-                                vod_hits_month: 61,
-                                vod_duration: '',
-                                vod_up: 705,
-                                vod_down: 150,
-                                vod_score: '10.0',
-                                vod_score_all: 7060,
-                                vod_score_num: 706,
-                                vod_time: '2024-04-17 21:02:46',
-                                vod_time_add: 1708587661,
-                                vod_time_hits: 0,
-                                vod_time_make: 0,
-                                vod_trysee: 0,
-                                vod_douban_id: 0,
-                                vod_douban_score: '0.0',
-                                vod_reurl: '',
-                                vod_rel_vod: '',
-                                vod_rel_art: '',
-                                vod_pwd: '',
-                                vod_pwd_url: '',
-                                vod_pwd_play: '',
-                                vod_pwd_play_url: '',
-                                vod_pwd_down: '',
-                                vod_pwd_down_url: '',
                                 vod_content: '',
                                 vod_play_from: '',
-                                vod_play_server: '',
-                                vod_play_note: '',
                                 vod_play_url: '',
-                                vod_down_from: '',
-                                vod_down_server: '',
-                                vod_down_note: '',
-                                vod_down_url: '',
-                                vod_plot: 0,
-                                vod_plot_name: '',
-                                vod_plot_detail: '',
-                                type_name: '',
                             },
                         ],
                     }
@@ -964,6 +828,655 @@ function saohuoClass() {
             const host = hostEndIndex === -1 ? url.slice(hostStartIndex) : url.slice(hostStartIndex, hostEndIndex)
 
             return `${url.slice(0, protocolEndIndex + 3)}${host}`
+        }
+    })()
+}
+
+function sbbClass() {
+    return new (class {
+        constructor() {
+            this.key = '素白白'
+            this.url = 'https://www.subaibaiys.com'
+            this.siteKey = ''
+            this.siteType = 0
+            this.headers = {
+                'User-Agent':
+                    'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+            }
+            this.cookie = {}
+            this.ignoreClassName = ['首页', '公告留言']
+        }
+
+        async getClassList() {
+            let webUrl = this.url
+            let backData = {}
+            try {
+                const pro = await $.http.get({ url: webUrl, headers: this.headers })
+
+                let proData = await pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let allClass = _$('ul.navlist a')
+                    let list = []
+                    allClass.each((index, element) => {
+                        let isIgnore = this.isIgnoreClassName(_$(element).text())
+                        if (isIgnore) {
+                            return
+                        }
+                        let type_name = _$(element).text()
+                        let url = _$(element).attr('href') || ''
+
+                        if (url.length > 0 && type_name.length > 0) {
+                            let videoClass = {}
+                            // videoClass.type_id = url
+                            videoClass.type_id = index
+                            videoClass.type_name = type_name.trim()
+                            list.push(videoClass)
+                        }
+                    })
+
+                    let allVideo = _$('.mi_cont .mi_btcon')
+                    let videos = []
+                    allVideo.each((index, element) => {
+                        let nodes = _$(element).find('.bt_img ul li')
+                        nodes.each((index, element) => {
+                            let vodUrl = _$(element).find('a').attr('href') || ''
+                            let vodPic = _$(element).find('img').attr('data-original') || ''
+                            let vodName = _$(element).find('img').attr('alt') || ''
+                            let vodDiJiJi = _$(element).find('.jidi').text() || ''
+
+                            let videoDet = {}
+                            videoDet.vod_id = +vodUrl.match(/movie\/(.+)\.html/)[1]
+                            videoDet.vod_pic = vodPic
+                            videoDet.vod_name = vodName
+                            videoDet.vod_remarks = vodDiJiJi.trim()
+                            videos.push(videoDet)
+                        })
+                    })
+
+                    backData.code = 1
+                    backData.msg = '數據列表'
+                    backData.page = 1
+                    backData.list = videos
+                    backData.class = list
+                }
+            } catch (error) {
+                backData.error = error.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        async getVideoList(queryParams) {
+            let page = queryParams.pg
+            let type = queryParams.t
+
+            let realTypeName = ''
+            if (type === '') return this.getClassList()
+            switch (type) {
+                case '1':
+                    realTypeName = '/new-movie'
+                    break
+                case '2':
+                    realTypeName = '/tv-drama'
+                    break
+                case '3':
+                    realTypeName = '/hot-month'
+                    break
+                case '4':
+                    realTypeName = '/high-movie'
+                    break
+                case '5':
+                    realTypeName = '/cartoon-movie'
+                    break
+                case '6':
+                    realTypeName = '/hongkong-movie'
+                    break
+                case '7':
+                    realTypeName = '/domestic-drama'
+                    break
+                case '8':
+                    realTypeName = '/american-drama'
+                    break
+                case '9':
+                    realTypeName = '/korean-drama'
+                    break
+                case '10':
+                    realTypeName = '/anime-drama'
+                    break
+            }
+
+            let listUrl = this.removeTrailingSlash(this.url) + realTypeName + '/page/' + page
+            let backData = {}
+            try {
+                let pro = await $.http.get({ url: listUrl, headers: this.headers })
+                let proData = pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let allVideo = _$('.bt_img.mi_ne_kd.mrb li')
+                    let lastPage = _$('.pagenavi_txt a[title="跳转到最后一页"]').attr('href')
+                    if (lastPage) {
+                        let parts = lastPage.split('/')
+                        lastPage = parts[parts.length - 1]
+                        // console.log('lastpage = ' + lastPage);
+                    } else {
+                        lastPage = '1'
+                        // console.log('lastpage not found, using default value');
+                    }
+                    let videos = []
+                    allVideo.each((index, element) => {
+                        let vodUrl = _$(element).find('a').attr('href') || ''
+                        let vodPic = _$(element).find('img.thumb').attr('data-original') || ''
+                        let vodName = _$(element).find('img.thumb').attr('alt') || ''
+                        let vodDiJiJi = _$(element).find('.jidi span').text()
+                            ? _$(element).find('.jidi span').text()
+                            : _$(element).find('.hdinfo').text()
+
+                        let videoDet = {}
+                        videoDet.vod_id = +vodUrl.match(/movie\/(.+)\.html/)[1]
+                        videoDet.vod_pic = vodPic
+                        videoDet.vod_name = vodName
+                        videoDet.vod_remarks = vodDiJiJi.trim()
+                        videos.push(videoDet)
+                    })
+
+                    backData.code = 1
+                    backData.msg = '數據列表'
+                    backData.page = page.toString()
+                    backData.pagecount = +lastPage
+                    backData.limit = videos.length.toString()
+                    backData.total = videos.length * lastPage
+                    backData.list = videos
+                }
+            } catch (e) {
+                $.logErr('Error fetching list:', e)
+                backData.error = e.message
+            }
+            return JSON.stringify(backData)
+        }
+
+        async getVideoDetail(queryParams) {
+            let ids = queryParams.ids
+            let backData = {}
+            try {
+                let webUrl = this.url + `/movie/${ids}.html`
+                let pro = await $.http.get({ url: webUrl, headers: this.headers })
+                let proData = pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let vod_name = _$('.moviedteail_tt h1').text()
+                    let vod_content = _$('.yp_context').text()
+                    let vod_pic = _$('.dyimg img').attr('src')
+
+                    let juJiDocment = _$('.paly_list_btn').find('a')
+                    // let vod_play_from = '';
+                    let vod_play_url = ''
+                    juJiDocment.each((index, element) => {
+                        vod_play_url += _$(element).text()
+                        vod_play_url += '$'
+                        vod_play_url +=
+                            'https://ykusu.ykusu/subaibai/provide/vod?ac=play&url=' +
+                            encodeURIComponent(_$(element).attr('href')) +
+                            '&n=.m3u8'
+                        vod_play_url += '#'
+                    })
+
+                    let temp = {
+                        code: 1,
+                        msg: '数据列表',
+                        page: 1,
+                        pagecount: 1,
+                        limit: '20',
+                        total: 1,
+                        list: [
+                            {
+                                vod_id: 1,
+                                vod_name: '',
+                                vod_pic: '',
+                                vod_remarks: '',
+                                type_name: '',
+                                vod_year: '',
+                                vod_area: '',
+                                vod_actor: '',
+                                vod_director: '',
+                                vod_content: '',
+                                vod_play_from: '',
+                                vod_play_url: '',
+                            },
+                        ],
+                    }
+                    temp.list[0].vod_play_url = vod_play_url
+                    // temp.list[0].vod_play_from = play_from.join('$$$')
+                    // temp.list[0].vod_play_note = '$$$'
+                    temp.list[0].vod_id = +ids
+                    temp.list[0].vod_name = vod_name
+                    temp.list[0].vod_pic = vod_pic
+                    temp.list[0].vod_content = vod_content.trim()
+                    backData = temp
+                }
+            } catch (e) {
+                backData.error = e.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        async getVideoPlayUrl(queryParams) {
+            let backData = {}
+            let url = decodeURIComponent(queryParams.url)
+            try {
+                let html = await $.http.get({ url: url, headers: this.headers })
+
+                let proData = html.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let iframe = _$('iframe').filter((i, iframe) => $(iframe).attr('src').includes('Cloud'))
+                    $.log('iframe.length=' + iframe.length)
+
+                    if (0 < iframe.length) {
+                        $.log('if')
+                        const iframeHtml = (
+                            await $.http.get({
+                                url: iframe[0].attr('src'),
+                                headers: {
+                                    Referer: url,
+                                    'User-Agent':
+                                        'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+                                },
+                            })
+                        ).body
+                        let code = iframeHtml
+                                .match(/var url = '(.*?)'/)[1]
+                                .split('')
+                                .reverse()
+                                .join(''),
+                            temp = ''
+                        for (let i = 0; i < code.length; i += 2)
+                            temp += String.fromCharCode(parseInt(code[i] + code[i + 1], 16))
+                        const playUrl =
+                            temp.substring(0, (temp.length - 7) / 2) + temp.substring((temp.length - 7) / 2 + 7)
+
+                        backData.data = playUrl
+                    } else {
+                        let playUrl = 'error'
+
+                        const script = _$('script')
+                        const js = script.filter((i, el) => _$(el).text().includes('window.wp_nonce')).text() || ''
+                        const group = js.match(/(var.*)eval\((\w*\(\w*\))\)/)
+                        const md5 = CryptoJS
+                        const result = eval(group[1] + group[2])
+                        playUrl = result.match(/url:.*?['"](.*?)['"]/)[1]
+                        $.log(playUrl)
+
+                        backData.data = playUrl
+                    }
+                }
+            } catch (error) {
+                backData.error = error.message
+            }
+            return JSON.stringify(backData)
+        }
+
+        async searchVideo(queryParams) {
+            const pg = queryParams.pg
+            const wd = queryParams.wd
+            let backData = {}
+
+            try {
+                let searchUrl = this.url + '/search?q=' + wd
+                let searchRes = await $.http.get({
+                    url: searchUrl,
+                    headers: this.headers,
+                })
+                let _$ = $.cheerio.load(searchRes.body)
+                let videos = []
+                let allVideo = _$('.search_list').find('li')
+                allVideo.each((index, element) => {
+                    let vodUrl = _$(element).find('a').attr('href') || ''
+                    let vodPic = _$(element).find('img.thumb').attr('data-original') || ''
+                    let vodName = _$(element).find('img.thumb').attr('alt') || ''
+                    let vodDiJiJi = _$(element).find('.jidi').text() || ''
+
+                    let videoDet = {}
+                    videoDet.vod_id = +vodUrl.match(/movie\/(.+)\.html/)[1]
+                    videoDet.vod_pic = vodPic
+                    videoDet.vod_name = vodName
+                    videoDet.vod_remarks = vodDiJiJi.trim()
+                    videos.push(videoDet)
+                })
+
+                backData.code = 1
+                backData.msg = '數據列表'
+                backData.page = pg
+                // backData.pagecount = +lastPage
+                backData.limit = videos.length.toString()
+                // backData.total = videos.length * lastPage
+                backData.list = videos
+            } catch (e) {
+                backData.error = e.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        combineUrl(url) {
+            if (url === undefined) {
+                return ''
+            }
+            if (url.indexOf(this.url) !== -1) {
+                return url
+            }
+            if (url.startsWith('/')) {
+                return this.url + url
+            }
+            return this.url + '/' + url
+        }
+
+        isIgnoreClassName(className) {
+            for (let index = 0; index < this.ignoreClassName.length; index++) {
+                const element = this.ignoreClassName[index]
+                if (className.indexOf(element) !== -1) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        removeTrailingSlash(str) {
+            if (str.endsWith('/')) {
+                return str.slice(0, -1)
+            }
+            return str
+        }
+    })()
+}
+
+function hjkkClass() {
+    return new (class {
+        constructor() {
+            this.url = 'https://www.hanjukankan.com'
+            this.headers = {
+                'User-Agent':
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+            }
+            this.ignoreClassName = ['首页', '泰剧', 'APP']
+        }
+
+        async getClassList() {
+            let webUrl = this.url
+            let backData = {}
+            try {
+                const pro = await $.http.get({ url: webUrl, headers: this.headers })
+
+                let proData = await pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let allClass = _$('ul.myui-header__menu a')
+                    let list = []
+                    allClass.each((index, element) => {
+                        let isIgnore = this.isIgnoreClassName(_$(element).text())
+                        if (isIgnore) {
+                            return
+                        }
+                        let type_name = _$(element).text()
+                        let url = _$(element).attr('href') || ''
+
+                        if (url.length > 0 && type_name.length > 0) {
+                            let videoClass = {}
+                            // videoClass.type_id = url
+                            videoClass.type_id = index
+                            videoClass.type_name = type_name.trim()
+                            list.push(videoClass)
+                        }
+                    })
+
+                    let allVideo = _$('.myui-panel')
+                    let videos = []
+                    allVideo.each((index, element) => {
+                        let nodes = _$(element).find('ul.myui-vodlist li')
+                        nodes.each((index, element) => {
+                            let vodUrl = _$(element).find('a').attr('href') || ''
+                            let vodPic = _$(element).find('a').attr('data-original') || ''
+                            let vodName = _$(element).find('a').attr('title') || ''
+                            let vodDiJiJi = ''
+
+                            let videoDet = {}
+                            videoDet.vod_id = +vodUrl.match(/movie\/index(.+)\.html/)[1]
+                            videoDet.vod_pic = vodPic
+                            videoDet.vod_name = vodName
+                            videoDet.vod_remarks = vodDiJiJi.trim()
+                            videos.push(videoDet)
+                        })
+                    })
+
+                    backData.code = 1
+                    backData.msg = '數據列表'
+                    backData.page = 1
+                    backData.list = videos
+                    backData.class = list
+                }
+            } catch (error) {
+                backData.error = error.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        async getVideoList(queryParams) {
+            let page = queryParams.pg
+            let type = queryParams.t
+
+            if (type === '') return this.getClassList()
+
+            let listUrl = this.removeTrailingSlash(this.url) + '/frim/index' + type + '-' + page + '.html'
+            let backData = {}
+            try {
+                let pro = await $.http.get({ url: listUrl, headers: this.headers })
+                let proData = pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let allVideo = _$('.myui-vodlist li')
+                    let lastPage = _$('.myui-page a')
+                        .filter((i, el) => _$(el).text() === '尾页')
+                        .attr('href')
+                    if (lastPage) {
+                        // let parts = lastPage.split('/')
+                        lastPage = lastPage.match(/index.-(.+)\.html/)[1]
+                        // console.log('lastpage = ' + lastPage);
+                    } else {
+                        lastPage = '1'
+                        // console.log('lastpage not found, using default value');
+                    }
+                    let videos = []
+                    allVideo.each((index, element) => {
+                        let vodUrl = _$(element).find('a').attr('href') || ''
+                        let vodPic = _$(element).find('a').attr('data-original') || ''
+                        let vodName = _$(element).find('a').attr('title') || ''
+                        let vodDiJiJi = ''
+
+                        let videoDet = {}
+                        videoDet.vod_id = +vodUrl.match(/movie\/index(.+)\.html/)[1]
+                        videoDet.vod_pic = vodPic
+                        videoDet.vod_name = vodName
+                        videoDet.vod_remarks = vodDiJiJi.trim()
+                        videos.push(videoDet)
+                    })
+
+                    backData.code = 1
+                    backData.msg = '數據列表'
+                    backData.page = page.toString()
+                    backData.pagecount = +lastPage
+                    backData.limit = videos.length.toString()
+                    backData.total = videos.length * lastPage
+                    backData.list = videos
+                }
+            } catch (e) {
+                $.logErr('Error fetching list:', e)
+                backData.error = e.message
+            }
+            return JSON.stringify(backData)
+        }
+
+        async getVideoDetail(queryParams) {
+            let ids = queryParams.ids
+            let backData = {}
+            try {
+                let webUrl = this.url + `/movie/index${ids}.html`
+                let pro = await $.http.get({ url: webUrl, headers: this.headers })
+                let proData = pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let vod_name = _$('h1.title').text()
+                    let vod_content = _$('#jq .tab-content.myui-panel_bd').text()
+                    let vod_pic = _$('.myui-content__thumb img').attr('data-original')
+
+                    let juJiDocment = _$('#playlist1 ul li').find('a')
+                    // let vod_play_from = '';
+                    let vod_play_url = ''
+                    juJiDocment.each((index, element) => {
+                        vod_play_url += _$(element).text()
+                        vod_play_url += '$'
+                        vod_play_url +=
+                            'https://ykusu.ykusu/hjkk/provide/vod?ac=play&url=' +
+                            encodeURIComponent(this.combineUrl(_$(element).attr('href'))) +
+                            '&n=.m3u8'
+                        vod_play_url += '#'
+                    })
+
+                    let temp = {
+                        code: 1,
+                        msg: '数据列表',
+                        page: 1,
+                        pagecount: 1,
+                        limit: '20',
+                        total: 1,
+                        list: [
+                            {
+                                vod_id: 1,
+                                vod_name: '',
+                                vod_pic: '',
+                                vod_remarks: '',
+                                type_name: '',
+                                vod_year: '',
+                                vod_area: '',
+                                vod_actor: '',
+                                vod_director: '',
+                                vod_content: '',
+                                vod_play_from: '',
+                                vod_play_url: '',
+                            },
+                        ],
+                    }
+                    temp.list[0].vod_play_url = vod_play_url
+                    // temp.list[0].vod_play_from = play_from.join('$$$')
+                    // temp.list[0].vod_play_note = '$$$'
+                    temp.list[0].vod_id = +ids
+                    temp.list[0].vod_name = vod_name
+                    temp.list[0].vod_pic = vod_pic
+                    temp.list[0].vod_content = vod_content.trim()
+                    backData = temp
+                }
+            } catch (e) {
+                backData.error = e.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        async getVideoPlayUrl(queryParams) {
+            let backData = {}
+            let url = decodeURIComponent(queryParams.url)
+            try {
+                let html = await $.http.get({ url: url, headers: this.headers })
+
+                let proData = html.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let script = _$('.myui-player__box script').text()
+
+                    let url = eval(script.match(/now=(.*);var pn/)[1])
+                    if (/\/file\//.test(url)) {
+                        url = url.replace('/file', '')
+                    }
+
+                    backData.data = url
+                }
+            } catch (error) {
+                backData.error = error.message
+            }
+            return JSON.stringify(backData)
+        }
+
+        async searchVideo(queryParams) {
+            const pg = queryParams.pg
+            const wd = queryParams.wd
+            let backData = {}
+
+            try {
+                let searchUrl = this.url + `/search.php?searchword=${wd}`
+                let searchRes = await $.http.get({
+                    url: searchUrl,
+                    headers: this.headers,
+                })
+                let _$ = $.cheerio.load(searchRes.body)
+                let videos = []
+                let allVideo = _$('#searchList').find('li')
+                allVideo.each((index, element) => {
+                    let vodUrl = _$(element).find('a.myui-vodlist__thumb').attr('href') || ''
+                    let vodPic = _$(element).find('a.myui-vodlist__thumb').attr('data-original') || ''
+                    let vodName = _$(element).find('a.myui-vodlist__thumb').attr('title') || ''
+                    let vodDiJiJi = _$(element).find('span.pic-tag').text() || ''
+
+                    let videoDet = {}
+                    videoDet.vod_id = +vodUrl.match(/movie\/index(.+)\.html/)[1]
+                    videoDet.vod_pic = vodPic
+                    videoDet.vod_name = vodName
+                    videoDet.vod_remarks = vodDiJiJi.trim()
+                    videos.push(videoDet)
+                })
+
+                backData.code = 1
+                backData.msg = '數據列表'
+                backData.page = pg
+                // backData.pagecount = +lastPage
+                backData.limit = videos.length.toString()
+                // backData.total = videos.length * lastPage
+                backData.list = videos
+            } catch (e) {
+                backData.error = e.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        combineUrl(url) {
+            if (url === undefined) {
+                return ''
+            }
+            if (url.indexOf(this.url) !== -1) {
+                return url
+            }
+            if (url.startsWith('/')) {
+                return this.url + url
+            }
+            return this.url + '/' + url
+        }
+
+        isIgnoreClassName(className) {
+            for (let index = 0; index < this.ignoreClassName.length; index++) {
+                const element = this.ignoreClassName[index]
+                if (className.indexOf(element) !== -1) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        removeTrailingSlash(str) {
+            if (str.endsWith('/')) {
+                return str.slice(0, -1)
+            }
+            return str
         }
     })()
 }
