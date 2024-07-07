@@ -1,0 +1,11 @@
+#!name=XPTV Sources
+#!desc=Format video data into CMS api structure
+
+[rewrite_local]
+^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php url response-header Content-Type:.* response-header Content-Type: application/vnd.apple.mpegURL
+
+https?:\/\/ykusu\.ykusu\/(.*)\/provide\/vod url script-request-header https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js
+https?:\/\/ykusu\.ykusu\/getJSON\/(.*).json url script-request-header https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js
+
+[mitm]
+hostname = ykusu.ykusu, tencent-1257389134.cos.ap-nanjing.myqcloud.com.qqhd.net
