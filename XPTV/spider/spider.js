@@ -1,4 +1,4 @@
-const $ = new Env('XPTV-sources', { logLevel: 'debug' })
+const $ = new Env('XPTV-sources', { logLevel: 'info' })
 
 !(async () => {
     await importRemoteUtils(
@@ -196,17 +196,17 @@ function bttwoClass() {
                     backData.list = videos
                     backData.class = list
                 }
-            } catch (error) {
-                $.logErr(error)
-                backData.error = error.message
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
             }
 
             return JSON.stringify(backData)
         }
 
         async getVideoList(queryParams) {
-            let page = queryParams.pg
-            let type = queryParams.t
+            const page = queryParams.pg
+            const type = queryParams.t
             let realTypeName = ''
             if (type === '') return this.getClassList()
             switch (type) {
@@ -275,7 +275,7 @@ function bttwoClass() {
         }
 
         async getVideoDetail(queryParams) {
-            let ids = queryParams.ids
+            const ids = queryParams.ids
             let backData = {}
             try {
                 let webUrl = this.url + `/movie/${ids}.html`
@@ -355,7 +355,7 @@ function bttwoClass() {
                         let playurl = text.match(/url: "(.*?)"/)[1]
 
                         backData.data = playurl
-                        $.log('playUrl: ' + playurl)
+                        // $.log('playUrl: ' + playurl)
                     } else {
                         $.msg('該片在線播放需要兩個BT的VIP會員')
                         // backData.error = '該片需兩個BT的VIP會員才能收看'
@@ -363,9 +363,9 @@ function bttwoClass() {
                     }
                     // } else backData.data = 'https://bit.ly/3BlS71b'
                 } else backData.data = 'https://shattereddisk.github.io/rickroll/rickroll.mp4'
-            } catch (error) {
-                $.logErr(error)
-                backData.error = error.message
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
             }
             return JSON.stringify(backData)
         }
@@ -443,15 +443,6 @@ function bttwoClass() {
             return this.url + '/' + url
         }
 
-        // isIgnoreClassName(className) {
-        //     for (let index = 0; index < this.ignoreClassName.length; index++) {
-        //         const element = this.ignoreClassName[index]
-        //         if (className.indexOf(element) !== -1) {
-        //             return true
-        //         }
-        //     }
-        //     return false
-        // }
         isIgnoreClassName(className) {
             return this.ignoreClassName.some((element) => className.includes(element))
         }
@@ -563,8 +554,9 @@ function saohuoClass() {
                     backData.list = videos
                     backData.class = list
                 }
-            } catch (error) {
-                backData.error = error.message
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
             }
 
             return JSON.stringify(backData)
@@ -691,6 +683,7 @@ function saohuoClass() {
                     backData = temp
                 }
             } catch (e) {
+                $.logErr(e)
                 backData.error = e.message
             }
 
@@ -727,12 +720,13 @@ function saohuoClass() {
                             body: `url=${url}&t=${t}&key=${key}&act=0&play=1`,
                         })
                         let purl = JSON.parse(presp.body).url
-                        $.log('purl=' + purl)
+                        // $.log('purl=' + purl)
                         backData.data = /http/.test(purl) ? purl : this.getHostFromURL(iframeUrl) + purl
                     } else backData.error = 'resp is empty'
                 }
-            } catch (error) {
-                backData.error = error.message
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
             }
             return JSON.stringify(backData)
         }
@@ -789,6 +783,7 @@ function saohuoClass() {
                 // backData.total = videos.length * lastPage
                 backData.list = videos
             } catch (e) {
+                $.logErr(e)
                 backData.error = e.message
             }
 
@@ -809,13 +804,7 @@ function saohuoClass() {
         }
 
         isIgnoreClassName(className) {
-            for (let index = 0; index < this.ignoreClassName.length; index++) {
-                const element = this.ignoreClassName[index]
-                if (className.indexOf(element) !== -1) {
-                    return true
-                }
-            }
-            return false
+            return this.ignoreClassName.some((element) => className.includes(element))
         }
 
         removeTrailingSlash(str) {
@@ -907,8 +896,9 @@ function sbbClass() {
                     backData.list = videos
                     backData.class = list
                 }
-            } catch (error) {
-                backData.error = error.message
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
             }
 
             return JSON.stringify(backData)
@@ -1062,6 +1052,7 @@ function sbbClass() {
                     backData = temp
                 }
             } catch (e) {
+                $.logErr(e)
                 backData.error = e.message
             }
 
@@ -1078,10 +1069,8 @@ function sbbClass() {
                 if (proData) {
                     let _$ = $.cheerio.load(proData)
                     let iframe = _$('iframe').filter((i, iframe) => $(iframe).attr('src').includes('Cloud'))
-                    $.log('iframe.length=' + iframe.length)
 
                     if (0 < iframe.length) {
-                        $.log('if')
                         const iframeHtml = (
                             await $.http.get({
                                 url: iframe[0].attr('src'),
@@ -1113,13 +1102,14 @@ function sbbClass() {
                         const md5 = CryptoJS
                         const result = eval(group[1] + group[2])
                         playUrl = result.match(/url:.*?['"](.*?)['"]/)[1]
-                        $.log(playUrl)
+                        // $.log(playUrl)
 
                         backData.data = playUrl
                     }
                 }
-            } catch (error) {
-                backData.error = error.message
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
             }
             return JSON.stringify(backData)
         }
@@ -1160,6 +1150,7 @@ function sbbClass() {
                 // backData.total = videos.length * lastPage
                 backData.list = videos
             } catch (e) {
+                $.logErr(e)
                 backData.error = e.message
             }
 
@@ -1180,13 +1171,7 @@ function sbbClass() {
         }
 
         isIgnoreClassName(className) {
-            for (let index = 0; index < this.ignoreClassName.length; index++) {
-                const element = this.ignoreClassName[index]
-                if (className.indexOf(element) !== -1) {
-                    return true
-                }
-            }
-            return false
+            return this.ignoreClassName.some((element) => className.includes(element))
         }
 
         removeTrailingSlash(str) {
@@ -1262,16 +1247,17 @@ function hjkkClass() {
                     backData.list = videos
                     backData.class = list
                 }
-            } catch (error) {
-                backData.error = error.message
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
             }
 
             return JSON.stringify(backData)
         }
 
         async getVideoList(queryParams) {
-            let page = queryParams.pg
-            let type = queryParams.t
+            const page = queryParams.pg
+            const type = queryParams.t
 
             if (type === '') return this.getClassList()
 
@@ -1384,6 +1370,7 @@ function hjkkClass() {
                     backData = temp
                 }
             } catch (e) {
+                $.logErr(e)
                 backData.error = e.message
             }
 
@@ -1408,8 +1395,9 @@ function hjkkClass() {
 
                     backData.data = url
                 }
-            } catch (error) {
-                backData.error = error.message
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
             }
             return JSON.stringify(backData)
         }
@@ -1450,6 +1438,7 @@ function hjkkClass() {
                 // backData.total = videos.length * lastPage
                 backData.list = videos
             } catch (e) {
+                $.logErr(e)
                 backData.error = e.message
             }
 
@@ -1470,13 +1459,7 @@ function hjkkClass() {
         }
 
         isIgnoreClassName(className) {
-            for (let index = 0; index < this.ignoreClassName.length; index++) {
-                const element = this.ignoreClassName[index]
-                if (className.indexOf(element) !== -1) {
-                    return true
-                }
-            }
-            return false
+            return this.ignoreClassName.some((element) => className.includes(element))
         }
 
         removeTrailingSlash(str) {
@@ -1750,7 +1733,7 @@ function nkvodClass() {
                     if (js.encrypt == 1) {
                         playUrl = unescape(playUrl)
                     } else if (js.encrypt == 2) {
-                        playUrl = unescape(this.base64Decode(playUrl))
+                        playUrl = unescape(base64Decode(playUrl))
                     }
                     if (/\.m3u8$/.test(playUrl)) {
                         backData.data = playUrl
@@ -1836,10 +1819,6 @@ function nkvodClass() {
             })
             const decryptedUrl = CryptoJS.enc.Utf8.stringify(decrypted)
             return decryptedUrl
-        }
-
-        base64Decode(text) {
-            return CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Base64.parse(text))
         }
 
         combineUrl(url) {
@@ -1939,16 +1918,17 @@ function kmeijuClass() {
                     backData.list = videos
                     backData.class = list
                 }
-            } catch (error) {
-                backData.error = error.message
+            } catch (e) {
+                $.logErr(e)
+                backData.e = error.message
             }
 
             return JSON.stringify(backData)
         }
 
         async getVideoList(queryParams) {
-            let page = queryParams.pg
-            let type = queryParams.t
+            const page = queryParams.pg
+            const type = queryParams.t
 
             let realTypeName = ''
             if (type === '') return this.getClassList()
@@ -1982,10 +1962,8 @@ function kmeijuClass() {
                     if (lastPage) {
                         let parts = lastPage.split('/')
                         lastPage = parts[parts.length - 1]
-                        // console.log('lastpage = ' + lastPage);
                     } else {
                         lastPage = '1'
-                        // console.log('lastpage not found, using default value');
                     }
                     let videos = []
                     allVideo.each((index, element) => {
@@ -2079,6 +2057,7 @@ function kmeijuClass() {
                     backData = temp
                 }
             } catch (e) {
+                $.logErr(e)
                 backData.error = e.message
             }
 
@@ -2097,13 +2076,12 @@ function kmeijuClass() {
                     let iframe = _$('.viframe').attr('src')
                     let iframeRes = await $.http.get({ url: iframe, headers: this.headers })
                     let config = JSON.parse('{' + iframeRes.body.match(/ConFig = \{(.*)\}/)[1] + '}')
-                    // $.log(JSON.stringify(config))
                     let playUrl = this.decryptUrl(config)
-                    // $.log(playUrl)
                     backData.data = playUrl
                 }
-            } catch (error) {
-                backData.error = error.message
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
             }
             return JSON.stringify(backData)
         }
@@ -2139,11 +2117,10 @@ function kmeijuClass() {
                 backData.code = 1
                 backData.msg = '數據列表'
                 backData.page = pg
-                // backData.pagecount = +lastPage
                 backData.limit = videos.length.toString()
-                // backData.total = videos.length * lastPage
                 backData.list = videos
             } catch (e) {
+                $.logErr(e)
                 backData.error = e.message
             }
 
@@ -2179,13 +2156,7 @@ function kmeijuClass() {
         }
 
         isIgnoreClassName(className) {
-            for (let index = 0; index < this.ignoreClassName.length; index++) {
-                const element = this.ignoreClassName[index]
-                if (className.indexOf(element) !== -1) {
-                    return true
-                }
-            }
-            return false
+            return this.ignoreClassName.some((element) => className.includes(element))
         }
 
         removeTrailingSlash(str) {
@@ -2197,60 +2168,15 @@ function kmeijuClass() {
     })()
 }
 
-// an URI [ parse | stringify ] to JSON / URI Converter based JavaScript
-// modify from https://github.com/NanoCat-Me/URL
-function URIs(opts) {
-    return new (class {
-        constructor(opts = []) {
-            this.name = 'URI v1.2.6'
-            this.opts = opts
-            this.json = { scheme: '', host: '', path: '', query: {} }
-        }
-
-        parse(url) {
-            const URLRegex = /(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>.+)?/
-            let json = url.match(URLRegex)?.groups ?? null
-            if (json?.path) json.paths = json.path.split('/')
-            else json.path = ''
-            if (json?.paths) {
-                const fileName = json.paths[json.paths.length - 1]
-                if (fileName?.includes('.')) {
-                    const list = fileName.split('.')
-                    json.format = list[list.length - 1]
-                }
-            }
-            if (json?.query) {
-                json.query = this.parseQuery(json.query)
-            }
-            return json
-        }
-
-        parseQuery(queryString) {
-            const params = {}
-            const queryParts = queryString.split('&')
-            queryParts.forEach((part) => {
-                const [key, ...values] = part.split('=')
-                params[key] = values.join('=') // Rejoin the value parts in case it contains '='
-            })
-            return params
-        }
-
-        stringify(json = this.json) {
-            let url = ''
-            if (json?.scheme && json?.host) url += json.scheme + '://' + json.host
-            if (json?.path) url += json?.host ? '/' + json.path : json.path
-            if (json?.query) {
-                url +=
-                    '?' +
-                    Object.entries(json.query)
-                        .map(([key, value]) => `${key}=${value}`)
-                        .join('&')
-            }
-            return url
-        }
-    })(opts)
+function base64Decode(text) {
+    return CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Base64.parse(text))
 }
 
+// an URI [ parse | stringify ] to JSON / URI Converter based JavaScript
+// https://github.com/VirgilClyne/GetSomeFries/blob/main/function/URI/URIs.embedded.min.js
+// prettier-ignore
+function URIs(t){return new class{constructor(t=[]){this.name="URI v1.2.6",this.opts=t,this.json={scheme:"",host:"",path:"",query:{}}}parse(t){let s=t.match(/(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/)?.groups??null;if(s?.path?s.paths=s.path.split("/"):s.path="",s?.paths){const t=s.paths[s.paths.length-1];if(t?.includes(".")){const e=t.split(".");s.format=e[e.length-1]}}return s?.query&&(s.query=Object.fromEntries(s.query.split("&").map((t=>t.split("="))))),s}stringify(t=this.json){let s="";return t?.scheme&&t?.host&&(s+=t.scheme+"://"+t.host),t?.path&&(s+=t?.host?"/"+t.path:t.path),t?.query&&(s+="?"+Object.entries(t.query).map((t=>t.join("="))).join("&")),s}}(t)}
+// @Yuheng0101
 // prettier-ignore
 async function importRemoteUtils(n,t,i,r){const u=function(){return typeof globalThis!="undefined"?globalThis:typeof self!="undefined"?self:typeof window!="undefined"?window:global}();if($.isNode()){if(r){$.debug(`【${i}】使用 'require' 导入模块 ${r}`);try{const n=require(r);$[i]=n;return}catch(o){$.error(`【${i}】导入模块 ${r} 失败, 请检查模块名或检查是否安装该依赖...`)}}else if($.debug(`【${i}】没有传入模块名称, 不使用 'require' 导入`),u[i]){$.debug(`【${i}】环境自带库, 已加载成功 🎉`);$[i]=u[i];return}!$[i]||$.debug(`【${i}】使用远程加载...`)}$.debug(`【${i}】正在从远程拉取脚本: ${n}`);const f=$.getval(`${i}.js`),e=n=>{eval(n),$[i]=t?eval(t)():u[i],!$[i]||$.debug(`【${i}】加载成功 🎉`)};f?($.debug(`【${i}】缓存存在, 尝试加载...`),e(f)):await $.http.get({url:n,timeout:2e3}).then(n=>{var t=n.body;e(t);$.setval(t,`${i}.js`);$.debug(`【${i}】已存入缓存 🎉`)}).catch(()=>Promise.reject(new Error(`【${i}】远程拉取失败, 请检查网络...`)))}
 // prettier-ignore
