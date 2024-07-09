@@ -10,6 +10,7 @@ http-request https?:\/\/ykusu\.ykusu\/(.*)\/provide\/vod script-path=https://raw
 http-request https?:\/\/ykusu\.ykusu\/getJSON\/(.*).json script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js, tag=XPTV-getJSON
 http-response ^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js, requires-body=true, timeout=10, tag=美劇星球
 http-request api\.emasmr\.com.*mp4 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js, requires-body=true, timeout=10, tag=短劇天堂
+http-response https?:\/\/hd\.suxun\.site\/api\.php\/provide\/vod(.*)&ids script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js, requires-body=true, timeout=10, tag=sx
 
 [MITM]
 hostname = ykusu.ykusu, tencent-1257389134.cos.ap-nanjing.myqcloud.com.qqhd.net, api.emasmr.com
