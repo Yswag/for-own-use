@@ -2,10 +2,12 @@
 #!desc=Format video data into CMS api structure
 
 [rewrite_local]
-^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php url response-header Content-Type:.* response-header Content-Type: application/vnd.apple.mpegURL
+^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php url response-header (\r\n)Content-Type:.*(\r\n) response-header $1Content-Type: application/vnd.apple.mpegURL$2
 
 https?:\/\/ykusu\.ykusu\/(.*)\/provide\/vod url script-request-header https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js
 https?:\/\/ykusu\.ykusu\/getJSON\/(.*).json url script-request-header https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js
+
+api\.emasmr\.com.*mp4 url script-request-header https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js
 
 [mitm]
 hostname = ykusu.ykusu, tencent-1257389134.cos.ap-nanjing.myqcloud.com.qqhd.net, api.emasmr.com
