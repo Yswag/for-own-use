@@ -4,7 +4,8 @@
 [Script]
 XPTV-sources = type=http-request,pattern=https?:\/\/ykusu\.ykusu\/(.*)\/provide\/vod,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js,script-update-interval=0,requires-body=0
 XPTV-getJSON = type=http-request,pattern=https?:\/\/ykusu\.ykusu\/getJSON\/(.*).json,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js,script-update-interval=0,requires-body=0
-美劇星球 = type=http-response,pattern=^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js,max-size=0,requires-body=true,timeout=10,script-update-interval=0,enable=true
+美劇星球 = type=http-response,pattern=^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js,max-size=0,requires-body=true,timeout=10,script-update-interval=0
+短劇天堂 = type=http-request,pattern=api\.emasmr\.com.*mp4,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js,max-size=0,requires-body=true,timeout=10,script-update-interval=0
 
 [MITM]
-hostname = %APPEND% ykusu.ykusu, tencent-1257389134.cos.ap-nanjing.myqcloud.com.qqhd.net
+hostname = %APPEND% ykusu.ykusu, tencent-1257389134.cos.ap-nanjing.myqcloud.com.qqhd.net, api.emasmr.com
