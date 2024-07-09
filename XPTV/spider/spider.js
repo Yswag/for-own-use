@@ -40,6 +40,9 @@ const $ = new Env('XPTV-sources', { logLevel: 'info' })
         case url.includes('/duanjutt/'):
             spiderInstance = new duanjuttClass()
             break
+        case url.includes('/sx/'):
+            spiderInstance = new sxClass()
+            break
         case url.includes('getJSON'):
             getJSON()
             break
@@ -125,6 +128,7 @@ function getJSON() {
             { name: '偽|耐看點播', type: 1, api: `https://ykusu.ykusu/nkvod/provide/vod` },
             { name: '偽|美劇星球', type: 1, api: `https://ykusu.ykusu/kmeiju/provide/vod` },
             { name: '偽|短劇天堂', type: 1, api: `https://ykusu.ykusu/duanjutt/provide/vod` },
+            { name: '偽|速訊影院', type: 1, api: `http://hd.suxun.site/api.php/provide/vod` },
         ],
     }
     return $.isQuanX()
@@ -2469,6 +2473,53 @@ function duanjuttClass() {
                 return str.slice(0, -1)
             }
             return str
+        }
+    })()
+}
+
+function sxClass() {
+    return new (class {
+        async getVideoPlayUrl(queryParams) {
+            let backData = {}
+            let url = decodeURIComponent(queryParams.url)
+            url =
+                base64Decode(
+                    'aHR0cHM6Ly9qc29uLnN1eHVuLnNpdGUvcGxheWVyL2FydHBsYXllci5waHA/aWY9MSZmcm9tPXN1eHVuangmdXJsPQ=='
+                ) + url
+            try {
+                let html = await $.http.get({ url: url, headers: this.headers })
+
+                let proData = html.body
+                if (proData) {
+                    let playUrl
+                    const matches = proData.match(/let ConFig = {([\w\W]*)},box/)
+                    if (proData && proData.length > 1) {
+                        const configJson = '{' + matches[1].trim() + '}'
+                        const config = JSON.parse(configJson)
+                        playUrl = this.decryptUrl(config)
+                    }
+                    backData.data = playUrl
+                }
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+            return JSON.stringify(backData)
+        }
+
+        decryptUrl(jsConfig) {
+            const key = CryptoJS.enc.Utf8.parse('2890' + jsConfig.config.uid + 'tB959C')
+            const iv = CryptoJS.enc.Utf8.parse('2F131BE941093035')
+            const mode = CryptoJS.mode.CBC
+            const padding = CryptoJS.pad.Pkcs7
+            const decrypted = CryptoJS.AES.decrypt(jsConfig.url, key, {
+                iv: iv,
+                mode: mode,
+                padding: padding,
+            })
+            const decryptedUrl = CryptoJS.enc.Utf8.stringify(decrypted)
+
+            return decryptedUrl
         }
     })()
 }
