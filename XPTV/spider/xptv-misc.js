@@ -16,7 +16,7 @@ try {
             headers['referer'] = 'https://duanjutt.tv/'
             $done({ headers: headers })
             break
-        case url.include('hd.suxun.site'):
+        case url.includes('hd.suxun.site'):
             let obj = JSON.parse($response.body)
 
             let playlist = obj.list[0].vod_play_url.split('#')
@@ -29,6 +29,9 @@ try {
             obj.list[0].vod_play_url = newPlaylist.join('#')
 
             $done({ body: JSON.stringify(obj) })
+            break
+        default:
+            $done()
             break
     }
 } catch (e) {
