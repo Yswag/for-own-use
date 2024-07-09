@@ -16,6 +16,20 @@ try {
 			headers['referer'] = 'https://duanjutt.tv/'
 			$done({ headers: headers })
 			break
+		case url.include('hd.suxun.site'):
+			let obj = JSON.parse($response.body)
+
+			let playlist = obj.list[0].vod_play_url.split('#')
+			let newPlaylist = []
+			playlist.forEach((e) => {
+				let url = e.split('$')[1]
+				url = 'https://ykusu.ykusu/sx/provide/vod?ac=play&url=' + encodeURIComponent(url) + '&n=.m3u8'
+				newPlaylist.push(e.split('$')[0] + '$' + url)
+			})
+			obj.list[0].vod_play_url = newPlaylist.join('#')
+
+			$done({ body: JSON.stringify(obj) })
+			break
 	}
 } catch (e) {
 	console.log(e)
