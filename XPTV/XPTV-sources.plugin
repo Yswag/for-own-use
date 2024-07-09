@@ -3,11 +3,12 @@
 #!icon=https://github.com/Toperlock/Quantumult/raw/main/icon/Doraemon/Doraemon-1054.png
 
 [Rewrite]
-^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php header-replace Content-Type application/vnd.apple.mpegURL
+#^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php header-replace Content-Type application/vnd.apple.mpegURL
 
 [Script]
 http-request https?:\/\/ykusu\.ykusu\/(.*)\/provide\/vod script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js, tag=XPTV-sources
 http-request https?:\/\/ykusu\.ykusu\/getJSON\/(.*).json script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js, tag=XPTV-getJSON
+http-response ^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/spider.js, requires-body=true, timeout=10, tag=美劇星球
 
 [MITM]
 hostname = ykusu.ykusu, tencent-1257389134.cos.ap-nanjing.myqcloud.com.qqhd.net
