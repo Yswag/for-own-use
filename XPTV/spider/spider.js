@@ -37,6 +37,14 @@ const $ = new Env('XPTV-sources', { logLevel: 'info' })
         case url.includes('/kmeiju/'):
             spiderInstance = new kmeijuClass()
             break
+        case url.includes('tencent-1257389134'):
+            if ($response.headers['content-type']) {
+                $response.headers['content-type'] = 'application/vnd.apple.mpegURL'
+            } else {
+                $response.headers['Content-Type'] = 'application/vnd.apple.mpegURL'
+            }
+            $.done($response)
+            break
         case url.includes('getJSON'):
             getJSON()
             break
