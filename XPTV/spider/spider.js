@@ -1652,22 +1652,27 @@ function nkvodClass() {
                 let proData = pro.body
                 if (proData) {
                     let _$ = $.cheerio.load(proData)
-                    let vod_name = _$('.module-info-heading h1').text()
-                    let vod_content = _$('.show-desc').text()
-                    let vod_pic = _$('.module-item-pic img').attr('data-original')
+                    let vod_name = _$('.detail-info h3').text()
+                    let vod_content = _$('.switch-box .text').text()
+                    let vod_pic = _$('.detail-pic img').attr('data-src')
 
                     let from = []
-                    _$('#y-playList > div').each((index, element) => {
-                        let name = _$(element).find('span').text()
+                    _$('.anthology-tab > .swiper-wrapper a').each((index, element) => {
+                        let name = _$(element).contents()
+							.filter(function () {
+								return this.type === 'text'
+							})
+							.text()
+							.trim()
                         from.push(name)
                     })
 
-                    let juJiDocment = _$('.module-play-list')
+                    let juJiDocment = _$('.anthology-list-box')
                     // let vod_play_from = '';
                     let vod_play_url = ''
                     juJiDocment.each((index, element) => {
                         let line = from[index]
-                        let allvideos = _$(element).find('.module-play-list-link')
+                        let allvideos = _$(element).find('ul.anthology-list-play li a')
                         allvideos.each((index, element) => {
                             let playerUrl = this.combineUrl(_$(element).attr('href'))
                             vod_play_url += line + '-' + _$(element).text()
@@ -1734,7 +1739,7 @@ function nkvodClass() {
                 let proData = html.body
                 if (proData) {
                     let _$ = $.cheerio.load(proData)
-                    const js = JSON.parse(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
+                    const js = JSON.parse(_$('script:contains(player_aaaa)').html().replace('var player_aaaa=', ''))
                     let playUrl = js.url
                     if (js.encrypt == 1) {
                         playUrl = unescape(playUrl)
