@@ -1,48 +1,19 @@
 const $ = new Env('cmsAdblock')
 
-// 海外看
-let haiwaikan = [
-	':16.0599,',
-	':15.2666,',
-	':15.1666,',
-	':15.08,',
-	':12.33,',
-	':10.85,',
-	':10.3333,',
-	':10.106555,',
-	':10.0099,',
-	':8.641966,',
-	':8.1748,',
-	':7.907899,',
-	':5.939267,',
-	':5.538866,',
-	':5.53,',
-	':3.970633,',
-	':3.937267,',
-	':3.93,',
-	':3.136466,',
-	':3.103100,',
-	':3.10,',
-	':2.936266,',
-	':2.602600,',
-	':2.235567,',
-	':2.002000,',
-	':2.00,',
-	':1.968633,',
-	':1.96,',
-	':1.36,',
-	':1.334666,',
-	':1.768432,',
-	':1.368033,',
-	':0.266932,',
-	':0.26,',
-
-	//":10.100000,",
-	':10.100,',
-	':2.002,',
-	':3.937,',
-	':1.968,',
-	':0.266,',
+// heimuer
+let hmrvideo = [
+	':14.970000,',
+	':14.950000,',
+	':12.37,',
+	':12.29,',
+	':12.27,', 
+	':12.07,',
+	':12.05,',
+	':11.93,',
+	':11.89,',
+	':11.80,',
+	':11.79,',
+	':10.000000,'
 ]
 
 // 量子資源
@@ -98,10 +69,8 @@ let adCount = 0
 
 ;(async () => {
 	switch (true) {
-		case url.includes('m3u.haiwaikan'):
-			await fetchJxResult()
-			hostsCount(haiwaikan, /^https?:\/\/(.*?)\//)
-			filterAds(haiwaikan)
+		case url.includes('hmrvideo'):
+			filterHmr(hmrvideo)
 			break
 		case url.includes('wgslsw'):
 			hostsCount(yhzy, /^https?:\/\/(.*?)\//)
@@ -171,7 +140,32 @@ function filterAds(valuesToRemove) {
 				$.log('Remove ad(by url):' + lines[i])
 				lines.splice(i - 1, 2)
 				adCount++
-			} else if (i < lines.length - 1 && lines[i + 1].endsWith('.ts')) {
+			} else if (i < lines.length - 1 && lines[i + 1].includes('.ts')) {
+				$.log('Remove ad(by duration):' + lines[i + 1])
+				lines.splice(i, 2)
+				adCount++
+			}
+		}
+	}
+
+	$.log(`移除廣告${adCount}行`)
+	$.done({ body: lines.join('\n') })
+}
+
+function filterHmr(valuesToRemove) {
+	for (let i = lines.length - 1; i >= 0; i--) {
+		if (valuesToRemove.some((value) => lines[i].includes(value))) {
+			let value = valuesToRemove.find((value) => lines[i].includes(value))
+			$.log('Match:' + value)
+			if (value.includes('kb')) {
+				$.log('Remove ad(by bitrate):' + lines[i])
+				lines.splice(i - 1, 2)
+				adCount++
+			} else if (!lines[i].startsWith('#')) {
+				$.log('Remove ad(by url):' + lines[i])
+				lines.splice(i - 1, 2)
+				adCount++
+			} else if (i < lines.length - 1 && lines[i + 1].includes('.ts') && lines[i-1].includes('DISCONTINUITY') && lines[i+2].includes('DISCONTINUITY')) {
 				$.log('Remove ad(by duration):' + lines[i + 1])
 				lines.splice(i, 2)
 				adCount++
@@ -247,27 +241,7 @@ async function fetchJxResult() {
 	if (url.includes('hls')) return
 
 	let jx
-	if (url.includes('haiwaikan')) {
-		jx = 'https://tang.hz.cz/jx/hwk?url='
-		const requestUrl = jx + url
-		const req = {
-			url: requestUrl,
-			timeout: 5000,
-		}
-		try {
-			const resp = await $.http.get(req)
-			const body = JSON.parse(resp.body)
-			$.log(resp.body)
-			if (body.url !== $request.url) {
-				const content = await $.http.get(body.url)
-				$.log('Modified by ' + body.url)
-				$.done({ body: content.body })
-			} else return
-		} catch (e) {
-			$.log(e)
-			return
-		}
-	}
+	
 
 	jx = 'https://jscdn.centos.chat/bilfun.php/?url='
 
@@ -299,15 +273,11 @@ async function fetchJxResult() {
 }
 
 function getArg() {
-	if($.isLoon()) {
-		let method = $persistentStore.read('去廣告方法')
-		return method === '原始方法' ? '1' : '2'
-	}
+	if ($.isLoon()) return $persistentStore.read('方法')
 	if (typeof $argument === 'undefined') {
 		return '1'
 	}
 	return $argument
-			
 }
 
 function fixAdM3u8Ai(m3u8_url, headers) {
