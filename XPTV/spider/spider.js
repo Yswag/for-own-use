@@ -43,6 +43,9 @@ const $ = new Env('XPTV-sources', { logLevel: 'info' })
         case url.includes('/sx/'):
             spiderInstance = new sxClass()
             break
+        case url.includes('/anfuns/'):
+            spiderInstance = new anfunsClass()
+            break
         case url.includes('getJSON'):
             getJSON()
             break
@@ -129,6 +132,7 @@ function getJSON() {
             { name: '偽|美劇星球', type: 1, api: `https://ykusu.ykusu/kmeiju/provide/vod` },
             { name: '偽|短劇天堂', type: 1, api: `https://ykusu.ykusu/duanjutt/provide/vod` },
             { name: '偽|速訊影院', type: 1, api: `http://hd.suxun.site/api.php/provide/vod` },
+            { name: '偽|anfuns', type: 1, api: `https://ykusu.ykusu/anfuns/provide/vod` },
         ],
     }
     return $.isQuanX()
@@ -1074,6 +1078,11 @@ function sbbClass() {
                 let proData = html.body
                 if (proData) {
                     let _$ = $.cheerio.load(proData)
+                    let isVip = _$('.noplay').text()
+                    if (isVip) {
+                        $.msg('仅对会员开放')
+                        return JSON.stringify({ data: null })
+                    }
                     let iframe = _$('iframe').filter((i, iframe) => $(iframe).attr('src').includes('Cloud'))
 
                     if (0 < iframe.length) {
@@ -1658,12 +1667,13 @@ function nkvodClass() {
 
                     let from = []
                     _$('.anthology-tab > .swiper-wrapper a').each((index, element) => {
-                        let name = _$(element).contents()
-							.filter(function () {
-								return this.type === 'text'
-							})
-							.text()
-							.trim()
+                        let name = _$(element)
+                            .contents()
+                            .filter(function () {
+                                return this.type === 'text'
+                            })
+                            .text()
+                            .trim()
                         from.push(name)
                     })
 
@@ -2527,6 +2537,306 @@ function sxClass() {
             return decryptedUrl
         }
     })()
+}
+
+function anfunsClass() {
+    return new (class {
+        constructor() {
+            this.url = 'https://www.anfuns.cc'
+            this.headers = {
+                'User-Agent':
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                Referer: this.url,
+            }
+            this.ignoreClassName = ['首页', '爱发电', 'QQ', '动漫资讯', '专题', '留言', '最新', '排行']
+        }
+
+        async getClassList() {
+            let webUrl = this.url
+            let backData = {}
+            try {
+                const pro = await $.http.get({ url: webUrl, headers: this.headers })
+
+                let proData = await pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let allClass = _$('.hl-menus li a')
+                    let list = []
+                    allClass.each((index, element) => {
+                        let isIgnore = this.isIgnoreClassName(_$(element).find('span').text())
+                        if (isIgnore) {
+                            return
+                        }
+                        let type_name = _$(element).find('span').text()
+                        let url = _$(element).attr('href') || ''
+                        // url = url.match(/type\/(\d+)\.html/)[1]
+
+                        if (url.length > 0 && type_name.length > 0) {
+                            let videoClass = {}
+                            videoClass.type_id = parseInt(url.match(/type\/(\d+)\.html/)[1])
+                            videoClass.type_name = type_name.trim()
+                            list.push(videoClass)
+                        }
+                    })
+
+                    let allVideo = _$('.hl-row-box')
+                    let videos = []
+                    allVideo.each((index, element) => {
+                        let nodes = _$(element).find('li.hl-list-item')
+                        nodes.each((index, element) => {
+                            let vodUrl = _$(element).find('a.hl-item-thumb').attr('href') || ''
+                            let vodPic = _$(element).find('a.hl-item-thumb').attr('data-original') || ''
+                            let vodName = _$(element).find('a.hl-item-thumb').attr('title') || ''
+                            let vodDiJiJi = _$(element).find('span.remarks').text() || ''
+
+                            if (!vodUrl.includes('/anime/')) return
+                            if (!vodPic.includes('http')) vodPic = this.url + vodPic
+
+                            let videoDet = {}
+                            videoDet.vod_id = +vodUrl.match(/anime\/(.+)\.html/)[1]
+                            videoDet.vod_pic = vodPic
+                            videoDet.vod_name = vodName
+                            videoDet.vod_remarks = vodDiJiJi.trim()
+                            videos.push(videoDet)
+                        })
+                    })
+
+                    backData.code = 1
+                    backData.msg = '數據列表'
+                    backData.page = 1
+                    backData.list = videos
+                    backData.class = list
+                }
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        async getVideoList(queryParams) {
+            const page = queryParams.pg
+            const type = queryParams.t
+
+            if (type === '') return this.getClassList()
+
+            let listUrl = `${this.url}/type/${type}-${page}.html`
+            let backData = {}
+            try {
+                let pro = await $.http.get({ url: listUrl, headers: this.headers })
+                let proData = pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let allVideo = _$('.hl-list-item')
+                    let lastPage = _$('.hl-page-wrap li.hl-hidden-xs').eq(4).find('a').attr('href')
+                    if (lastPage) {
+                        let regex = new RegExp(`/type\/${type}-(.*)\.html`)
+                        lastPage = lastPage.match(regex)[1]
+                    } else {
+                        lastPage = '1'
+                    }
+                    let videos = []
+                    allVideo.each((index, element) => {
+                        let vodUrl = _$(element).find('a.hl-item-thumb').attr('href') || ''
+                        let vodPic = _$(element).find('a.hl-item-thumb').attr('data-original') || ''
+                        let vodName = _$(element).find('a.hl-item-thumb').attr('title') || ''
+                        let vodDiJiJi = _$(element).find('span.remarks').text() || ''
+
+                        if (!vodPic.includes('http')) vodPic = this.url + vodPic
+
+                        let videoDet = {}
+                        videoDet.vod_id = +vodUrl.match(/anime\/(.+)\.html/)[1]
+                        videoDet.vod_pic = vodPic
+                        videoDet.vod_name = vodName.trim()
+                        videoDet.vod_remarks = vodDiJiJi.trim()
+                        videos.push(videoDet)
+                    })
+
+                    backData.code = 1
+                    backData.msg = '數據列表'
+                    backData.page = page.toString()
+                    backData.pagecount = +lastPage
+                    backData.limit = videos.length.toString()
+                    backData.total = videos.length * lastPage
+                    backData.list = videos
+                }
+            } catch (e) {
+                $.logErr('Error fetching list:', e)
+                backData.error = e.message
+            }
+            return JSON.stringify(backData)
+        }
+
+        async getVideoDetail(queryParams) {
+            let ids = queryParams.ids
+            let backData = {}
+            try {
+                let webUrl = this.url + `/anime/${ids}.html`
+                let pro = await $.http.get({ url: webUrl, headers: this.headers })
+                let proData = pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let vod_name = _$('h2.hl-dc-title').text()
+                    let vod_content = _$('.hl-content-text').text()
+                    let vod_pic = _$('.hl-item-thumb').attr('data-original')
+
+                    // if (!vod_pic.includes('http')) vod_pic = this.url + vod_pic
+
+                    let from = []
+                    _$('.hl-plays-from a').each((i, e) => {
+                        let name = _$(e).text().trim()
+                        from.push(name)
+                    })
+
+                    let juJiDocment = _$('ul.hl-plays-list')
+                    let playlist = []
+                    juJiDocment.each((index, element) => {
+                        let videos = _$(element).find('li a')
+                        let vod_play_url = ''
+                        videos.each((i, e) => {
+                            vod_play_url += from[index] + '-' + _$(e).text()
+                            vod_play_url += '$'
+                            vod_play_url +=
+                                'https://ykusu.ykusu/anfuns/provide/vod?ac=play&url=' +
+                                encodeURIComponent(this.combineUrl(_$(e).attr('href'))) +
+                                '&n=.m3u8'
+                            vod_play_url += '#'
+                        })
+                        playlist.push(vod_play_url)
+                    })
+
+                    let temp = {
+                        code: 1,
+                        msg: '数据列表',
+                        page: 1,
+                        pagecount: 1,
+                        limit: '20',
+                        total: 1,
+                        list: [
+                            {
+                                vod_id: 1,
+                                vod_name: '',
+                                vod_pic: '',
+                                vod_remarks: '',
+                                type_name: '',
+                                vod_year: '',
+                                vod_area: '',
+                                vod_actor: '',
+                                vod_director: '',
+                                vod_content: '',
+                                vod_play_from: '',
+                                vod_play_url: '',
+                            },
+                        ],
+                    }
+                    temp.list[0].vod_play_url = playlist.join('$$$')
+                    temp.list[0].vod_play_from = from.join('$$$')
+                    temp.list[0].vod_play_note = '$$$'
+                    temp.list[0].vod_id = +ids
+                    temp.list[0].vod_name = vod_name
+                    temp.list[0].vod_pic = vod_pic
+                    temp.list[0].vod_content = vod_content.trim()
+                    backData = temp
+                }
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        async getVideoPlayUrl(queryParams) {
+            let backData = {}
+            let url = decodeURIComponent(queryParams.url)
+            try {
+                let html = await $.http.get({ url: url, headers: this.headers })
+
+                let proData = html.body
+                if (proData) {
+                    const _$ = $.cheerio.load(proData)
+                    let config = JSON.parse(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
+                    // $.log(decodeURIComponent(base64Decode(config.url)))
+                    let playUrl = decodeURIComponent(base64Decode(config.url))
+                    backData.data = playUrl
+                }
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+            return JSON.stringify(backData)
+        }
+
+        async searchVideo(queryParams) {
+            const pg = queryParams.pg
+            const wd = queryParams.wd
+            let backData = {}
+
+            try {
+                let searchUrl = this.url + `/search/page/${pg}/wd/${wd}.html`
+                let searchRes = await $.http.get({
+                    url: searchUrl,
+                    headers: this.headers,
+                })
+                let _$ = $.cheerio.load(searchRes.body)
+                let videos = []
+                let allVideo = _$('li.hl-list-item')
+                allVideo.each((index, element) => {
+                    let vodUrl = _$(element).find('a.hl-item-thumb').attr('href') || ''
+                    let vodPic = _$(element).find('a.hl-item-thumb').attr('data-original') || ''
+                    let vodName = _$(element).find('a.hl-item-thumb').attr('title') || ''
+                    let vodDiJiJi = _$(element).find('span.remarks').text() || ''
+
+                    let videoDet = {}
+                    videoDet.vod_id = +vodUrl.match(/anime\/(.+)\.html/)[1]
+                    videoDet.vod_pic = vodPic
+                    videoDet.vod_name = vodName.trim()
+                    videoDet.vod_remarks = vodDiJiJi.trim()
+                    videos.push(videoDet)
+                })
+
+                backData.code = 1
+                backData.msg = '數據列表'
+                backData.page = pg
+                backData.limit = videos.length.toString()
+                backData.list = videos
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        combineUrl(url) {
+            if (url === undefined) {
+                return ''
+            }
+            if (url.indexOf(this.url) !== -1) {
+                return url
+            }
+            if (url.startsWith('/')) {
+                return this.url + url
+            }
+            return this.url + '/' + url
+        }
+
+        isIgnoreClassName(className) {
+            return this.ignoreClassName.some((element) => className.includes(element))
+        }
+
+        removeTrailingSlash(str) {
+            if (str.endsWith('/')) {
+                return str.slice(0, -1)
+            }
+            return str
+        }
+    })()
+}
+
+function base64Encode(text) {
+    return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text))
 }
 
 function base64Decode(text) {
