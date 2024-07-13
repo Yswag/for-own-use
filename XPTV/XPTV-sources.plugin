@@ -11,6 +11,7 @@ http-request https?:\/\/ykusu\.ykusu\/getJSON\/(.*).json script-path=https://raw
 http-response ^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js, requires-body=true, timeout=10, tag=美劇星球
 http-request api\.emasmr\.com.*mp4 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js, requires-body=true, timeout=10, tag=短劇天堂
 http-response https?:\/\/hd\.suxun\.site\/api\.php\/provide\/vod(.*)&ids script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js, requires-body=true, timeout=10, tag=sx
+http-request ppvod01\.blbtgg\.com.*(ts|m3u8) script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js, requires-body=true, timeout=10, tag=文才
 
 [MITM]
-hostname = ykusu.ykusu, tencent-1257389134.cos.ap-nanjing.myqcloud.com.qqhd.net, api.emasmr.com
+hostname = ykusu.ykusu, tencent-1257389134.cos.ap-nanjing.myqcloud.com.qqhd.net, api.emasmr.com, ppvod01.blbtgg.com
