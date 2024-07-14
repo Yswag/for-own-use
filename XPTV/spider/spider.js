@@ -121,16 +121,16 @@ async function handleRequest(spiderInstance, queryParams) {
 function getJSON() {
     const subs = {
         sites: [
-            { name: '偽|文才', type: 1, api: `https://ykusu.ykusu/zeqaht/provide/vod` },
-            { name: '偽|速訊影院', type: 1, api: `http://hd.suxun.site/api.php/provide/vod` },
-            { name: '偽|兩個BT', type: 1, api: `https://ykusu.ykusu/bttwo/provide/vod` },
-            { name: '偽|燒火電影', type: 1, api: `https://ykusu.ykusu/saohuo/provide/vod` },
-            { name: '偽|素白白影視', type: 1, api: `https://ykusu.ykusu/subaibai/provide/vod` },
-            { name: '偽|anfuns', type: 1, api: `https://ykusu.ykusu/anfuns/provide/vod` },
-            { name: '偽|耐看點播', type: 1, api: `https://ykusu.ykusu/nkvod/provide/vod` },
-            { name: '偽|韓劇看看', type: 1, api: `https://ykusu.ykusu/hjkk/provide/vod` },
-            { name: '偽|短劇天堂', type: 1, api: `https://ykusu.ykusu/duanjutt/provide/vod` },
-            { name: '偽|美劇星球', type: 1, api: `https://ykusu.ykusu/kmeiju/provide/vod` },
+            { name: '文才|偽', type: 1, api: `https://ykusu.ykusu/zeqaht/provide/vod` },
+            { name: '速訊影院|偽', type: 1, api: `http://hd.suxun.site/api.php/provide/vod` },
+            { name: '兩個BT|偽', type: 1, api: `https://ykusu.ykusu/bttwo/provide/vod` },
+            { name: '燒火電影|偽', type: 1, api: `https://ykusu.ykusu/saohuo/provide/vod` },
+            { name: '素白白影視|偽', type: 1, api: `https://ykusu.ykusu/subaibai/provide/vod` },
+            { name: 'anfuns|偽', type: 1, api: `https://ykusu.ykusu/anfuns/provide/vod` },
+            { name: '耐看點播|偽', type: 1, api: `https://ykusu.ykusu/nkvod/provide/vod` },
+            { name: '韓劇看看|偽', type: 1, api: `https://ykusu.ykusu/hjkk/provide/vod` },
+            { name: '短劇天堂|偽', type: 1, api: `https://ykusu.ykusu/duanjutt/provide/vod` },
+            { name: '美劇星球|偽', type: 1, api: `https://ykusu.ykusu/kmeiju/provide/vod` },
         ],
     }
     return $.isQuanX() ? $.done({ status: 'HTTP/1.1 200', body: JSON.stringify(subs) }) : $.done({ response: { status: 200, body: JSON.stringify(subs) } })
