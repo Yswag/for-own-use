@@ -3096,7 +3096,7 @@ function zeqahtClass() {
 
         async getClassList(page) {
             let pg = page ? page : 1
-            let webUrl = this.url + '/api.php/provide/vod/?ac=detail&t=33' + `&pg=${pg}`
+            let webUrl = this.url + '/api.php/provide/vod/?ac=detail&t=' + `&pg=${pg}`
             let backData = {}
             try {
                 const pro = await $.http.get({ url: webUrl, headers: this.headers })
