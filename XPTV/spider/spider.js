@@ -57,8 +57,8 @@ const $ = new Env('XPTV-sources', { logLevel: 'info' })
 })().catch((e) => $.logErr(e))
 
 async function handleRequest(spiderInstance, queryParams) {
-    const ac = queryParams.ac
-    if (ac === 'list') {
+    const ac = queryParams?.ac || ''
+    if (ac === 'list' || ac === '') {
         let res = await spiderInstance.getClassList()
         $.isQuanX()
             ? $.done({ status: 'HTTP/1.1 200', body: res })
