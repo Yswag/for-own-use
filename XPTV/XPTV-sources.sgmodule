@@ -8,6 +8,7 @@ XPTV-getJSON = type=http-request,pattern=https?:\/\/ykusu\.ykusu\/getJSON\/(.*).
 短劇天堂 = type=http-request,pattern=api\.emasmr\.com.*mp4,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js,max-size=0,requires-body=true,timeout=10,script-update-interval=0
 sx = type=http-response,timeout=30,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js,script-update-interval=0,pattern=https?:\/\/hd\.suxun\.site\/api\.php\/provide\/vod(.*)&ids,requires-body=1,max-size=0
 文才 = type=http-request,pattern=ppvod01\.blbtgg\.com.*(ts|m3u8),script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js,max-size=0,requires-body=true,timeout=10,script-update-interval=0
+mg = type=http-response,timeout=30,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/XPTV/spider/xptv-misc.js,script-update-interval=0,pattern=https?:\/\/vipcj\.timizy\.com\/api\.php\/provide\/vod\/from\/mgtv(.*)&ids,requires-body=true,max-size=0
 
 [MITM]
-hostname = %APPEND% ykusu.ykusu, tencent-1257389134.cos.ap-nanjing.myqcloud.com.qqhd.net, api.emasmr.com, ppvod01.blbtgg.com
+hostname = %APPEND% ykusu.ykusu, tencent-1257389134.cos.ap-nanjing.myqcloud.com.qqhd.net, api.emasmr.com, ppvod01.blbtgg.com, vipcj.timizy.com
