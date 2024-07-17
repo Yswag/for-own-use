@@ -40,8 +40,11 @@ const $ = new Env('XPTV-sources', { logLevel: 'info' })
         case url.includes('/6080/'):
             spiderInstance = new newvisionClass()
             break
-        case url.includes('/zeqaht'):
+        case url.includes('/zeqaht/'):
             spiderInstance = new zeqahtClass()
+            break
+        case url.includes('/mgtimi/'):
+            spiderInstance = new mgtimiClass()
             break
         case url.includes('getJSON'):
             getJSON()
@@ -65,6 +68,9 @@ async function handleRequest(spiderInstance, queryParams) {
             : $.done({
                   response: {
                       status: 200,
+                      headers: {
+                          'Content-Type': 'text/html;charset=utf-8',
+                      },
                       body: res,
                   },
               })
@@ -78,6 +84,9 @@ async function handleRequest(spiderInstance, queryParams) {
                 : $.done({
                       response: {
                           status: 200,
+                          headers: {
+                              'Content-Type': 'text/html;charset=utf-8',
+                          },
                           body: res,
                       },
                   })
@@ -88,6 +97,9 @@ async function handleRequest(spiderInstance, queryParams) {
                 : $.done({
                       response: {
                           status: 200,
+                          headers: {
+                              'Content-Type': 'text/html;charset=utf-8',
+                          },
                           body: res,
                       },
                   })
@@ -98,6 +110,9 @@ async function handleRequest(spiderInstance, queryParams) {
                 : $.done({
                       response: {
                           status: 200,
+                          headers: {
+                              'Content-Type': 'text/html;charset=utf-8',
+                          },
                           body: res,
                       },
                   })
@@ -131,6 +146,7 @@ function getJSON() {
             { name: '韓劇看看|偽', type: 1, api: `https://ykusu.ykusu/hjkk/provide/vod` },
             { name: '短劇天堂|偽', type: 1, api: `https://ykusu.ykusu/duanjutt/provide/vod` },
             { name: '美劇星球|偽', type: 1, api: `https://ykusu.ykusu/kmeiju/provide/vod` },
+            { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.com/api.php/provide/vod/from/mgtv` },
         ],
     }
     return $.isQuanX() ? $.done({ status: 'HTTP/1.1 200', body: JSON.stringify(subs) }) : $.done({ response: { status: 200, body: JSON.stringify(subs) } })
@@ -3128,6 +3144,7 @@ function zeqahtClass() {
                         { type_id: 16, type_name: '港台剧' },
                         { type_id: 62, type_name: '日韩剧' },
                         { type_id: 68, type_name: '其他剧' },
+                        // { type_id: 88, type_name: '短剧' },
                         { type_id: 3, type_name: '综艺' },
                         { type_id: 69, type_name: '国产综艺' },
                         { type_id: 70, type_name: '港台综艺' },
@@ -3260,6 +3277,50 @@ function zeqahtClass() {
 
         getUUID() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (e) => ('x' === e ? (16 * Math.random()) | 0 : 'r&0x3' | '0x8').toString(16))
+        }
+    })()
+}
+
+function mgtimiClass() {
+    return new (class {
+        constructor() {
+            this.headers = {
+                'User-Agent': 'MGINTLMe/6.7.5 (iPhone; iOS 17.1; Scale/3.00)',
+            }
+        }
+
+        async getVideoPlayUrl(queryParams) {
+            let backData = {}
+            let url = decodeURIComponent(queryParams.url)
+            let id = url.match(/b\/(.*)\/(.*)\.html/)[2]
+            let getSource =
+                base64Decode(
+                    'aHR0cHM6Ly9tb2JpbGUtc3RyZWFtLmFwaS5tZ3R2LmNvbS92MS92aWRlby9zb3VyY2U/dGlja2V0PTRGMDM0MkM3NDQ4OTNCQzVCRTJFRTdCRUZGQjBEQUZEJnZpZGVvSWQ9='
+                ) + id
+            try {
+                let html = await $.http.get({ url: getSource, headers: this.headers })
+
+                let proData = html.body
+                if (proData) {
+                    let obj = JSON.parse(proData)
+                    if (obj.code !== 200) {
+                        $.msg(obj.msg)
+                        backData.data = null
+                    } else {
+                        let videoSource = obj.data.videoSources[0]
+                        let videoUrl = videoSource.url
+                        let vres = await $.http.get({ url: videoUrl, headers: this.headers })
+                        if (vres.body) {
+                            let playUrl = JSON.parse(vres.body).info
+                            backData.data = playUrl
+                        }
+                    }
+                }
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+            return JSON.stringify(backData)
         }
     })()
 }
