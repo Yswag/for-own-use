@@ -3303,25 +3303,25 @@ function mgtimiClass() {
                 let proData = html.body
                 if (proData) {
                     let obj = JSON.parse(proData)
-                    // if (obj.code !== 200) {
-                    //     $.msg(obj.msg)
-                    //     backData.data = null
-                    // } else {
-                    //     let videoSource = obj.data.videoSources[0]
-                    //     let videoUrl = videoSource.url
-                    //     let vres = await $.http.get({ url: videoUrl, headers: this.headers })
-                    //     if (vres.body) {
-                    //         let playUrl = JSON.parse(vres.body).info
-                    //         backData.data = playUrl
-                    //     }
-                    // }
-                    let videoSource = obj.data.videoSources[0]
-                    let videoUrl = videoSource.url
-                    let vres = await $.http.get({ url: videoUrl, headers: this.headers })
-                    if (vres.body) {
-                        let playUrl = JSON.parse(vres.body).info
-                        backData.data = playUrl
+                    if (obj.code == 10023) {
+                        $.msg(obj.msg)
+                        backData.data = null
+                    } else {
+                        let videoSource = obj.data.videoSources[0]
+                        let videoUrl = videoSource.url
+                        let vres = await $.http.get({ url: videoUrl, headers: this.headers })
+                        if (vres.body) {
+                            let playUrl = JSON.parse(vres.body).info
+                            backData.data = playUrl
+                        }
                     }
+                    // let videoSource = obj.data.videoSources[0]
+                    // let videoUrl = videoSource.url
+                    // let vres = await $.http.get({ url: videoUrl, headers: this.headers })
+                    // if (vres.body) {
+                    //     let playUrl = JSON.parse(vres.body).info
+                    //     backData.data = playUrl
+                    // }
                 }
             } catch (e) {
                 $.logErr(e)
