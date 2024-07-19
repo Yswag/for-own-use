@@ -1657,7 +1657,7 @@ function nkvodClass() {
                     let vod_pic = _$('.detail-pic img').attr('data-src')
 
                     let from = []
-                    _$('.anthology-tab .swiper-wrapper a').each((index, element) => {
+                    _$('.anthology .swiper-wrapper a').each((index, element) => {
                         let name = _$(element)
                             .contents()
                             .filter(function () {
