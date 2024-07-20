@@ -146,7 +146,7 @@ function getJSON() {
             { name: '韓劇看看|偽', type: 1, api: `https://ykusu.ykusu/hjkk/provide/vod` },
             { name: '短劇天堂|偽', type: 1, api: `https://ykusu.ykusu/duanjutt/provide/vod` },
             { name: '美劇星球|偽', type: 1, api: `https://ykusu.ykusu/kmeiju/provide/vod` },
-            { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.com/api.php/provide/vod/from/mgtv` },
+            { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.top/api.php/provide/vod/from/mgtv` },
         ],
     }
     return $.isQuanX() ? $.done({ status: 'HTTP/1.1 200', body: JSON.stringify(subs) }) : $.done({ response: { status: 200, body: JSON.stringify(subs) } })
