@@ -37,7 +37,7 @@ try {
 			headers['referer'] = 'https://www.ghw9zwp5.com/'
 			$done({ headers: headers })
 			break
-		case url.includes('vipcj.timizy.com'):
+		case url.includes('vipcj.timizy'):
 			try {
 				let obj = JSON.parse($response.body)
 
