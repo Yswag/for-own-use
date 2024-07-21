@@ -46,6 +46,9 @@ const $ = new Env('XPTV-sources', { logLevel: 'info' })
         case url.includes('/mgtimi/'):
             spiderInstance = new mgtimiClass()
             break
+        case url.includes('/dsakf23665/'):
+            spiderInstance = new dsakf23665Class()
+            break
         case url.includes('getJSON'):
             getJSON()
             break
@@ -146,7 +149,9 @@ function getJSON() {
             { name: '韓劇看看|偽', type: 1, api: `https://ykusu.ykusu/hjkk/provide/vod` },
             { name: '短劇天堂|偽', type: 1, api: `https://ykusu.ykusu/duanjutt/provide/vod` },
             { name: '美劇星球|偽', type: 1, api: `https://ykusu.ykusu/kmeiju/provide/vod` },
-            { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.top/api.php/provide/vod/from/mgtv` },
+            { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.com/api.php/provide/vod/from/mgtv` },
+            { name: '小螞蟻|偽', type: 1, api: `http://dsakf23665.com/api.php/provide/vod/from/NBY` },
+            { name: '4K測試|偽', type: 1, api: `http://dsakf23665.com/api.php/provide/vod/from/4kvip` },
         ],
     }
     return $.isQuanX() ? $.done({ status: 'HTTP/1.1 200', body: JSON.stringify(subs) }) : $.done({ response: { status: 200, body: JSON.stringify(subs) } })
@@ -3323,6 +3328,51 @@ function mgtimiClass() {
                     //     backData.data = playUrl
                     // }
                 }
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+            return JSON.stringify(backData)
+        }
+    })()
+}
+
+function dsakf23665Class() {
+    return new (class {
+        constructor() {
+            this.headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+            }
+        }
+
+        async getVideoPlayUrl(queryParams) {
+            let backData = {}
+            let parts = queryParams.url.split('@@@')
+            let id = parts[0]
+            let from = parts[1]
+            let url = decodeURIComponent(parts[2])
+            let parseUrl = 'http://dsakf23665.com/api.php/v1.home/parseurl'
+            let body = {
+                vod_id: id,
+                from: from,
+                url: url,
+                index: 0,
+            }
+            try {
+                let resp = await $.http.post({
+                    url: parseUrl,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'User-Agent': this.headers['User-Agent'],
+                    },
+                    body: JSON.stringify(body),
+                })
+
+                let playUrl = JSON.parse(resp.body).data.url
+                if (!playUrl.startsWith('http')) {
+                    $.msg('解析失敗')
+                }
+                backData.data = playUrl
             } catch (e) {
                 $.logErr(e)
                 backData.error = e.message
