@@ -3300,7 +3300,7 @@ function mgtimiClass() {
             let id = url.match(/b\/(.*)\/(.*)\.html/)[2]
             let getSource =
                 base64Decode(
-                    'aHR0cHM6Ly9tb2JpbGUtc3RyZWFtLmFwaS5tZ3R2LmNvbS92MS92aWRlby9zb3VyY2U/dGlja2V0PTRGMDM0MkM3NDQ4OTNCQzVCRTJFRTdCRUZGQjBEQUZEJnZpZGVvSWQ9='
+                    'aHR0cHM6Ly9tb2JpbGUtc3RyZWFtLmFwaS5tZ3R2LmNvbS92MS92aWRlby9zb3VyY2U/bW9kPWlQaG9uZTEzJTJDMiZvc1R5cGU9aW9zJm9zVmVyc2lvbj0xNy4xJnRpY2tldD00RjAzNDJDNzQ0ODkzQkM1QkUyRUU3QkVGRkIwREFGRCZ2aWRlb0lkPQ=='
                 ) + id
             try {
                 let html = await $.http.get({ url: getSource, headers: this.headers })
