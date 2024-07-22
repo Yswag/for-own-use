@@ -140,7 +140,7 @@ function getJSON() {
     const subs = {
         sites: [
             { name: '文才|偽', type: 1, api: `https://ykusu.ykusu/zeqaht/provide/vod` },
-            { name: '速訊影院|偽', type: 1, api: `http://hd.suxun.site/api.php/provide/vod` },
+            //{ name: '速訊影院|偽', type: 1, api: `http://hd.suxun.site/api.php/provide/vod` },
             { name: '兩個BT|偽', type: 1, api: `https://ykusu.ykusu/bttwo/provide/vod` },
             { name: '燒火電影|偽', type: 1, api: `https://ykusu.ykusu/saohuo/provide/vod` },
             { name: '素白白影視|偽', type: 1, api: `https://ykusu.ykusu/subaibai/provide/vod` },
