@@ -1,6 +1,6 @@
 #!name=XPTV Sources
 #!desc=Format video data into CMS api structure
-#!icon=https://github.com/Toperlock/Quantumult/raw/main/icon/Doraemon/Doraemon-1054.png
+#!icon=https://raw.githubusercontent.com/sooyaaabo/Loon/main/Icon/XPTV.png
 
 [Rewrite]
 #^https:\/\/tencent-1257389134\.cos\.ap-nanjing\.myqcloud\.com\.qqhd\.net\/fangdao\.php header-replace Content-Type application/vnd.apple.mpegURL
