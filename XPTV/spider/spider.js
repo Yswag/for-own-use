@@ -140,7 +140,7 @@ function getJSON() {
     const subs = {
         sites: [
             { name: '文才|偽', type: 1, api: `https://ykusu.ykusu/zeqaht/provide/vod` },
-            { name: '速訊影院|偽', type: 1, api: `http://hd.suxun.site/api.php/provide/vod` },
+            //{ name: '速訊影院|偽', type: 1, api: `http://hd.suxun.site/api.php/provide/vod` },
             { name: '兩個BT|偽', type: 1, api: `https://ykusu.ykusu/bttwo/provide/vod` },
             { name: '燒火電影|偽', type: 1, api: `https://ykusu.ykusu/saohuo/provide/vod` },
             { name: '素白白影視|偽', type: 1, api: `https://ykusu.ykusu/subaibai/provide/vod` },
@@ -149,7 +149,7 @@ function getJSON() {
             { name: '韓劇看看|偽', type: 1, api: `https://ykusu.ykusu/hjkk/provide/vod` },
             { name: '短劇天堂|偽', type: 1, api: `https://ykusu.ykusu/duanjutt/provide/vod` },
             { name: '美劇星球|偽', type: 1, api: `https://ykusu.ykusu/kmeiju/provide/vod` },
-            { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.com/api.php/provide/vod/from/mgtv` },
+            { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.top/api.php/provide/vod/from/mgtv` },
             { name: '小螞蟻|偽', type: 1, api: `http://dsakf23665.com/api.php/provide/vod/from/NBY` },
             { name: '4K測試|偽', type: 1, api: `http://dsakf23665.com/api.php/provide/vod/from/4kvip` },
         ],
@@ -3300,7 +3300,7 @@ function mgtimiClass() {
             let id = url.match(/b\/(.*)\/(.*)\.html/)[2]
             let getSource =
                 base64Decode(
-                    'aHR0cHM6Ly9tb2JpbGUtc3RyZWFtLmFwaS5tZ3R2LmNvbS92MS92aWRlby9zb3VyY2U/dGlja2V0PTRGMDM0MkM3NDQ4OTNCQzVCRTJFRTdCRUZGQjBEQUZEJnZpZGVvSWQ9='
+                    'aHR0cHM6Ly9tb2JpbGUtc3RyZWFtLmFwaS5tZ3R2LmNvbS92MS92aWRlby9zb3VyY2U/bW9kPWlQaG9uZTEzJTJDMiZvc1R5cGU9aW9zJm9zVmVyc2lvbj0xNy4xJnRpY2tldD02OTRGQkU2MjFGQzAzMEI4OUE4OTlFMDc3RDY5RUE0OSZ2aWRlb0lkPQ=='
                 ) + id
             try {
                 let html = await $.http.get({ url: getSource, headers: this.headers })
