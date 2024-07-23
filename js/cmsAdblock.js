@@ -8,7 +8,7 @@ let hmrvideo = [
 	':14.940000,',
 	':12.37,',
 	':12.29,',
-	':12.27,', 
+	':12.27,',
 	':12.07,',
 	':12.05,',
 	':11.93,',
@@ -16,6 +16,7 @@ let hmrvideo = [
 	':11.80,',
 	':11.79,',
 	//':10.000000,'
+	':4.170833,',
 ]
 
 // 量子資源
@@ -72,7 +73,8 @@ let adCount = 0
 ;(async () => {
 	switch (true) {
 		case url.includes('hmrvideo'):
-			filterHmr(hmrvideo)
+			await fetchJxResult()
+			filterAds(hmrvideo)
 			break
 		case url.includes('wgslsw'):
 			hostsCount(yhzy, /^https?:\/\/(.*?)\//)
@@ -167,7 +169,12 @@ function filterHmr(valuesToRemove) {
 				$.log('Remove ad(by url):' + lines[i])
 				lines.splice(i - 1, 2)
 				adCount++
-			} else if (i < lines.length - 1 && lines[i + 1].includes('.ts') && lines[i-1].includes('DISCONTINUITY') && lines[i+2].includes('DISCONTINUITY')) {
+			} else if (
+				i < lines.length - 1 &&
+				lines[i + 1].includes('.ts') &&
+				lines[i - 1].includes('DISCONTINUITY') &&
+				lines[i + 2].includes('DISCONTINUITY')
+			) {
 				$.log('Remove ad(by duration):' + lines[i + 1])
 				lines.splice(i, 2)
 				adCount++
@@ -243,13 +250,17 @@ async function fetchJxResult() {
 	if (url.includes('hls')) return
 
 	let jx
-	
 
-	jx = 'https://jscdn.centos.chat/bilfun.php/?url='
+	if (url.includes('hmrvideo')) {
+		jx = 'https://tang.hz.cz/jx/hmr?noads='
+	} else {
+		jx = 'https://jscdn.centos.chat/bilfun.php/?url='
+	}
 
 	const requestUrl = jx + url
 	const req = {
 		url: requestUrl,
+		headers: { 'User-Agent': 'okhttp/3.12' },
 		timeout: 5000,
 	}
 	try {
@@ -257,17 +268,21 @@ async function fetchJxResult() {
 		const body = JSON.parse(resp.body)
 		$.log(resp.body)
 		if (body.url !== $request.url) {
-			$.log('Redirect to', body.url)
+			const m3u8 = (await $.http.get({ url: body.url, headers: { 'User-Agent': 'okhttp/3.12' } })).body
 			$.isQuanX()
 				? $.done({
-						status: 'HTTP/1.1 302',
-						headers: { Location: body.url },
+						status: 'HTTP/1.1 200',
+						headers: { 'Content-Type': 'application/vnd.apple.mpegURL' },
+						body: m3u8,
 				  })
 				: $.done({
-						status: 302,
-						headers: { Location: body.url },
+						status: 200,
+						headers: { 'Content-Type': 'application/vnd.apple.mpegURL' },
+						body: m3u8,
 				  })
-		} else $.done({})
+			//$.log('Redirect to', body.url)
+			//$.msg('Redirect to', body.url)
+		} else return
 	} catch (e) {
 		$.log(e)
 		$.done({})
