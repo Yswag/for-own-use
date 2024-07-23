@@ -268,7 +268,13 @@ async function fetchJxResult() {
 		const body = JSON.parse(resp.body)
 		$.log(resp.body)
 		if (body.url !== $request.url) {
-			const m3u8 = (await $.http.get({ url: body.url, headers: { 'User-Agent': 'okhttp/3.12' } })).body
+			const m3u8 = (
+				await $.http.get({
+					url: body.url,
+					headers: { 'User-Agent': 'okhttp/3.12' },
+					timeout: 8000,
+				})
+			).body
 			$.isQuanX()
 				? $.done({
 						status: 'HTTP/1.1 200',
