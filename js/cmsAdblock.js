@@ -58,6 +58,8 @@ let temp = []
 
 let arg = getArg()
 let isMsg = arg.toLowerCase() === 'true'
+$.log('arg = '+arg)
+$.log('isMsg = '+isMsg)
 
 //if (arg === '2') {
 //	$.log('using 2nd method')
