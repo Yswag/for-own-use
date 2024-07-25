@@ -8,7 +8,7 @@
 (^https?:\/\/s\d+\.bfengbf\.com\/video)(.+)_z5q\.ts $1$2.ts 302
 
 [Script]
-http-response ^https?:\/\/m3u8\.hmrvideo\.com\/play\/(.+).m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜黑木耳
+#http-response ^https?:\/\/m3u8\.hmrvideo\.com\/play\/(.+).m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜黑木耳
 
 http-response ^https?:\/\/((?:v\.lzcdn|v\.cdnlz|vip.*\.lz[-]?cdn)\d+\.com)\/.+\/hls\/.+\.m3u8 script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js, requires-body=true, tag=去廣告｜量子資源
 
