@@ -8,7 +8,7 @@ let hmrvideo = [
 	':14.940000,',
 	':12.37,',
 	':12.29,',
-	':12.27,', 
+	':12.27,',
 	':12.07,',
 	':12.05,',
 	':11.93,',
@@ -16,6 +16,7 @@ let hmrvideo = [
 	':11.80,',
 	':11.79,',
 	//':10.000000,'
+	':4.170833,',
 ]
 
 // 量子資源
@@ -56,11 +57,14 @@ let t097img = ['y.ts']
 let temp = []
 
 let arg = getArg()
+let isMsg = arg.toLowerCase() === 'true'
+$.log('arg = '+arg)
+$.log('isMsg = '+isMsg)
 
-if (arg === '2') {
-	$.log('using 2nd method')
-	fixAdM3u8Ai($request.url)
-}
+//if (arg === '2') {
+//	$.log('using 2nd method')
+//	fixAdM3u8Ai($request.url)
+//}
 
 if ($response.body === undefined || !$response.body.includes('#EXTM3U')) $.done({})
 
@@ -72,7 +76,8 @@ let adCount = 0
 ;(async () => {
 	switch (true) {
 		case url.includes('hmrvideo'):
-			filterHmr(hmrvideo)
+			await fetchJxResult()
+			filterAds(hmrvideo)
 			break
 		case url.includes('wgslsw'):
 			hostsCount(yhzy, /^https?:\/\/(.*?)\//)
@@ -150,6 +155,7 @@ function filterAds(valuesToRemove) {
 		}
 	}
 
+	if (isMsg) $.msg('cmsAdblock', `移除廣告${adCount}行`)
 	$.log(`移除廣告${adCount}行`)
 	$.done({ body: lines.join('\n') })
 }
@@ -167,7 +173,12 @@ function filterHmr(valuesToRemove) {
 				$.log('Remove ad(by url):' + lines[i])
 				lines.splice(i - 1, 2)
 				adCount++
-			} else if (i < lines.length - 1 && lines[i + 1].includes('.ts') && lines[i-1].includes('DISCONTINUITY') && lines[i+2].includes('DISCONTINUITY')) {
+			} else if (
+				i < lines.length - 1 &&
+				lines[i + 1].includes('.ts') &&
+				lines[i - 1].includes('DISCONTINUITY') &&
+				lines[i + 2].includes('DISCONTINUITY')
+			) {
 				$.log('Remove ad(by duration):' + lines[i + 1])
 				lines.splice(i, 2)
 				adCount++
@@ -175,6 +186,7 @@ function filterHmr(valuesToRemove) {
 		}
 	}
 
+	$.msg('debug', `移除廣告${adCount}行`)
 	$.log(`移除廣告${adCount}行`)
 	$.done({ body: lines.join('\n') })
 }
@@ -243,13 +255,17 @@ async function fetchJxResult() {
 	if (url.includes('hls')) return
 
 	let jx
-	
 
-	jx = 'https://jscdn.centos.chat/bilfun.php/?url='
+	if (url.includes('hmrvideo')) {
+		jx = 'https://tang.hz.cz/jx/hmr?noads='
+	} else {
+		jx = 'https://jscdn.centos.chat/bilfun.php/?url='
+	}
 
 	const requestUrl = jx + url
 	const req = {
 		url: requestUrl,
+		headers: { 'User-Agent': 'okhttp/3.12' },
 		timeout: 5000,
 	}
 	try {
@@ -257,17 +273,28 @@ async function fetchJxResult() {
 		const body = JSON.parse(resp.body)
 		$.log(resp.body)
 		if (body.url !== $request.url) {
-			$.log('Redirect to', body.url)
+			const m3u8 = (
+				await $.http.get({
+					url: body.url,
+					headers: { 'User-Agent': 'okhttp/3.12' },
+					timeout: 8000,
+				})
+			).body
+			if (isMsg) $.msg('cmsAdblock', 'Redirect to' + body.url)
 			$.isQuanX()
 				? $.done({
-						status: 'HTTP/1.1 302',
-						headers: { Location: body.url },
+						status: 'HTTP/1.1 200',
+						headers: { 'Content-Type': 'application/vnd.apple.mpegURL' },
+						body: m3u8,
 				  })
 				: $.done({
-						status: 302,
-						headers: { Location: body.url },
+						status: 200,
+						headers: { 'Content-Type': 'application/vnd.apple.mpegURL' },
+						body: m3u8,
 				  })
-		} else $.done({})
+			//$.log('Redirect to', body.url)
+			//$.msg('Redirect to', body.url)
+		} else return
 	} catch (e) {
 		$.log(e)
 		$.done({})
@@ -275,131 +302,11 @@ async function fetchJxResult() {
 }
 
 function getArg() {
-	if ($.isLoon()) return $persistentStore.read('方法')
+	if ($.isLoon()) return $persistentStore.read('彈窗通知')
 	if (typeof $argument === 'undefined') {
-		return '1'
+		return false
 	}
 	return $argument
-}
-
-function fixAdM3u8Ai(m3u8_url, headers) {
-	let ts = new Date().getTime()
-	let option = headers ? { headers: headers } : {}
-
-	function b(s1, s2) {
-		let i = 0
-		while (i < s1.length) {
-			if (s1[i] !== s2[i]) {
-				break
-			}
-			i++
-		}
-		return i
-	}
-
-	function reverseString(str) {
-		return str.split('').reverse().join('')
-	}
-
-	//log('播放的地址：' + m3u8_url);
-	let m3u8 = $response.body
-	//log('m3u8处理前:' + m3u8);
-	//m3u8 = m3u8
-	//	.trim()
-	//	.split('\n')
-	//	.map((it) => (it.startsWith('#') ? it : urljoin(m3u8_url, it)))
-	//	.join('\n')
-	//log('m3u8处理后:============:' + m3u8);
-	// 获取嵌套m3u8地址
-	//m3u8 = m3u8.replace(/\n\n/gi, '\n') //删除多余的换行符
-	//let last_url = m3u8.split('\n').slice(-1)[0]
-	//if (last_url.length < 5) {
-	//	last_url = m3u8.split('\n').slice(-2)[0]
-	//}
-
-	//if (last_url.includes('.m3u8') && last_url !== m3u8_url) {
-	//	m3u8_url = urljoin2(m3u8_url, last_url)
-	//	$.log('嵌套的m3u8_url:' + m3u8_url)
-	//	m3u8 = request(m3u8_url, option)
-	//}
-	//log('----处理有广告的地址----');
-	let s = m3u8
-		.trim()
-		.split('\n')
-		.filter((it) => it.trim())
-		.join('\n')
-	let ss = s.split('\n')
-	//找出第一条播放地址
-	//let firststr = ss.find(x => !x.startsWith('#'));
-	let firststr = ''
-	let maxl = 0 //最大相同字符
-	let kk = 0
-	let kkk = 2
-	let secondstr = ''
-	for (let i = 0; i < ss.length; i++) {
-		let s = ss[i]
-		if (!s.startsWith('#')) {
-			if (kk == 0) firststr = s
-			if (kk == 1) maxl = b(firststr, s)
-			if (kk > 1) {
-				if (maxl > b(firststr, s)) {
-					if (secondstr.length < 5) secondstr = s
-					kkk = kkk + 2
-				} else {
-					maxl = b(firststr, s)
-					kkk++
-				}
-			}
-			kk++
-			if (kk >= 20) break
-		}
-	}
-	if (kkk > 30) firststr = secondstr
-	let firststrlen = firststr.length
-	//log('字符串长度：' + firststrlen);
-	let ml = Math.round(ss.length / 2).toString().length //取数据的长度的位数
-	//log('数据条数的长度：' + ml);
-	//找出最后一条播放地址
-	let maxc = 0
-	let laststr = ss.toReversed().find((x) => {
-		if (!x.startsWith('#')) {
-			let k = b(reverseString(firststr), reverseString(x))
-			maxl = b(firststr, x)
-			maxc++
-			if (firststrlen - maxl <= ml + k || maxc > 10) {
-				return true
-			}
-		}
-		return false
-	})
-	$.log('最后一条切片：' + laststr)
-	//log('最小相同字符长度：' + maxl);
-	let ad_urls = []
-	for (let i = 0; i < ss.length; i++) {
-		let s = ss[i]
-		if (!s.startsWith('#')) {
-			if (b(firststr, s) < maxl) {
-				ad_urls.push(s) // 广告地址加入列表
-				ss.splice(i - 1, 2)
-				i = i - 2
-			} else {
-				//ss[i] = urljoin(m3u8_url, s)
-				ss[i] = s
-			}
-		} else {
-			//ss[i] = s.replace(/URI=\"(.*)\"/, 'URI="' + urljoin(m3u8_url, '$1') + '"')
-			ss[i] = s
-		}
-	}
-	$.log('处理的m3u8地址:' + m3u8_url)
-	$.log('----广告地址----')
-	$.log(ad_urls)
-	$.log('移除廣告' + ad_urls.length + '行')
-	m3u8 = ss.join('\n')
-	//log('处理完成');
-	$.log('处理耗时：' + (new Date().getTime() - ts).toString())
-	//return m3u8
-	$.done({ body: m3u8 })
 }
 
 //prettier-ignore
