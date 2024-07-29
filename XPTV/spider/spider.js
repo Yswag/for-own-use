@@ -3213,7 +3213,7 @@ function zeqahtClass() {
                     playlist.forEach((e, i) => {
                         let parts = e.split('$')
                         let name = parts[0]
-                        let url = `https://ykusu.ykusu/zeqaht/provide/vod?ac=play&id=${obj.list[0].vod_id}&nid=${i + 1}&n=.m3u8`
+                        let url = `https://ykusu.ykusu/zeqaht/provide/vod?ac=play&id=${obj.list[0].vod_id}&index=${i}&n=.m3u8`
                         newPlaylist.push(name + '$' + url)
                     })
                     obj.list[0].vod_play_url = newPlaylist.join('#')
@@ -3230,9 +3230,17 @@ function zeqahtClass() {
         async getVideoPlayUrl(queryParams) {
             let backData = {}
             let id = queryParams.id
-            let nid = queryParams.nid
-            let url = `${base64Decode('aHR0cHM6Ly93d3cuZ2h3OXp3cDUuY29tL2FwaS9tdy1tb3ZpZS9hbm9ueW1vdXMvdmlkZW8vZXBpc29kZS91cmw=')}?id=${id}&nid=${nid}`
+            let index = queryParams.index
+            let detailPage = base64Decode('aHR0cHM6Ly93d3cuZ2h3OXp3cDUuY29tL2RldGFpbC8=') + id
             try {
+                let dres = await $.http.get({ url: detailPage, headers: this.headers })
+                let _$ = $.cheerio.load(dres.body)
+                let item = _$('div[class^="detail__PlayListBox"]').find('div.listitem').eq(index)
+                let nid = item
+                    .find('a')
+                    .attr('href')
+                    .match(/\/sid\/(.+)/)[1]
+                let url = `${base64Decode('aHR0cHM6Ly93d3cuZ2h3OXp3cDUuY29tL2FwaS9tdy1tb3ZpZS9hbm9ueW1vdXMvdmlkZW8vZXBpc29kZS91cmw=')}?id=${id}&nid=${nid}`
                 let signKey = base64Decode('Y2I4MDg1MjliYWU2YjZiZTQ1ZWNmYWIyOWE0ODg5YmM=')
                 let dataStr = url.split('?')[1]
                 let t = Date.now()
