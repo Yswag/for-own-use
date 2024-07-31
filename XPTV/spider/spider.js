@@ -3705,24 +3705,29 @@ function nonoClass() {
             let backData = {}
 
             try {
-                let searchUrl = this.url + `/search/page/${pg}/wd/${wd}.html`
+                let searchUrl = this.url + `/?s=${wd}`
                 let searchRes = await $.http.get({
                     url: searchUrl,
-                    headers: this.headers,
+                    headers: {
+                        accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,/;q=0.8',
+                        'user-agent':
+                            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1',
+                        referer: 'https://www.novipnoad.net',
+                    },
                 })
                 let _$ = $.cheerio.load(searchRes.body)
                 let videos = []
-                let allVideo = _$('li.hl-list-item')
+                let allVideo = _$('.search-listing-content .video-item')
                 allVideo.each((index, element) => {
-                    let vodUrl = _$(element).find('a.hl-item-thumb').attr('href') || ''
-                    let vodPic = _$(element).find('a.hl-item-thumb').attr('data-original') || ''
-                    let vodName = _$(element).find('a.hl-item-thumb').attr('title') || ''
+                    let vodUrl = _$(element).find('.item-thumbnail a').attr('href') || ''
+                    let vodPic = _$(element).find('.item-thumbnail img').attr('data-original') || ''
+                    let vodName = _$(element).find('.item-thumbnail a').attr('title') || ''
                     let vodDiJiJi = _$(element).find('span.remarks').text() || ''
 
                     let videoDet = {}
-                    videoDet.vod_id = +vodUrl.match(/anime\/(.+)\.html/)[1]
+                    videoDet.vod_id = +vodUrl.match(/net\/.+\/(\d+)\.html/)[1]
                     videoDet.vod_pic = vodPic
-                    videoDet.vod_name = vodName.trim()
+                    videoDet.vod_name = vodName.replace(/(【.*?】)/g, '').trim()
                     videoDet.vod_remarks = vodDiJiJi.trim()
                     videos.push(videoDet)
                 })
