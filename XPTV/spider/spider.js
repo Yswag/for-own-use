@@ -140,6 +140,22 @@ function getJSON() {
     return $.isQuanX() ? $.done({ status: 'HTTP/1.1 200', body: JSON.stringify(subs) }) : $.done({ response: { status: 200, body: JSON.stringify(subs) } })
 }
 
+function msgtodc(site, e) {
+    const webhook = 'https://discord.com/api/webhooks/1052995873270923314/-lua5joiYT63DjGn6H-a_X3srT0MrNfPZDJjLtvcsHJ69fU1gVz2O-Ldc5wcwzEr7uoA'
+    const err = {
+        time: $.time('yyyy-MM-dd HH:mm:ss'),
+        env: $.getEnv(),
+        site,
+        error: e.message,
+    }
+    return $.http.post({
+        url: webhook,
+        body: {
+            content: $.toStr(err),
+        },
+    })
+}
+
 function bttwoClass() {
     return new (class {
         constructor() {
@@ -208,7 +224,8 @@ function bttwoClass() {
                     backData.class = list
                 }
             } catch (e) {
-                $.logErr(e)
+                await msgtodc('bttwo', e)
+                $.logErr(e.message)
                 backData.error = e.message
             }
 
@@ -277,6 +294,7 @@ function bttwoClass() {
                     backData.list = videos
                 }
             } catch (e) {
+                await msgtodc('bttwo', e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
@@ -291,10 +309,7 @@ function bttwoClass() {
                 let pro = await $.http.get({ url: webUrl, headers: this.headers })
                 let proData = pro.body
                 if (proData) {
-                    // let document = parse(proData)
                     let _$ = $.cheerio.load(proData)
-
-                    // let juJiDocment = document.querySelector('.paly_list_btn')?.querySelectorAll('a') ?? []
                     let juJiDocument = _$('.paly_list_btn').find('a')
 
                     let vod_play_url = ''
@@ -334,6 +349,7 @@ function bttwoClass() {
                     backData = temp
                 }
             } catch (e) {
+                await msgtodc('bttwo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -370,6 +386,7 @@ function bttwoClass() {
                     // } else backData.data = 'https://bit.ly/3BlS71b'
                 } else backData.data = 'https://shattereddisk.github.io/rickroll/rickroll.mp4'
             } catch (e) {
+                await msgtodc('bttwo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -412,6 +429,7 @@ function bttwoClass() {
                     backData.list = videos
                 }
             } catch (e) {
+                await msgtodc('bttwo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -560,6 +578,7 @@ function saohuoClass() {
                     backData.class = list
                 }
             } catch (e) {
+                await msgtodc('saohuo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -613,6 +632,7 @@ function saohuoClass() {
                     backData.list = videos
                 }
             } catch (e) {
+                await msgtodc('saohuo', e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
@@ -686,6 +706,7 @@ function saohuoClass() {
                     backData = temp
                 }
             } catch (e) {
+                await msgtodc('saohuo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -728,6 +749,7 @@ function saohuoClass() {
                     } else backData.error = 'resp is empty'
                 }
             } catch (e) {
+                await msgtodc('saohuo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -784,6 +806,7 @@ function saohuoClass() {
                 // backData.total = videos.length * lastPage
                 backData.list = videos
             } catch (e) {
+                await msgtodc('saohuo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -898,6 +921,7 @@ function sbbClass() {
                     backData.class = list
                 }
             } catch (e) {
+                await msgtodc('saohuo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -985,6 +1009,7 @@ function sbbClass() {
                     backData.list = videos
                 }
             } catch (e) {
+                await msgtodc('saohuo', e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
@@ -1048,6 +1073,7 @@ function sbbClass() {
                     backData = temp
                 }
             } catch (e) {
+                await msgtodc('saohuo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1107,6 +1133,7 @@ function sbbClass() {
                     }
                 }
             } catch (e) {
+                await msgtodc('saohuo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1149,6 +1176,7 @@ function sbbClass() {
                 // backData.total = videos.length * lastPage
                 backData.list = videos
             } catch (e) {
+                await msgtodc('saohuo', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1246,6 +1274,7 @@ function hjkkClass() {
                     backData.class = list
                 }
             } catch (e) {
+                await msgtodc('hjkk', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1302,6 +1331,7 @@ function hjkkClass() {
                     backData.list = videos
                 }
             } catch (e) {
+                await msgtodc('hjkk', e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
@@ -1366,6 +1396,7 @@ function hjkkClass() {
                     backData = temp
                 }
             } catch (e) {
+                await msgtodc('hjkk', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1392,6 +1423,7 @@ function hjkkClass() {
                     backData.data = url
                 }
             } catch (e) {
+                await msgtodc('hjkk', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1434,6 +1466,7 @@ function hjkkClass() {
                 // backData.total = videos.length * lastPage
                 backData.list = videos
             } catch (e) {
+                await msgtodc('hjkk', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1535,6 +1568,7 @@ function anfunsClass() {
                     backData.class = list
                 }
             } catch (e) {
+                await msgtodc('anfuns', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1589,6 +1623,7 @@ function anfunsClass() {
                     backData.list = videos
                 }
             } catch (e) {
+                await msgtodc('anfuns', e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
@@ -1665,6 +1700,7 @@ function anfunsClass() {
                     backData = temp
                 }
             } catch (e) {
+                await msgtodc('anfuns', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1687,6 +1723,7 @@ function anfunsClass() {
                     backData.data = playUrl
                 }
             } catch (e) {
+                await msgtodc('anfuns', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1727,6 +1764,7 @@ function anfunsClass() {
                 backData.limit = videos.length.toString()
                 backData.list = videos
             } catch (e) {
+                await msgtodc('anfuns', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -2112,6 +2150,7 @@ function zeqahtClass() {
                     backData = obj
                 }
             } catch (e) {
+                await msgtodc('zeqaht', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -2138,6 +2177,7 @@ function zeqahtClass() {
                     backData = obj
                 }
             } catch (e) {
+                await msgtodc('zeqaht', e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
@@ -2166,6 +2206,7 @@ function zeqahtClass() {
                     backData = obj
                 }
             } catch (e) {
+                await msgtodc('zeqaht', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -2208,6 +2249,7 @@ function zeqahtClass() {
                     backData.data = playUrl
                 }
             } catch (e) {
+                await msgtodc('zeqaht', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -2227,6 +2269,7 @@ function zeqahtClass() {
                 })
                 backData = JSON.parse(searchRes.body)
             } catch (e) {
+                await msgtodc('zeqaht', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -2278,6 +2321,7 @@ function mgtimiClass() {
                     }
                 }
             } catch (e) {
+                await msgtodc('mgtv', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -2350,6 +2394,7 @@ function nonoClass() {
                     backData.class = list
                 }
             } catch (e) {
+                await msgtodc('novipnoad', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -2438,6 +2483,7 @@ function nonoClass() {
                     backData.list = videos
                 }
             } catch (e) {
+                await msgtodc('novipnoad', e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
@@ -2488,21 +2534,6 @@ function nonoClass() {
                         vod_play_url = playlist.join('$$$')
                     }
 
-                    // let juJiDocment = _$('ul.hl-plays-list')
-                    // let playlist = []
-                    // juJiDocment.each((index, element) => {
-                    //     let videos = _$(element).find('li a')
-                    //     let vod_play_url = ''
-                    //     videos.each((i, e) => {
-                    //         vod_play_url += from[index] + '-' + _$(e).text()
-                    //         vod_play_url += '$'
-                    //         vod_play_url +=
-                    //             'https://ykusu.ykusu/nono/provide/vod?ac=play&url=' + encodeURIComponent(this.combineUrl(_$(e).attr('href'))) + '&n=.m3u8'
-                    //         vod_play_url += '#'
-                    //     })
-                    //     playlist.push(vod_play_url)
-                    // })
-
                     let temp = {
                         code: 1,
                         msg: '数据列表',
@@ -2528,7 +2559,6 @@ function nonoClass() {
                         ],
                     }
                     temp.list[0].vod_play_url = vod_play_url
-                    // temp.list[0].vod_play_from = from.join('$$$')
                     temp.list[0].vod_id = +ids
                     temp.list[0].vod_name = vod_name
                     temp.list[0].vod_pic = vod_pic
@@ -2536,6 +2566,7 @@ function nonoClass() {
                     backData = temp
                 }
             } catch (e) {
+                await msgtodc('novipnoad', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -2562,7 +2593,8 @@ function nonoClass() {
                 const device = player.body.match(/params\['device'\] = '(\w+)';/)[1]
                 const config = data.split(',')
                 const vkey = JSON.parse(
-                    this.getVkey(config[0], config[1], config[2], config[3], config[4], config[5])
+                    // this.getVkey(config[0], config[1], config[2], config[3], config[4], config[5])
+                    this.getVkey(...config)
                         .match(/JSON.stringify\((.*)\)\);/)[1]
                         .replace(/'/g, '"')
                         .replace(/(ckey|ref|ip|time):/g, '"$1":')
@@ -2591,9 +2623,9 @@ function nonoClass() {
                 let playUrl = jsres.body.match(/decrypt\("(.*)"\)/)[1]
                 playUrl = this.decryptUrl(playUrl)
                 playUrl = playUrl.quality[playUrl.defaultQuality].url
-                console.log(playUrl)
                 backData.data = playUrl
             } catch (e) {
+                await msgtodc('novipnoad', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -2639,6 +2671,7 @@ function nonoClass() {
                 backData.limit = videos.length.toString()
                 backData.list = videos
             } catch (e) {
+                await msgtodc('novipnoad', e)
                 $.logErr(e)
                 backData.error = e.message
             }
