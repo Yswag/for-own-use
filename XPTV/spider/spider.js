@@ -3436,7 +3436,7 @@ function nonoClass() {
                             let videoDet = {}
                             videoDet.vod_id = +vodUrl.match(/net\/.+\/(.+)\.html/)[1]
                             videoDet.vod_pic = vodPic
-                            videoDet.vod_name = vodName.replace(/(【.*?】)/g, '')
+                            videoDet.vod_name = vodName.replace(/^(【.*?】)/g, '')
                             videoDet.vod_remarks = vodDiJiJi.trim()
                             videos.push(videoDet)
                         })
@@ -3523,7 +3523,7 @@ function nonoClass() {
                         let videoDet = {}
                         videoDet.vod_id = +vodUrl
                         videoDet.vod_pic = vodPic
-                        videoDet.vod_name = vodName.replace(/(【.*?】)/g, '').trim()
+                        videoDet.vod_name = vodName.replace(/^(【.*?】)/g, '').trim()
                         videoDet.vod_remarks = vodDiJiJi.trim()
                         videos.push(videoDet)
                     })
@@ -3727,7 +3727,7 @@ function nonoClass() {
                     let videoDet = {}
                     videoDet.vod_id = +vodUrl.match(/net\/.+\/(\d+)\.html/)[1]
                     videoDet.vod_pic = vodPic
-                    videoDet.vod_name = vodName.replace(/(【.*?】)/g, '').trim()
+                    videoDet.vod_name = vodName.replace(/^(【.*?】)/g, '').trim()
                     videoDet.vod_remarks = vodDiJiJi.trim()
                     videos.push(videoDet)
                 })
