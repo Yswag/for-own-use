@@ -3262,7 +3262,7 @@ function zeqahtClass() {
                 let proData = pro.body
                 if (proData) {
                     let obj = JSON.parse(proData)
-                    let playUrl = obj.data
+                    let playUrl = obj.data.playUrl
                     backData.data = playUrl
                 }
             } catch (e) {
