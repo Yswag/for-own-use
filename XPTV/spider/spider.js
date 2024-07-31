@@ -3244,7 +3244,7 @@ function zeqahtClass() {
                     .find('a')
                     .attr('href')
                     .match(/\/sid\/(.+)/)[1]
-                let url = `${base64Decode('aHR0cHM6Ly93d3cuZ2h3OXp3cDUuY29tL2FwaS9tdy1tb3ZpZS9hbm9ueW1vdXMvdmlkZW8vZXBpc29kZS91cmw=')}?id=${id}&nid=${nid}`
+                let url = `${base64Decode('aHR0cHM6Ly93d3cuZ2h3OXp3cDUuY29tL2FwaS9tdy1tb3ZpZS9hbm9ueW1vdXMvdjEvdmlkZW8vZXBpc29kZS91cmw=')}?id=${id}&nid=${nid}`
                 let signKey = base64Decode('Y2I4MDg1MjliYWU2YjZiZTQ1ZWNmYWIyOWE0ODg5YmM=')
                 let dataStr = url.split('?')[1]
                 let t = Date.now()
