@@ -49,6 +49,9 @@ const $ = new Env('XPTV-sources', { logLevel: 'info' })
         case url.includes('/dsakf23665/'):
             spiderInstance = new dsakf23665Class()
             break
+        case url.includes('/nono/'):
+            spiderInstance = new nonoClass()
+            break
         case url.includes('getJSON'):
             getJSON()
             break
@@ -152,6 +155,7 @@ function getJSON() {
             // { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.top/api.php/provide/vod/from/mgtv` },
             { name: '小螞蟻|偽', type: 1, api: `http://dsakf23665.com/api.php/provide/vod/from/NBY` },
             { name: '4K測試|偽', type: 1, api: `http://dsakf23665.com/api.php/provide/vod/from/4kvip` },
+            { name: 'NO視頻|偽', type: 1, api: `https://ykusu.ykusu/nono/api.php/provide/vod` },
         ],
     }
     return $.isQuanX() ? $.done({ status: 'HTTP/1.1 200', body: JSON.stringify(subs) }) : $.done({ response: { status: 200, body: JSON.stringify(subs) } })
@@ -3377,6 +3381,488 @@ function dsakf23665Class() {
                 backData.error = e.message
             }
             return JSON.stringify(backData)
+        }
+    })()
+}
+
+function nonoClass() {
+    return new (class {
+        constructor() {
+            this.url = 'https://www.novipnoad.net'
+            this.headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+            }
+            this.ignoreClassName = ['首页', '剧集']
+        }
+
+        async getClassList() {
+            let webUrl = this.url
+            let backData = {}
+            try {
+                const pro = await $.http.get({ url: webUrl, headers: this.headers })
+
+                let proData = await pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let allClass = _$('.main-menu .nav-ul-menu a')
+                    let list = []
+                    allClass.each((index, element) => {
+                        let isIgnore = this.isIgnoreClassName(_$(element).text())
+                        if (isIgnore) {
+                            return
+                        }
+                        let type_name = _$(element).text()
+                        let url = _$(element).attr('href') || ''
+                        // url = url.match(/type\/(\d+)\.html/)[1]
+
+                        if (url.length > 0 && type_name.length > 0) {
+                            let videoClass = {}
+                            videoClass.type_id = index
+                            videoClass.type_name = type_name.trim()
+                            list.push(videoClass)
+                        }
+                    })
+
+                    let allVideo = _$('.smart-box')
+                    let videos = []
+                    allVideo.each((index, element) => {
+                        let nodes = _$(element).find('.video-item')
+                        nodes.each((index, element) => {
+                            let vodUrl = _$(element).find('a').attr('href') || ''
+                            let vodPic = _$(element).find('a img').attr('data-original') || ''
+                            let vodName = _$(element).find('a').attr('title') || ''
+                            let vodDiJiJi = _$(element).find('span.remarks').text() || ''
+
+                            let videoDet = {}
+                            videoDet.vod_id = +vodUrl.match(/net\/.+\/(.+)\.html/)[1]
+                            videoDet.vod_pic = vodPic
+                            videoDet.vod_name = vodName.replace(/(【.*?】)/g, '')
+                            videoDet.vod_remarks = vodDiJiJi.trim()
+                            videos.push(videoDet)
+                        })
+                    })
+
+                    backData.code = 1
+                    backData.msg = '數據列表'
+                    backData.page = 1
+                    backData.list = videos
+                    backData.class = list
+                }
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        async getVideoList(queryParams) {
+            const page = queryParams.pg
+            const type = queryParams.t
+
+            let realTypeName = ''
+            if (type === '') return this.getClassList()
+            switch (type) {
+                case '2':
+                    realTypeName = '/tv/hongkong'
+                    break
+                case '3':
+                    realTypeName = '/tv/taiwan'
+                    break
+                case '4':
+                    realTypeName = '/tv/western'
+                    break
+                case '5':
+                    realTypeName = '/tv/japan'
+                    break
+                case '6':
+                    realTypeName = '/tv/korea'
+                    break
+                case '7':
+                    realTypeName = '/tv/thailand'
+                    break
+                case '8':
+                    realTypeName = '/tv/turkey'
+                    break
+                case '9':
+                    realTypeName = '/movie'
+                    break
+                case '10':
+                    realTypeName = '/anime'
+                    break
+                case '11':
+                    realTypeName = '/shows'
+                    break
+                case '12':
+                    realTypeName = '/music'
+                    break
+                case '13':
+                    realTypeName = '/short'
+                    break
+                case '14':
+                    realTypeName = '/other'
+                    break
+            }
+
+            let listUrl = `${this.url}${realTypeName}/page/${page}`
+            let backData = {}
+            try {
+                let pro = await $.http.get({ url: listUrl, headers: this.headers })
+                let proData = pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let allVideo = _$('.video-listing-content .video-item')
+                    let lastPage = _$('.wp-pagenavi a.last').text() || '1'
+                    let videos = []
+                    allVideo.each((index, element) => {
+                        let vodUrl = _$(element).find('h3 a').attr('rel') || ''
+                        let vodPic = _$(element).find('img').attr('data-original') || ''
+                        let vodName = _$(element).find('h3 a').attr('title') || ''
+                        let vodDiJiJi = _$(element).find('span.remarks').text() || ''
+
+                        let videoDet = {}
+                        videoDet.vod_id = +vodUrl
+                        videoDet.vod_pic = vodPic
+                        videoDet.vod_name = vodName.replace(/(【.*?】)/g, '').trim()
+                        videoDet.vod_remarks = vodDiJiJi.trim()
+                        videos.push(videoDet)
+                    })
+
+                    backData.code = 1
+                    backData.msg = '數據列表'
+                    backData.page = page.toString()
+                    backData.pagecount = +lastPage
+                    backData.limit = videos.length.toString()
+                    backData.total = videos.length * lastPage
+                    backData.list = videos
+                }
+            } catch (e) {
+                $.logErr('Error fetching list:', e)
+                backData.error = e.message
+            }
+            return JSON.stringify(backData)
+        }
+
+        async getVideoDetail(queryParams) {
+            let ids = queryParams.ids
+            let backData = {}
+            try {
+                let webUrl = this.url + `/movie/${ids}.html`
+                let pro = await $.http.get({ url: webUrl, headers: this.headers })
+                let proData = pro.body
+                if (proData) {
+                    let _$ = $.cheerio.load(proData)
+                    let vod_name = _$('.video-item h1').text()
+                    let vod_content = _$('.item-content p').eq(0).text() || ''
+                    let vod_pic = _$('.hl-item-thumb').attr('data-original') || ''
+
+                    let vod_play_url = ''
+                    let playInfo = _$('.item-content script').text()
+                    let pkey = playInfo.match(/pkey:"(.*)"/)[1]
+                    let ref = _$('meta[property="og:url"]')
+                        .attr('content')
+                        .match(/\.net(.*)/)[1]
+
+                    if (playInfo.includes('vid:')) {
+                        let vid = playInfo.match(/vid:"(.*)",/)[1]
+                        vod_play_url =
+                            '1$' + 'https://ykusu.ykusu/nono/provide/vod?ac=play&vid=' + vid + '&pkey=' + pkey + '&ref=' + encodeURIComponent(ref) + '&n=.m3u8'
+                    } else {
+                        let btns = _$('.multilink-btn')
+                        let playlist = []
+                        btns.each((index, element) => {
+                            let name = _$(element).text()
+                            let vid = _$(element).attr('data-vid')
+                            let url =
+                                name +
+                                '$https://ykusu.ykusu/nono/provide/vod?ac=play&vid=' +
+                                vid +
+                                '&pkey=' +
+                                pkey +
+                                '&ref=' +
+                                encodeURIComponent(ref) +
+                                '&n=.m3u8'
+                            playlist.push(url)
+                        })
+                        vod_play_url = playlist.join('$$$')
+                    }
+
+                    // let juJiDocment = _$('ul.hl-plays-list')
+                    // let playlist = []
+                    // juJiDocment.each((index, element) => {
+                    //     let videos = _$(element).find('li a')
+                    //     let vod_play_url = ''
+                    //     videos.each((i, e) => {
+                    //         vod_play_url += from[index] + '-' + _$(e).text()
+                    //         vod_play_url += '$'
+                    //         vod_play_url +=
+                    //             'https://ykusu.ykusu/nono/provide/vod?ac=play&url=' + encodeURIComponent(this.combineUrl(_$(e).attr('href'))) + '&n=.m3u8'
+                    //         vod_play_url += '#'
+                    //     })
+                    //     playlist.push(vod_play_url)
+                    // })
+
+                    let temp = {
+                        code: 1,
+                        msg: '数据列表',
+                        page: 1,
+                        pagecount: 1,
+                        limit: '20',
+                        total: 1,
+                        list: [
+                            {
+                                vod_id: 1,
+                                vod_name: '',
+                                vod_pic: '',
+                                vod_remarks: '',
+                                type_name: '',
+                                vod_year: '',
+                                vod_area: '',
+                                vod_actor: '',
+                                vod_director: '',
+                                vod_content: '',
+                                vod_play_from: '',
+                                vod_play_url: '',
+                            },
+                        ],
+                    }
+                    temp.list[0].vod_play_url = vod_play_url
+                    // temp.list[0].vod_play_from = from.join('$$$')
+                    temp.list[0].vod_id = +ids
+                    temp.list[0].vod_name = vod_name
+                    temp.list[0].vod_pic = vod_pic
+                    temp.list[0].vod_content = vod_content.includes(';') ? vod_content.split(';')[1] : vod_content
+                    backData = temp
+                }
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        async getVideoPlayUrl(queryParams) {
+            let backData = {}
+            let vid = queryParams.vid
+            let pkey = queryParams.pkey
+            let ref = decodeURIComponent(queryParams.ref)
+            try {
+                // get vkey
+                const playerUrl = `https://player.novipnoad.net/v1/?url=${vid}&pkey=${pkey}&ref=${ref}`
+                const player = await $.http.get({
+                    url: playerUrl,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+                        referer: 'https://www.novipnoad.net',
+                    },
+                })
+                const data = player.body.match(/decodeURIComponent\(escape\(r\)\)\}(.*)\)/)[1].replace(/["\(\)]/g, '')
+                const device = player.body.match(/params\['device'\] = '(\w+)';/)[1]
+                const config = data.split(',')
+                const vkey = JSON.parse(
+                    this.getVkey(config[0], config[1], config[2], config[3], config[4], config[5])
+                        .match(/JSON.stringify\((.*)\)\);/)[1]
+                        .replace(/'/g, '"')
+                        .replace(/(ckey|ref|ip|time):/g, '"$1":')
+                )
+
+                // get jsapi
+                const phpUrl = `https://player.novipnoad.net/v1/player.php?id=${vid}&device=${device}`
+                const phpres = await $.http.get({
+                    url: phpUrl,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+                        referer: playerUrl,
+                    },
+                })
+                let jsapi = phpres.body.match(/jsapi = '(.*)';/)[1]
+                jsapi = jsapi + '?ckey=' + vkey.ckey.toUpperCase() + '&ref=' + encodeURIComponent(vkey.ref) + '&ip=' + vkey.ip + '&time=' + vkey.time
+
+                // get play url
+                const jsres = await $.http.get({
+                    url: jsapi,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+                        referer: 'https://www.novipnoad.net',
+                    },
+                })
+                let playUrl = jsres.body.match(/decrypt\("(.*)"\)/)[1]
+                playUrl = this.decryptUrl(playUrl)
+                playUrl = playUrl.quality[playUrl.defaultQuality].url
+                console.log(playUrl)
+                backData.data = playUrl
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+            return JSON.stringify(backData)
+        }
+
+        async searchVideo(queryParams) {
+            const pg = queryParams.pg
+            const wd = queryParams.wd
+            let backData = {}
+
+            try {
+                let searchUrl = this.url + `/search/page/${pg}/wd/${wd}.html`
+                let searchRes = await $.http.get({
+                    url: searchUrl,
+                    headers: this.headers,
+                })
+                let _$ = $.cheerio.load(searchRes.body)
+                let videos = []
+                let allVideo = _$('li.hl-list-item')
+                allVideo.each((index, element) => {
+                    let vodUrl = _$(element).find('a.hl-item-thumb').attr('href') || ''
+                    let vodPic = _$(element).find('a.hl-item-thumb').attr('data-original') || ''
+                    let vodName = _$(element).find('a.hl-item-thumb').attr('title') || ''
+                    let vodDiJiJi = _$(element).find('span.remarks').text() || ''
+
+                    let videoDet = {}
+                    videoDet.vod_id = +vodUrl.match(/anime\/(.+)\.html/)[1]
+                    videoDet.vod_pic = vodPic
+                    videoDet.vod_name = vodName.trim()
+                    videoDet.vod_remarks = vodDiJiJi.trim()
+                    videos.push(videoDet)
+                })
+
+                backData.code = 1
+                backData.msg = '數據列表'
+                backData.page = pg
+                backData.limit = videos.length.toString()
+                backData.list = videos
+            } catch (e) {
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return JSON.stringify(backData)
+        }
+
+        getVkey(h, u, n, t, e, r) {
+            r = ''
+            for (var i = 0, len = h.length; i < len; i++) {
+                var s = ''
+                while (h[i] !== n[e]) {
+                    s += h[i]
+                    i++
+                }
+                for (var j = 0; j < n.length; j++) s = s.replace(new RegExp(n[j], 'g'), j)
+                r += String.fromCharCode(this._0xe31c(s, e, 10) - t)
+            }
+            return decodeURIComponent(escape(r))
+        }
+
+        _0xe31c(d, e, f) {
+            var g = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('')
+            var h = g.slice(0, e)
+            var i = g.slice(0, f)
+            var j = d
+                .split('')
+                .reverse()
+                .reduce(function (a, b, c) {
+                    if (h.indexOf(b) !== -1) return (a += h.indexOf(b) * Math.pow(e, c))
+                }, 0)
+            var k = ''
+            while (j > 0) {
+                k = i[j % f] + k
+                j = (j - (j % f)) / f
+            }
+            return k || 0
+        }
+
+        decryptUrl(_0x395610) {
+            var _0x15159f = '5f3651b7'
+            var _0x36346e = this._0x2b01e7(_0x395610, _0x15159f)
+            return JSON.parse(_0x36346e)
+        }
+
+        _0x2b01e7(_0x12f758, _0xda9b8e) {
+            var b = '3.3.1'
+            // var _0x3bf069 = atob(_0x12f758)
+            var _0x3bf069 = this.atob(_0x12f758)
+            for (var _0x19fa71, _0x300ace = [], _0x18815b = 0, _0xe5da02 = '', _0x1d31f3 = 0; 256 > _0x1d31f3; _0x1d31f3++) {
+                _0x300ace[_0x1d31f3] = _0x1d31f3
+            }
+            for (_0x1d31f3 = 0; 256 > _0x1d31f3; _0x1d31f3++) {
+                _0x18815b = (_0x18815b + _0x300ace[_0x1d31f3] + _0xda9b8e.charCodeAt(_0x1d31f3 % _0xda9b8e.length)) % 256
+                _0x19fa71 = _0x300ace[_0x1d31f3]
+                _0x300ace[_0x1d31f3] = _0x300ace[_0x18815b]
+                _0x300ace[_0x18815b] = _0x19fa71
+            }
+            for (b = _0x18815b = _0x1d31f3 = 0; b < _0x3bf069.length; b++) {
+                _0x1d31f3 = (_0x1d31f3 + 1) % 256
+                _0x18815b = (_0x18815b + _0x300ace[_0x1d31f3]) % 256
+                _0x19fa71 = _0x300ace[_0x1d31f3]
+                _0x300ace[_0x1d31f3] = _0x300ace[_0x18815b]
+                _0x300ace[_0x18815b] = _0x19fa71
+                _0xe5da02 += String.fromCharCode(_0x3bf069.charCodeAt(b) ^ _0x300ace[(_0x300ace[_0x1d31f3] + _0x300ace[_0x18815b]) % 256])
+            }
+            return _0xe5da02
+        }
+
+        atob(b64) {
+            var chars = {
+                ascii: function () {
+                    return 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+                },
+                indices: function () {
+                    if (!this.cache) {
+                        this.cache = {}
+                        var ascii = chars.ascii()
+
+                        for (var c = 0; c < ascii.length; c++) {
+                            var chr = ascii[c]
+                            this.cache[chr] = c
+                        }
+                    }
+                    return this.cache
+                },
+            }
+            var indices = chars.indices(),
+                pos = b64.indexOf('='),
+                padded = pos > -1,
+                len = padded ? pos : b64.length,
+                i = -1,
+                data = ''
+
+            while (i < len) {
+                var code = (indices[b64[++i]] << 18) | (indices[b64[++i]] << 12) | (indices[b64[++i]] << 6) | indices[b64[++i]]
+                if (code !== 0) {
+                    data += String.fromCharCode((code >>> 16) & 255, (code >>> 8) & 255, code & 255)
+                }
+            }
+
+            if (padded) {
+                data = data.slice(0, pos - b64.length)
+            }
+
+            return data
+        }
+
+        combineUrl(url) {
+            if (url === undefined) {
+                return ''
+            }
+            if (url.indexOf(this.url) !== -1) {
+                return url
+            }
+            if (url.startsWith('/')) {
+                return this.url + url
+            }
+            return this.url + '/' + url
+        }
+
+        isIgnoreClassName(className) {
+            return this.ignoreClassName.some((element) => className.includes(element))
+        }
+
+        removeTrailingSlash(str) {
+            if (str.endsWith('/')) {
+                return str.slice(0, -1)
+            }
+            return str
         }
     })()
 }
