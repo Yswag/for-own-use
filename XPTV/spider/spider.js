@@ -942,7 +942,7 @@ function sbbClass() {
                         const script = _$('script')
                         const js = script.filter((i, el) => _$(el).text().includes('window.wp_nonce')).text() || ''
                         const group = js.match(/(var.*)eval\((\w*\(\w*\))\)/)
-                        const md5 = CryptoJS
+                        const md5 = $.CryptoJS
                         const result = eval(group[1] + group[2])
                         playUrl = result.match(/url:.*?['"](.*?)['"]/)[1]
 
@@ -1404,16 +1404,16 @@ function nkvodClass() {
         }
 
         decryptUrl(jsConfig) {
-            const key = CryptoJS.enc.Utf8.parse('2890' + jsConfig.config.uid + 'tB959C')
-            const iv = CryptoJS.enc.Utf8.parse('GZ4JgN2BdSqVWJ1z')
-            const mode = CryptoJS.mode.CBC
-            const padding = CryptoJS.pad.Pkcs7
-            const decrypted = CryptoJS.AES.decrypt(jsConfig.url, key, {
+            const key = $.CryptoJS.enc.Utf8.parse('2890' + jsConfig.config.uid + 'tB959C')
+            const iv = $.CryptoJS.enc.Utf8.parse('GZ4JgN2BdSqVWJ1z')
+            const mode = $.CryptoJS.mode.CBC
+            const padding = $.CryptoJS.pad.Pkcs7
+            const decrypted = $.CryptoJS.AES.decrypt(jsConfig.url, key, {
                 iv: iv,
                 mode: mode,
                 padding: padding,
             })
-            const decryptedUrl = CryptoJS.enc.Utf8.stringify(decrypted)
+            const decryptedUrl = $.CryptoJS.enc.Utf8.stringify(decrypted)
             return decryptedUrl
         }
     })()
@@ -1794,7 +1794,7 @@ function zeqahtClass() {
                         'User-Agent': this.headers['User-Agent'],
                         deviceId: this.getUUID(),
                         t: t,
-                        sign: CryptoJS.SHA1(CryptoJS.MD5(signStr).toString()).toString(),
+                        sign: $.CryptoJS.SHA1($.CryptoJS.MD5(signStr).toString()).toString(),
                     },
                 })
                 let proData = pro.body
@@ -2381,11 +2381,11 @@ function removeTrailingSlash(str) {
 }
 
 function base64Encode(text) {
-    return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text))
+    return $.CryptoJS.enc.Base64.stringify($.CryptoJS.enc.Utf8.parse(text))
 }
 
 function base64Decode(text) {
-    return CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Base64.parse(text))
+    return $.CryptoJS.enc.Utf8.stringify($.CryptoJS.enc.Base64.parse(text))
 }
 
 // an URI [ parse | stringify ] to JSON / URI Converter based JavaScript
