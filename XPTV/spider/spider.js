@@ -182,14 +182,14 @@ function bttwoClass() {
                     let allClass = _$('.navlist a')
                     let list = []
                     allClass.each((index, element) => {
-                        let isIgnore = this.isIgnoreClassName(_$(element).text())
+                        let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
                         if (isIgnore) {
                             return
                         }
                         let type_name = _$(element).text()
                         let url = _$(element).attr('href') ?? ''
 
-                        url = this.combineUrl(url)
+                        url = combineUrl(this.url, url)
 
                         if (url.length > 0 && type_name.length > 0) {
                             let videoClass = {}
@@ -221,11 +221,7 @@ function bttwoClass() {
                         })
                     })
 
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = 1
-                    backData.list = videos
-                    backData.class = list
+                    backData = parseClassList(videos, list)
                 }
             } catch (e) {
                 await msgtodc('bttwo', e)
@@ -258,7 +254,7 @@ function bttwoClass() {
                     realTypeName = '/jpsrtv'
                     break
             }
-            let listUrl = this.removeTrailingSlash(this.url) + realTypeName + '/page/' + page.toString()
+            let listUrl = removeTrailingSlash(this.url) + realTypeName + '/page/' + page.toString()
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
@@ -289,13 +285,7 @@ function bttwoClass() {
                         videos.push(videoDet)
                     })
 
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = page.toString()
-                    backData.pagecount = +lastPage
-                    backData.limit = videos.length.toString()
-                    backData.total = videos.length * lastPage
-                    backData.list = videos
+                    backData = parseVideoList(videos, page, lastPage)
                 }
             } catch (e) {
                 await msgtodc('bttwo', e)
@@ -324,33 +314,7 @@ function bttwoClass() {
                         vod_play_url += '#'
                     })
 
-                    let temp = {
-                        code: 1,
-                        msg: '数据列表',
-                        page: 1,
-                        pagecount: 1,
-                        limit: '20',
-                        total: 1,
-                        list: [
-                            {
-                                vod_id: 1,
-                                vod_name: '',
-                                vod_pic: '',
-                                vod_remarks: '',
-                                type_name: '',
-                                vod_year: '',
-                                vod_area: '',
-                                vod_actor: '',
-                                vod_director: '',
-                                vod_content: '',
-                                vod_play_from: '',
-                                vod_play_url: '',
-                            },
-                        ],
-                    }
-                    temp.list[0].vod_play_url = vod_play_url
-                    temp.list[0].vod_id = +ids
-                    backData = temp
+                    backData = parseVideoDetail(+ids, '', '', '', vod_play_url)
                 }
             } catch (e) {
                 await msgtodc('bttwo', e)
@@ -381,13 +345,10 @@ function bttwoClass() {
                         let playurl = text.match(/url: "(.*?)"/)[1]
 
                         backData.data = playurl
-                        // $.log('playUrl: ' + playurl)
                     } else {
                         $.msg('該片在線播放需要兩個BT的VIP會員')
-                        // backData.error = '該片需兩個BT的VIP會員才能收看'
                         backData.data = 'https://shattereddisk.github.io/rickroll/rickroll.mp4'
                     }
-                    // } else backData.data = 'https://bit.ly/3BlS71b'
                 } else backData.data = 'https://shattereddisk.github.io/rickroll/rickroll.mp4'
             } catch (e) {
                 await msgtodc('bttwo', e)
@@ -401,7 +362,7 @@ function bttwoClass() {
             const pg = queryParams.pg
             const wd = queryParams.wd
             let backData = {}
-            let url = this.removeTrailingSlash(this.url) + `/xssssearch?q=${wd}$f=_all&p=${pg}`
+            let url = removeTrailingSlash(this.url) + `/xssssearch?q=${wd}$f=_all&p=${pg}`
 
             try {
                 let pro = await $.http.get({ url: url, headers: this.headers })
@@ -424,13 +385,7 @@ function bttwoClass() {
                         videos.push(videoDet)
                     })
 
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = $.toStr(pg)
-                    // backData.pagecount = +lastPage;
-                    backData.limit = videos.length.toString()
-                    // backData.total = videos.length * lastPage;
-                    backData.list = videos
+                    backData = parseVideoList(videos, pg, '1')
                 }
             } catch (e) {
                 await msgtodc('bttwo', e)
@@ -457,30 +412,6 @@ function bttwoClass() {
             const plaintext = decrypted.toString($.CryptoJS.enc.Utf8)
             return plaintext
         }
-
-        combineUrl(url) {
-            if (url === undefined) {
-                return ''
-            }
-            if (url.indexOf(this.url) !== -1) {
-                return url
-            }
-            if (url.startsWith('/')) {
-                return this.url + url
-            }
-            return this.url + '/' + url
-        }
-
-        isIgnoreClassName(className) {
-            return this.ignoreClassName.some((element) => className.includes(element))
-        }
-
-        removeTrailingSlash(str) {
-            if (str.endsWith('/')) {
-                return str.slice(0, -1)
-            }
-            return str
-        }
     })()
 }
 
@@ -506,7 +437,7 @@ function saohuoClass() {
                     let allClass = _$('nav.top_bar > a')
                     let list = []
                     allClass.each((index, element) => {
-                        let isIgnore = this.isIgnoreClassName(_$(element).text())
+                        let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
                         if (isIgnore) {
                             return
                         }
@@ -516,7 +447,6 @@ function saohuoClass() {
                             url = '/list/4.html'
                         } else url = _$(element).attr('href') || ''
 
-                        // url = this.combineUrl(url)
                         url = url.match(/list\/(.*)\.html/)[1]
 
                         if (url.length > 0 && type_name.length > 0) {
@@ -559,27 +489,26 @@ function saohuoClass() {
                         }
                     })
 
-                    let allVideo = _$('ul.v_list').eq(0).find('.v_img')
+                    let allSection = _$('ul.v_list')
                     let videos = []
-                    allVideo.each((index, element) => {
-                        let vodUrl = _$(element).find('a').attr('href') || ''
-                        let vodPic = _$(element).find('img').attr('data-original') || ''
-                        let vodName = _$(element).find('a').attr('title') || ''
-                        let vodDiJiJi = _$(element).find('.v_note').text() || ''
+                    allSection.each((index, element) => {
+                        let allVideo = _$(element).find('.v_img')
+                        allVideo.each((index, element) => {
+                            let vodUrl = _$(element).find('a').attr('href') || ''
+                            let vodPic = _$(element).find('img').attr('data-original') || ''
+                            let vodName = _$(element).find('a').attr('title') || ''
+                            let vodDiJiJi = _$(element).find('.v_note').text() || ''
 
-                        let videoDet = {}
-                        videoDet.vod_id = +vodUrl.match(/movie\/(.+)\.html/)[1]
-                        videoDet.vod_pic = vodPic
-                        videoDet.vod_name = vodName
-                        videoDet.vod_remarks = vodDiJiJi.trim()
-                        videos.push(videoDet)
+                            let videoDet = {}
+                            videoDet.vod_id = +vodUrl.match(/movie\/(.+)\.html/)[1]
+                            videoDet.vod_pic = vodPic
+                            videoDet.vod_name = vodName
+                            videoDet.vod_remarks = vodDiJiJi.trim()
+                            videos.push(videoDet)
+                        })
                     })
 
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = 1
-                    backData.list = videos
-                    backData.class = list
+                    backData = parseClassList(videos, list)
                 }
             } catch (e) {
                 await msgtodc('saohuo', e)
@@ -596,7 +525,7 @@ function saohuoClass() {
 
             if (type === '') return this.getClassList()
 
-            let listUrl = this.removeTrailingSlash(this.url) + '/list/' + type + '-' + page.toString() + '.html'
+            let listUrl = removeTrailingSlash(this.url) + '/list/' + type + '-' + page.toString() + '.html'
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
@@ -610,7 +539,6 @@ function saohuoClass() {
                         lastPage = parts[parts.length - 1]
                     } else {
                         lastPage = '1'
-                        // console.log('lastpage not found, using default value');
                     }
                     let videos = []
                     allVideo.each((index, element) => {
@@ -627,13 +555,7 @@ function saohuoClass() {
                         videos.push(videoDet)
                     })
 
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = page.toString()
-                    backData.pagecount = +lastPage
-                    backData.limit = videos.length.toString()
-                    backData.total = videos.length * lastPage
-                    backData.list = videos
+                    backData = parseVideoList(videos, page, lastPage)
                 }
             } catch (e) {
                 await msgtodc('saohuo', e)
@@ -659,11 +581,9 @@ function saohuoClass() {
                         .each((i, e) => play_from.push(_$(e).text()))
 
                     let juJiDocment = _$('#play_link').find('li')
-                    // let vod_play_from = '';
                     let vod_play_url = ''
                     juJiDocment.each((index, element) => {
                         let playLinkList = juJiDocment.eq(index)
-                        // let playLinks = _$(playLinkList).find('a').toArray()
                         let playLinks = _$(playLinkList).find('a')
                         let from = play_from[index]
 
@@ -679,35 +599,9 @@ function saohuoClass() {
                         vod_play_url += '$$$'
                     })
 
-                    let temp = {
-                        code: 1,
-                        msg: '数据列表',
-                        page: 1,
-                        pagecount: 1,
-                        limit: '20',
-                        total: 1,
-                        list: [
-                            {
-                                vod_id: 1,
-                                vod_name: '',
-                                vod_pic: '',
-                                vod_remarks: '',
-                                type_name: '',
-                                vod_year: '',
-                                vod_area: '',
-                                vod_actor: '',
-                                vod_director: '',
-                                vod_content: '',
-                                vod_play_from: '',
-                                vod_play_url: '',
-                            },
-                        ],
-                    }
-                    temp.list[0].vod_play_url = vod_play_url
-                    temp.list[0].vod_play_from = play_from.join('$$$')
-                    temp.list[0].vod_play_note = '$$$'
-                    temp.list[0].vod_id = +ids
-                    backData = temp
+                    backData = parseVideoDetail(+ids, '', '', '', vod_play_url)
+                    backData.list[0].vod_play_from = play_from.join('$$$')
+                    backData.list[0].vod_play_note = '$$$'
                 }
             } catch (e) {
                 await msgtodc('saohuo', e)
@@ -748,7 +642,6 @@ function saohuoClass() {
                             body: `url=${url}&t=${t}&key=${key}&act=0&play=1`,
                         })
                         let purl = JSON.parse(presp.body).url
-                        // $.log('purl=' + purl)
                         backData.data = /http/.test(purl) ? purl : this.getHostFromURL(iframeUrl) + purl
                     } else backData.error = 'resp is empty'
                 }
@@ -802,13 +695,7 @@ function saohuoClass() {
                     videos.push(videoDet)
                 })
 
-                backData.code = 1
-                backData.msg = '數據列表'
-                backData.page = pg
-                // backData.pagecount = +lastPage
-                backData.limit = videos.length.toString()
-                // backData.total = videos.length * lastPage
-                backData.list = videos
+                backData = parseVideoList(videos, pg, '1')
             } catch (e) {
                 await msgtodc('saohuo', e)
                 $.logErr(e)
@@ -816,30 +703,6 @@ function saohuoClass() {
             }
 
             return JSON.stringify(backData)
-        }
-
-        combineUrl(url) {
-            if (url === undefined) {
-                return ''
-            }
-            if (url.indexOf(this.url) !== -1) {
-                return url
-            }
-            if (url.startsWith('/')) {
-                return this.url + url
-            }
-            return this.url + '/' + url
-        }
-
-        isIgnoreClassName(className) {
-            return this.ignoreClassName.some((element) => className.includes(element))
-        }
-
-        removeTrailingSlash(str) {
-            if (str.endsWith('/')) {
-                return str.slice(0, -1)
-            }
-            return str
         }
 
         getHostFromURL(url) {
@@ -883,7 +746,7 @@ function sbbClass() {
                     let allClass = _$('ul.navlist a')
                     let list = []
                     allClass.each((index, element) => {
-                        let isIgnore = this.isIgnoreClassName(_$(element).text())
+                        let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
                         if (isIgnore) {
                             return
                         }
@@ -892,7 +755,6 @@ function sbbClass() {
 
                         if (url.length > 0 && type_name.length > 0) {
                             let videoClass = {}
-                            // videoClass.type_id = url
                             videoClass.type_id = index
                             videoClass.type_name = type_name.trim()
                             list.push(videoClass)
@@ -918,14 +780,10 @@ function sbbClass() {
                         })
                     })
 
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = 1
-                    backData.list = videos
-                    backData.class = list
+                    backData = parseClassList(videos, list)
                 }
             } catch (e) {
-                await msgtodc('saohuo', e)
+                await msgtodc('sbb', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -972,7 +830,7 @@ function sbbClass() {
                     break
             }
 
-            let listUrl = this.removeTrailingSlash(this.url) + realTypeName + '/page/' + page
+            let listUrl = removeTrailingSlash(this.url) + realTypeName + '/page/' + page
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
@@ -984,10 +842,8 @@ function sbbClass() {
                     if (lastPage) {
                         let parts = lastPage.split('/')
                         lastPage = parts[parts.length - 1]
-                        // console.log('lastpage = ' + lastPage);
                     } else {
                         lastPage = '1'
-                        // console.log('lastpage not found, using default value');
                     }
                     let videos = []
                     allVideo.each((index, element) => {
@@ -1004,16 +860,10 @@ function sbbClass() {
                         videos.push(videoDet)
                     })
 
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = page.toString()
-                    backData.pagecount = +lastPage
-                    backData.limit = videos.length.toString()
-                    backData.total = videos.length * lastPage
-                    backData.list = videos
+                    backData = parseVideoList(videos, page, lastPage)
                 }
             } catch (e) {
-                await msgtodc('saohuo', e)
+                await msgtodc('sbb', e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
@@ -1034,7 +884,6 @@ function sbbClass() {
                     let vod_pic = _$('.dyimg img').attr('src')
 
                     let juJiDocment = _$('.paly_list_btn').find('a')
-                    // let vod_play_from = '';
                     let vod_play_url = ''
                     juJiDocment.each((index, element) => {
                         vod_play_url += _$(element).text()
@@ -1043,41 +892,10 @@ function sbbClass() {
                         vod_play_url += '#'
                     })
 
-                    let temp = {
-                        code: 1,
-                        msg: '数据列表',
-                        page: 1,
-                        pagecount: 1,
-                        limit: '20',
-                        total: 1,
-                        list: [
-                            {
-                                vod_id: 1,
-                                vod_name: '',
-                                vod_pic: '',
-                                vod_remarks: '',
-                                type_name: '',
-                                vod_year: '',
-                                vod_area: '',
-                                vod_actor: '',
-                                vod_director: '',
-                                vod_content: '',
-                                vod_play_from: '',
-                                vod_play_url: '',
-                            },
-                        ],
-                    }
-                    temp.list[0].vod_play_url = vod_play_url
-                    // temp.list[0].vod_play_from = play_from.join('$$$')
-                    // temp.list[0].vod_play_note = '$$$'
-                    temp.list[0].vod_id = +ids
-                    temp.list[0].vod_name = vod_name
-                    temp.list[0].vod_pic = vod_pic
-                    temp.list[0].vod_content = vod_content.trim()
-                    backData = temp
+                    backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content.trim(), vod_play_url)
                 }
             } catch (e) {
-                await msgtodc('saohuo', e)
+                await msgtodc('sbb', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1124,20 +942,18 @@ function sbbClass() {
                         backData.data = playUrl
                     } else {
                         let playUrl = 'error'
-
                         const script = _$('script')
                         const js = script.filter((i, el) => _$(el).text().includes('window.wp_nonce')).text() || ''
                         const group = js.match(/(var.*)eval\((\w*\(\w*\))\)/)
                         const md5 = CryptoJS
                         const result = eval(group[1] + group[2])
                         playUrl = result.match(/url:.*?['"](.*?)['"]/)[1]
-                        // $.log(playUrl)
 
                         backData.data = playUrl
                     }
                 }
             } catch (e) {
-                await msgtodc('saohuo', e)
+                await msgtodc('sbb', e)
                 $.logErr(e)
                 backData.error = e.message
             }
@@ -1172,44 +988,14 @@ function sbbClass() {
                     videos.push(videoDet)
                 })
 
-                backData.code = 1
-                backData.msg = '數據列表'
-                backData.page = pg
-                // backData.pagecount = +lastPage
-                backData.limit = videos.length.toString()
-                // backData.total = videos.length * lastPage
-                backData.list = videos
+                backData = parseVideoList(videos, pg, '1')
             } catch (e) {
-                await msgtodc('saohuo', e)
+                await msgtodc('sbb', e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
             return JSON.stringify(backData)
-        }
-
-        combineUrl(url) {
-            if (url === undefined) {
-                return ''
-            }
-            if (url.indexOf(this.url) !== -1) {
-                return url
-            }
-            if (url.startsWith('/')) {
-                return this.url + url
-            }
-            return this.url + '/' + url
-        }
-
-        isIgnoreClassName(className) {
-            return this.ignoreClassName.some((element) => className.includes(element))
-        }
-
-        removeTrailingSlash(str) {
-            if (str.endsWith('/')) {
-                return str.slice(0, -1)
-            }
-            return str
         }
     })()
 }
@@ -1229,54 +1015,47 @@ function hjkkClass() {
             let backData = {}
             try {
                 const pro = await $.http.get({ url: webUrl, headers: this.headers })
-
                 let proData = await pro.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let allClass = _$('ul.myui-header__menu a')
-                    let list = []
-                    allClass.each((index, element) => {
-                        let isIgnore = this.isIgnoreClassName(_$(element).text())
-                        if (isIgnore) {
-                            return
-                        }
-                        let type_name = _$(element).text()
-                        let url = _$(element).attr('href') || ''
 
-                        if (url.length > 0 && type_name.length > 0) {
-                            let videoClass = {}
-                            // videoClass.type_id = url
-                            videoClass.type_id = index
-                            videoClass.type_name = type_name.trim()
-                            list.push(videoClass)
-                        }
+                let _$ = $.cheerio.load(proData)
+                let allClass = _$('ul.myui-header__menu a')
+                let list = []
+                allClass.each((index, element) => {
+                    let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
+                    if (isIgnore) {
+                        return
+                    }
+                    let type_name = _$(element).text()
+                    let url = _$(element).attr('href') || ''
+
+                    if (url.length > 0 && type_name.length > 0) {
+                        let videoClass = {}
+                        videoClass.type_id = index
+                        videoClass.type_name = type_name.trim()
+                        list.push(videoClass)
+                    }
+                })
+
+                let allVideo = _$('.myui-panel')
+                let videos = []
+                allVideo.each((index, element) => {
+                    let nodes = _$(element).find('ul.myui-vodlist li')
+                    nodes.each((index, element) => {
+                        let vodUrl = _$(element).find('a').attr('href') || ''
+                        let vodPic = _$(element).find('a').attr('data-original') || ''
+                        let vodName = _$(element).find('a').attr('title') || ''
+                        let vodDiJiJi = ''
+
+                        let videoDet = {}
+                        videoDet.vod_id = +vodUrl.match(/movie\/index(.+)\.html/)[1]
+                        videoDet.vod_pic = vodPic
+                        videoDet.vod_name = vodName
+                        videoDet.vod_remarks = vodDiJiJi.trim()
+                        videos.push(videoDet)
                     })
+                })
 
-                    let allVideo = _$('.myui-panel')
-                    let videos = []
-                    allVideo.each((index, element) => {
-                        let nodes = _$(element).find('ul.myui-vodlist li')
-                        nodes.each((index, element) => {
-                            let vodUrl = _$(element).find('a').attr('href') || ''
-                            let vodPic = _$(element).find('a').attr('data-original') || ''
-                            let vodName = _$(element).find('a').attr('title') || ''
-                            let vodDiJiJi = ''
-
-                            let videoDet = {}
-                            videoDet.vod_id = +vodUrl.match(/movie\/index(.+)\.html/)[1]
-                            videoDet.vod_pic = vodPic
-                            videoDet.vod_name = vodName
-                            videoDet.vod_remarks = vodDiJiJi.trim()
-                            videos.push(videoDet)
-                        })
-                    })
-
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = 1
-                    backData.list = videos
-                    backData.class = list
-                }
+                backData = parseClassList(videos, list)
             } catch (e) {
                 await msgtodc('hjkk', e)
                 $.logErr(e)
@@ -1292,48 +1071,38 @@ function hjkkClass() {
 
             if (type === '') return this.getClassList()
 
-            let listUrl = this.removeTrailingSlash(this.url) + '/frim/index' + type + '-' + page + '.html'
+            let listUrl = removeTrailingSlash(this.url) + '/frim/index' + type + '-' + page + '.html'
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
                 let proData = pro.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let allVideo = _$('.myui-vodlist li')
-                    let lastPage = _$('.myui-page a')
-                        .filter((i, el) => _$(el).text() === '尾页')
-                        .attr('href')
-                    if (lastPage) {
-                        // let parts = lastPage.split('/')
-                        lastPage = lastPage.match(/index.-(.+)\.html/)[1]
-                        // console.log('lastpage = ' + lastPage);
-                    } else {
-                        lastPage = '1'
-                        // console.log('lastpage not found, using default value');
-                    }
-                    let videos = []
-                    allVideo.each((index, element) => {
-                        let vodUrl = _$(element).find('a').attr('href') || ''
-                        let vodPic = _$(element).find('a').attr('data-original') || ''
-                        let vodName = _$(element).find('a').attr('title') || ''
-                        let vodDiJiJi = ''
 
-                        let videoDet = {}
-                        videoDet.vod_id = +vodUrl.match(/movie\/index(.+)\.html/)[1]
-                        videoDet.vod_pic = vodPic
-                        videoDet.vod_name = vodName
-                        videoDet.vod_remarks = vodDiJiJi.trim()
-                        videos.push(videoDet)
-                    })
-
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = page.toString()
-                    backData.pagecount = +lastPage
-                    backData.limit = videos.length.toString()
-                    backData.total = videos.length * lastPage
-                    backData.list = videos
+                let _$ = $.cheerio.load(proData)
+                let allVideo = _$('.myui-vodlist li')
+                let lastPage = _$('.myui-page a')
+                    .filter((i, el) => _$(el).text() === '尾页')
+                    .attr('href')
+                if (lastPage) {
+                    lastPage = lastPage.match(/index.-(.+)\.html/)[1]
+                } else {
+                    lastPage = '1'
                 }
+                let videos = []
+                allVideo.each((index, element) => {
+                    let vodUrl = _$(element).find('a').attr('href') || ''
+                    let vodPic = _$(element).find('a').attr('data-original') || ''
+                    let vodName = _$(element).find('a').attr('title') || ''
+                    let vodDiJiJi = ''
+
+                    let videoDet = {}
+                    videoDet.vod_id = +vodUrl.match(/movie\/index(.+)\.html/)[1]
+                    videoDet.vod_pic = vodPic
+                    videoDet.vod_name = vodName
+                    videoDet.vod_remarks = vodDiJiJi.trim()
+                    videos.push(videoDet)
+                })
+
+                backData = parseVideoList(videos, page, lastPage)
             } catch (e) {
                 await msgtodc('hjkk', e)
                 $.logErr('Error fetching list:', e)
@@ -1349,56 +1118,23 @@ function hjkkClass() {
                 let webUrl = this.url + `/movie/index${ids}.html`
                 let pro = await $.http.get({ url: webUrl, headers: this.headers })
                 let proData = pro.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let vod_name = _$('h1.title').text()
-                    let vod_content = _$('#jq .tab-content.myui-panel_bd').text()
-                    let vod_pic = _$('.myui-content__thumb img').attr('data-original')
 
-                    let juJiDocment = _$('#playlist1 ul li').find('a')
-                    // let vod_play_from = '';
-                    let vod_play_url = ''
-                    juJiDocment.each((index, element) => {
-                        vod_play_url += _$(element).text()
-                        vod_play_url += '$'
-                        vod_play_url +=
-                            'https://ykusu.ykusu/hjkk/provide/vod?ac=play&url=' + encodeURIComponent(this.combineUrl(_$(element).attr('href'))) + '&n=.m3u8'
-                        vod_play_url += '#'
-                    })
+                let _$ = $.cheerio.load(proData)
+                let vod_name = _$('h1.title').text()
+                let vod_content = _$('#jq .tab-content.myui-panel_bd').text()
+                let vod_pic = _$('.myui-content__thumb img').attr('data-original')
 
-                    let temp = {
-                        code: 1,
-                        msg: '数据列表',
-                        page: 1,
-                        pagecount: 1,
-                        limit: '20',
-                        total: 1,
-                        list: [
-                            {
-                                vod_id: 1,
-                                vod_name: '',
-                                vod_pic: '',
-                                vod_remarks: '',
-                                type_name: '',
-                                vod_year: '',
-                                vod_area: '',
-                                vod_actor: '',
-                                vod_director: '',
-                                vod_content: '',
-                                vod_play_from: '',
-                                vod_play_url: '',
-                            },
-                        ],
-                    }
-                    temp.list[0].vod_play_url = vod_play_url
-                    // temp.list[0].vod_play_from = play_from.join('$$$')
-                    // temp.list[0].vod_play_note = '$$$'
-                    temp.list[0].vod_id = +ids
-                    temp.list[0].vod_name = vod_name
-                    temp.list[0].vod_pic = vod_pic
-                    temp.list[0].vod_content = vod_content.trim()
-                    backData = temp
-                }
+                let juJiDocment = _$('#playlist1 ul li').find('a')
+                let vod_play_url = ''
+                juJiDocment.each((index, element) => {
+                    vod_play_url += _$(element).text()
+                    vod_play_url += '$'
+                    vod_play_url +=
+                        'https://ykusu.ykusu/hjkk/provide/vod?ac=play&url=' + encodeURIComponent(combineUrl(this.url, _$(element).attr('href'))) + '&n=.m3u8'
+                    vod_play_url += '#'
+                })
+
+                backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content.trim(), vod_play_url)
             } catch (e) {
                 await msgtodc('hjkk', e)
                 $.logErr(e)
@@ -1413,19 +1149,16 @@ function hjkkClass() {
             let url = decodeURIComponent(queryParams.url)
             try {
                 let html = await $.http.get({ url: url, headers: this.headers })
-
                 let proData = html.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let script = _$('.myui-player__box script').text()
 
-                    let url = eval(script.match(/now=(.*);var pn/)[1])
-                    if (/\/file\//.test(url)) {
-                        url = url.replace('/file', '')
-                    }
-
-                    backData.data = url
+                let _$ = $.cheerio.load(proData)
+                let script = _$('.myui-player__box script').text()
+                let playUrl = eval(script.match(/now=(.*);var pn/)[1])
+                if (/\/file\//.test(playUrl)) {
+                    playUrl = playUrl.replace('/file', '')
                 }
+
+                backData.data = playUrl
             } catch (e) {
                 await msgtodc('hjkk', e)
                 $.logErr(e)
@@ -1462,13 +1195,7 @@ function hjkkClass() {
                     videos.push(videoDet)
                 })
 
-                backData.code = 1
-                backData.msg = '數據列表'
-                backData.page = pg
-                // backData.pagecount = +lastPage
-                backData.limit = videos.length.toString()
-                // backData.total = videos.length * lastPage
-                backData.list = videos
+                backData = parseVideoList(videos, pg, '1')
             } catch (e) {
                 await msgtodc('hjkk', e)
                 $.logErr(e)
@@ -1476,30 +1203,6 @@ function hjkkClass() {
             }
 
             return JSON.stringify(backData)
-        }
-
-        combineUrl(url) {
-            if (url === undefined) {
-                return ''
-            }
-            if (url.indexOf(this.url) !== -1) {
-                return url
-            }
-            if (url.startsWith('/')) {
-                return this.url + url
-            }
-            return this.url + '/' + url
-        }
-
-        isIgnoreClassName(className) {
-            return this.ignoreClassName.some((element) => className.includes(element))
-        }
-
-        removeTrailingSlash(str) {
-            if (str.endsWith('/')) {
-                return str.slice(0, -1)
-            }
-            return str
         }
     })()
 }
@@ -1539,7 +1242,6 @@ function nkvodClass() {
 
         async getClassList() {
             await this.initParseMap()
-            let webUrl = this.url
             let backData = {}
             try {
                 let list = [
@@ -1554,12 +1256,7 @@ function nkvodClass() {
                     { type_id: 20, type_name: '其他劇' },
                 ]
 
-                backData.code = 1
-                backData.msg = '數據列表'
-                backData.page = 1
-                // backData.list = videos
-                backData.list = []
-                backData.class = list
+                backData = parseClassList([], list)
             } catch (e) {
                 await msgtodc('nkvod', e)
                 $.logErr(e)
@@ -1575,44 +1272,12 @@ function nkvodClass() {
 
             // if (type === '') return this.getClassList()
 
-            let listUrl = this.removeTrailingSlash(this.url) + `/index.php/ajax/data?mid=1&tid=${type}&page=${page}&limit=20`
+            let listUrl = removeTrailingSlash(this.url) + `/index.php/ajax/data?mid=1&tid=${type}&page=${page}&limit=20`
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
                 let proData = pro.body
-                if (proData) {
-                    // let _$ = $.cheerio.load(proData)
-                    // let allVideo = _$('.content .module > a')
-                    // let lastPage = _$('.pagenavi_txt a[title="尾页"]').attr('href')
-                    // if (lastPage) {
-                    //     lastPage = lastPage.match(/\/show\/(.*)--------(.*)---\.html/)[2]
-                    //     // console.log('lastpage = ' + lastPage);
-                    // } else {
-                    //     lastPage = '1'
-                    //     // console.log('lastpage not found, using default value');
-                    // }
-                    // let videos = []
-                    // allVideo.each((index, element) => {
-                    //     let vodUrl = _$(element).attr('href') || ''
-                    //     let vodPic = _$(element).find('img').attr('data-original') || ''
-                    //     let vodName = _$(element).attr('title') || ''
-                    //     let vodDiJiJi = _$(element).find('.module-item-note').text() || ''
-                    //     let videoDet = {}
-                    //     videoDet.vod_id = +vodUrl.match(/detail\/(.+)\.html/)[1]
-                    //     videoDet.vod_pic = vodPic
-                    //     videoDet.vod_name = vodName
-                    //     videoDet.vod_remarks = vodDiJiJi.trim()
-                    //     videos.push(videoDet)
-                    // })
-                    // backData.code = 1
-                    // backData.msg = '數據列表'
-                    // backData.page = page.toString()
-                    // backData.pagecount = +lastPage
-                    // backData.limit = videos.length.toString()
-                    // backData.total = videos.length * lastPage
-                    // backData.list = videos
-                    backData = JSON.parse(proData)
-                }
+                backData = JSON.parse(proData)
             } catch (e) {
                 await msgtodc('nkvod', e)
                 $.logErr('Error fetching list:', e)
@@ -1628,74 +1293,43 @@ function nkvodClass() {
                 let webUrl = this.url + `/detail/${ids}.html`
                 let pro = await $.http.get({ url: webUrl, headers: this.headers })
                 let proData = pro.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let vod_name = _$('.detail-info h3').text()
-                    let vod_content = _$('.switch-box .text').text()
-                    let vod_pic = _$('.detail-pic img').attr('data-src')
 
-                    let from = []
-                    _$('.anthology .swiper-wrapper a').each((index, element) => {
-                        let name = _$(element)
-                            .contents()
-                            .filter(function () {
-                                return this.type === 'text'
-                            })
-                            .text()
-                            .trim()
-                        from.push(name)
-                    })
+                let _$ = $.cheerio.load(proData)
+                let vod_name = _$('.detail-info h3').text()
+                let vod_content = _$('.switch-box .text').text()
+                let vod_pic = _$('.detail-pic img').attr('data-src')
 
-                    let juJiDocment = _$('.anthology-list-box')
-                    // let vod_play_from = '';
-                    let vod_play_url = ''
-                    juJiDocment.each((index, element) => {
-                        let line = from[index]
-                        let allvideos = _$(element).find('ul.anthology-list-play li a')
-                        allvideos.each((index, element) => {
-                            let playerUrl = this.combineUrl(_$(element).attr('href'))
-                            vod_play_url += line + '-' + _$(element).text()
-                            vod_play_url += '$'
-                            vod_play_url +=
-                                'https://ykusu.ykusu/nkvod/api.php/provide/vod?ac=play&url=' + `${from[index]}@@@` + encodeURIComponent(playerUrl) + '&n=.m3u8'
-                            vod_play_url += '#'
+                let from = []
+                _$('.anthology .swiper-wrapper a').each((index, element) => {
+                    let name = _$(element)
+                        .contents()
+                        .filter(function () {
+                            return this.type === 'text'
                         })
-                        vod_play_url += '$$$'
-                    })
+                        .text()
+                        .trim()
+                    from.push(name)
+                })
 
-                    let temp = {
-                        code: 1,
-                        msg: '数据列表',
-                        page: 1,
-                        pagecount: 1,
-                        limit: '20',
-                        total: 1,
-                        list: [
-                            {
-                                vod_id: 1,
-                                vod_name: '',
-                                vod_pic: '',
-                                vod_remarks: '',
-                                type_name: '',
-                                vod_year: '',
-                                vod_area: '',
-                                vod_actor: '',
-                                vod_director: '',
-                                vod_content: '',
-                                vod_play_from: '',
-                                vod_play_url: '',
-                            },
-                        ],
-                    }
-                    temp.list[0].vod_play_url = vod_play_url
-                    temp.list[0].vod_play_from = from.join('$$$')
-                    temp.list[0].vod_play_note = '$$$'
-                    temp.list[0].vod_id = +ids
-                    temp.list[0].vod_name = vod_name
-                    temp.list[0].vod_pic = vod_pic
-                    temp.list[0].vod_content = vod_content.trim()
-                    backData = temp
-                }
+                let juJiDocment = _$('.anthology-list-box')
+                let vod_play_url = ''
+                juJiDocment.each((index, element) => {
+                    let line = from[index]
+                    let allvideos = _$(element).find('ul.anthology-list-play li a')
+                    allvideos.each((index, element) => {
+                        let playerUrl = combineUrl(this.url, _$(element).attr('href'))
+                        vod_play_url += line + '-' + _$(element).text()
+                        vod_play_url += '$'
+                        vod_play_url +=
+                            'https://ykusu.ykusu/nkvod/api.php/provide/vod?ac=play&url=' + `${from[index]}@@@` + encodeURIComponent(playerUrl) + '&n=.m3u8'
+                        vod_play_url += '#'
+                    })
+                    vod_play_url += '$$$'
+                })
+
+                backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content.trim(), vod_play_url)
+                backData.list[0].vod_play_from = from.join('$$$')
+                backData.list[0].vod_play_note = '$$$'
             } catch (e) {
                 await msgtodc('nkvod', e)
                 backData.error = e.message
@@ -1712,38 +1346,36 @@ function nkvodClass() {
             let url = parts[1]
             try {
                 let html = await $.http.get({ url: url, headers: this.headers })
-
                 let proData = html.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    const js = JSON.parse(_$('script:contains(player_aaaa)').html().replace('var player_aaaa=', ''))
-                    let playUrl = js.url
-                    if (js.encrypt == 1) {
-                        playUrl = unescape(playUrl)
-                    } else if (js.encrypt == 2) {
-                        playUrl = unescape(base64Decode(playUrl))
-                    }
-                    if (/\.m3u8$/.test(playUrl)) {
-                        backData.data = playUrl
-                    } else {
-                        const parseUrl = parseMap[from]
-                        if (parseUrl) {
-                            const reqUrl = parseUrl + playUrl
-                            const parseHtml = (
-                                await $.http.get({
-                                    url: reqUrl,
-                                    headers: this.headers,
-                                })
-                            ).body
-                            const matches = parseHtml.match(/let ConFig = {([\w\W]*)},box/)
-                            if (matches && matches.length > 1) {
-                                const configJson = '{' + matches[1].trim() + '}'
-                                const config = JSON.parse(configJson)
-                                playUrl = this.decryptUrl(config)
-                            }
+
+                let _$ = $.cheerio.load(proData)
+                const js = JSON.parse(_$('script:contains(player_aaaa)').html().replace('var player_aaaa=', ''))
+                let playUrl = js.url
+                if (js.encrypt == 1) {
+                    playUrl = unescape(playUrl)
+                } else if (js.encrypt == 2) {
+                    playUrl = unescape(base64Decode(playUrl))
+                }
+                if (/\.m3u8$/.test(playUrl)) {
+                    backData.data = playUrl
+                } else {
+                    const parseUrl = parseMap[from]
+                    if (parseUrl) {
+                        const reqUrl = parseUrl + playUrl
+                        const parseHtml = (
+                            await $.http.get({
+                                url: reqUrl,
+                                headers: this.headers,
+                            })
+                        ).body
+                        const matches = parseHtml.match(/let ConFig = {([\w\W]*)},box/)
+                        if (matches && matches.length > 1) {
+                            const configJson = '{' + matches[1].trim() + '}'
+                            const config = JSON.parse(configJson)
+                            playUrl = this.decryptUrl(config)
                         }
-                        backData.data = playUrl
                     }
+                    backData.data = playUrl
                 }
             } catch (e) {
                 await msgtodc('nkvod', e)
@@ -1764,30 +1396,7 @@ function nkvodClass() {
                     url: searchUrl,
                     headers: this.headers,
                 })
-                // let _$ = $.cheerio.load(searchRes.body)
-                // let videos = []
-                // let allVideo = _$('.search_list').find('li')
-                // allVideo.each((index, element) => {
-                //     let vodUrl = _$(element).find('a').attr('href') || ''
-                //     let vodPic = _$(element).find('img.thumb').attr('data-original') || ''
-                //     let vodName = _$(element).find('img.thumb').attr('alt') || ''
-                //     let vodDiJiJi = _$(element).find('.jidi').text() || ''
 
-                //     let videoDet = {}
-                //     videoDet.vod_id = +vodUrl.match(/movie\/(.+)\.html/)[1]
-                //     videoDet.vod_pic = vodPic
-                //     videoDet.vod_name = vodName
-                //     videoDet.vod_remarks = vodDiJiJi.trim()
-                //     videos.push(videoDet)
-                // })
-
-                // backData.code = 1
-                // backData.msg = '數據列表'
-                // backData.page = pg
-                // // backData.pagecount = +lastPage
-                // backData.limit = videos.length.toString()
-                // // backData.total = videos.length * lastPage
-                // backData.list = videos
                 backData = JSON.stringify(searchRes.body)
             } catch (e) {
                 await msgtodc('nkvod', e)
@@ -1810,36 +1419,6 @@ function nkvodClass() {
             const decryptedUrl = CryptoJS.enc.Utf8.stringify(decrypted)
             return decryptedUrl
         }
-
-        combineUrl(url) {
-            if (url === undefined) {
-                return ''
-            }
-            if (url.indexOf(this.url) !== -1) {
-                return url
-            }
-            if (url.startsWith('/')) {
-                return this.url + url
-            }
-            return this.url + '/' + url
-        }
-
-        isIgnoreClassName(className) {
-            for (let index = 0; index < this.ignoreClassName.length; index++) {
-                const element = this.ignoreClassName[index]
-                if (className.indexOf(element) !== -1) {
-                    return true
-                }
-            }
-            return false
-        }
-
-        removeTrailingSlash(str) {
-            if (str.endsWith('/')) {
-                return str.slice(0, -1)
-            }
-            return str
-        }
     })()
 }
 
@@ -1859,57 +1438,50 @@ function anfunsClass() {
             let backData = {}
             try {
                 const pro = await $.http.get({ url: webUrl, headers: this.headers })
-
                 let proData = await pro.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let allClass = _$('.hl-menus li a')
-                    let list = []
-                    allClass.each((index, element) => {
-                        let isIgnore = this.isIgnoreClassName(_$(element).find('span').text())
-                        if (isIgnore) {
-                            return
-                        }
-                        let type_name = _$(element).find('span').text()
-                        let url = _$(element).attr('href') || ''
-                        // url = url.match(/type\/(\d+)\.html/)[1]
 
-                        if (url.length > 0 && type_name.length > 0) {
-                            let videoClass = {}
-                            videoClass.type_id = parseInt(url.match(/type\/(\d+)\.html/)[1])
-                            videoClass.type_name = type_name.trim()
-                            list.push(videoClass)
-                        }
+                let _$ = $.cheerio.load(proData)
+                let allClass = _$('.hl-menus li a')
+                let list = []
+                allClass.each((index, element) => {
+                    let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).find('span').text())
+                    if (isIgnore) {
+                        return
+                    }
+                    let type_name = _$(element).find('span').text()
+                    let url = _$(element).attr('href') || ''
+
+                    if (url.length > 0 && type_name.length > 0) {
+                        let videoClass = {}
+                        videoClass.type_id = parseInt(url.match(/type\/(\d+)\.html/)[1])
+                        videoClass.type_name = type_name.trim()
+                        list.push(videoClass)
+                    }
+                })
+
+                let allVideo = _$('.hl-row-box')
+                let videos = []
+                allVideo.each((index, element) => {
+                    let nodes = _$(element).find('li.hl-list-item')
+                    nodes.each((index, element) => {
+                        let vodUrl = _$(element).find('a.hl-item-thumb').attr('href') || ''
+                        let vodPic = _$(element).find('a.hl-item-thumb').attr('data-original') || ''
+                        let vodName = _$(element).find('a.hl-item-thumb').attr('title') || ''
+                        let vodDiJiJi = _$(element).find('span.remarks').text() || ''
+
+                        if (!vodUrl.includes('/anime/')) return
+                        if (!vodPic.includes('http')) vodPic = this.url + vodPic
+
+                        let videoDet = {}
+                        videoDet.vod_id = +vodUrl.match(/anime\/(.+)\.html/)[1]
+                        videoDet.vod_pic = vodPic
+                        videoDet.vod_name = vodName
+                        videoDet.vod_remarks = vodDiJiJi.trim()
+                        videos.push(videoDet)
                     })
+                })
 
-                    let allVideo = _$('.hl-row-box')
-                    let videos = []
-                    allVideo.each((index, element) => {
-                        let nodes = _$(element).find('li.hl-list-item')
-                        nodes.each((index, element) => {
-                            let vodUrl = _$(element).find('a.hl-item-thumb').attr('href') || ''
-                            let vodPic = _$(element).find('a.hl-item-thumb').attr('data-original') || ''
-                            let vodName = _$(element).find('a.hl-item-thumb').attr('title') || ''
-                            let vodDiJiJi = _$(element).find('span.remarks').text() || ''
-
-                            if (!vodUrl.includes('/anime/')) return
-                            if (!vodPic.includes('http')) vodPic = this.url + vodPic
-
-                            let videoDet = {}
-                            videoDet.vod_id = +vodUrl.match(/anime\/(.+)\.html/)[1]
-                            videoDet.vod_pic = vodPic
-                            videoDet.vod_name = vodName
-                            videoDet.vod_remarks = vodDiJiJi.trim()
-                            videos.push(videoDet)
-                        })
-                    })
-
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = 1
-                    backData.list = videos
-                    backData.class = list
-                }
+                backData = parseClassList(videos, list)
             } catch (e) {
                 await msgtodc('anfuns', e)
                 $.logErr(e)
@@ -1930,41 +1502,34 @@ function anfunsClass() {
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
                 let proData = pro.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let allVideo = _$('.hl-list-item')
-                    let lastPage = _$('.hl-page-wrap li.hl-hidden-xs').eq(4).find('a').attr('href')
-                    if (lastPage) {
-                        let regex = new RegExp(`/type\/${type}-(.*)\.html`)
-                        lastPage = lastPage.match(regex)[1]
-                    } else {
-                        lastPage = '1'
-                    }
-                    let videos = []
-                    allVideo.each((index, element) => {
-                        let vodUrl = _$(element).find('a.hl-item-thumb').attr('href') || ''
-                        let vodPic = _$(element).find('a.hl-item-thumb').attr('data-original') || ''
-                        let vodName = _$(element).find('a.hl-item-thumb').attr('title') || ''
-                        let vodDiJiJi = _$(element).find('span.remarks').text() || ''
 
-                        if (!vodPic.includes('http')) vodPic = this.url + vodPic
-
-                        let videoDet = {}
-                        videoDet.vod_id = +vodUrl.match(/anime\/(.+)\.html/)[1]
-                        videoDet.vod_pic = vodPic
-                        videoDet.vod_name = vodName.trim()
-                        videoDet.vod_remarks = vodDiJiJi.trim()
-                        videos.push(videoDet)
-                    })
-
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = page.toString()
-                    backData.pagecount = +lastPage
-                    backData.limit = videos.length.toString()
-                    backData.total = videos.length * lastPage
-                    backData.list = videos
+                let _$ = $.cheerio.load(proData)
+                let allVideo = _$('.hl-list-item')
+                let lastPage = _$('.hl-page-wrap li.hl-hidden-xs').eq(4).find('a').attr('href')
+                if (lastPage) {
+                    let regex = new RegExp(`/type\/${type}-(.*)\.html`)
+                    lastPage = lastPage.match(regex)[1]
+                } else {
+                    lastPage = '1'
                 }
+                let videos = []
+                allVideo.each((index, element) => {
+                    let vodUrl = _$(element).find('a.hl-item-thumb').attr('href') || ''
+                    let vodPic = _$(element).find('a.hl-item-thumb').attr('data-original') || ''
+                    let vodName = _$(element).find('a.hl-item-thumb').attr('title') || ''
+                    let vodDiJiJi = _$(element).find('span.remarks').text() || ''
+
+                    if (!vodPic.includes('http')) vodPic = this.url + vodPic
+
+                    let videoDet = {}
+                    videoDet.vod_id = +vodUrl.match(/anime\/(.+)\.html/)[1]
+                    videoDet.vod_pic = vodPic
+                    videoDet.vod_name = vodName.trim()
+                    videoDet.vod_remarks = vodDiJiJi.trim()
+                    videos.push(videoDet)
+                })
+
+                backData = parseVideoList(videos, page, lastPage)
             } catch (e) {
                 await msgtodc('anfuns', e)
                 $.logErr('Error fetching list:', e)
@@ -1980,68 +1545,36 @@ function anfunsClass() {
                 let webUrl = this.url + `/anime/${ids}.html`
                 let pro = await $.http.get({ url: webUrl, headers: this.headers })
                 let proData = pro.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let vod_name = _$('h2.hl-dc-title').text()
-                    let vod_content = _$('.hl-content-text').text()
-                    let vod_pic = _$('.hl-item-thumb').attr('data-original')
 
-                    // if (!vod_pic.includes('http')) vod_pic = this.url + vod_pic
+                let _$ = $.cheerio.load(proData)
+                let vod_name = _$('h2.hl-dc-title').text()
+                let vod_content = _$('.hl-content-text').text()
+                let vod_pic = _$('.hl-item-thumb').attr('data-original')
 
-                    let from = []
-                    _$('.hl-plays-from a').each((i, e) => {
-                        let name = _$(e).text().trim()
-                        from.push(name)
+                let from = []
+                _$('.hl-plays-from a').each((i, e) => {
+                    let name = _$(e).text().trim()
+                    from.push(name)
+                })
+
+                let juJiDocment = _$('ul.hl-plays-list')
+                let playlist = []
+                juJiDocment.each((index, element) => {
+                    let videos = _$(element).find('li a')
+                    let vod_play_url = ''
+                    videos.each((i, e) => {
+                        vod_play_url += from[index] + '-' + _$(e).text()
+                        vod_play_url += '$'
+                        vod_play_url +=
+                            'https://ykusu.ykusu/anfuns/provide/vod?ac=play&url=' + encodeURIComponent(combineUrl(this.url, _$(e).attr('href'))) + '&n=.m3u8'
+                        vod_play_url += '#'
                     })
+                    playlist.push(vod_play_url)
+                })
 
-                    let juJiDocment = _$('ul.hl-plays-list')
-                    let playlist = []
-                    juJiDocment.each((index, element) => {
-                        let videos = _$(element).find('li a')
-                        let vod_play_url = ''
-                        videos.each((i, e) => {
-                            vod_play_url += from[index] + '-' + _$(e).text()
-                            vod_play_url += '$'
-                            vod_play_url +=
-                                'https://ykusu.ykusu/anfuns/provide/vod?ac=play&url=' + encodeURIComponent(this.combineUrl(_$(e).attr('href'))) + '&n=.m3u8'
-                            vod_play_url += '#'
-                        })
-                        playlist.push(vod_play_url)
-                    })
-
-                    let temp = {
-                        code: 1,
-                        msg: '数据列表',
-                        page: 1,
-                        pagecount: 1,
-                        limit: '20',
-                        total: 1,
-                        list: [
-                            {
-                                vod_id: 1,
-                                vod_name: '',
-                                vod_pic: '',
-                                vod_remarks: '',
-                                type_name: '',
-                                vod_year: '',
-                                vod_area: '',
-                                vod_actor: '',
-                                vod_director: '',
-                                vod_content: '',
-                                vod_play_from: '',
-                                vod_play_url: '',
-                            },
-                        ],
-                    }
-                    temp.list[0].vod_play_url = playlist.join('$$$')
-                    temp.list[0].vod_play_from = from.join('$$$')
-                    temp.list[0].vod_play_note = '$$$'
-                    temp.list[0].vod_id = +ids
-                    temp.list[0].vod_name = vod_name
-                    temp.list[0].vod_pic = vod_pic
-                    temp.list[0].vod_content = vod_content.trim()
-                    backData = temp
-                }
+                backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content.trim(), playlist.join('$$$'))
+                backData.list[0].vod_play_from = from.join('$$$')
+                backData.list[0].vod_play_note = '$$$'
             } catch (e) {
                 await msgtodc('anfuns', e)
                 $.logErr(e)
@@ -2056,15 +1589,21 @@ function anfunsClass() {
             let url = decodeURIComponent(queryParams.url)
             try {
                 let html = await $.http.get({ url: url, headers: this.headers })
-
                 let proData = html.body
-                if (proData) {
-                    const _$ = $.cheerio.load(proData)
-                    let config = JSON.parse(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
-                    // $.log(decodeURIComponent(base64Decode(config.url)))
-                    let playUrl = decodeURIComponent(base64Decode(config.url))
-                    backData.data = playUrl
+
+                const pKey = $.CryptoJS.enc.Utf8.parse('AnFunsVapi233290')
+                function getVideoUrl(_0xdfbc96) {
+                    const _0x3e603d = $.CryptoJS.AES.decrypt(_0xdfbc96, pKey, {
+                        mode: $.CryptoJS.mode.ECB,
+                    })
+                    return _0x3e603d.toString($.CryptoJS.enc.Utf8)
                 }
+
+                const _$ = $.cheerio.load(proData)
+                let config = JSON.parse(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
+                // let playUrl = decodeURIComponent(base64Decode(config.url))
+                let playUrl = getVideoUrl(config.url)
+                backData.data = playUrl
             } catch (e) {
                 await msgtodc('anfuns', e)
                 $.logErr(e)
@@ -2101,11 +1640,7 @@ function anfunsClass() {
                     videos.push(videoDet)
                 })
 
-                backData.code = 1
-                backData.msg = '數據列表'
-                backData.page = pg
-                backData.limit = videos.length.toString()
-                backData.list = videos
+                backData = parseVideoList(videos, pg, '1')
             } catch (e) {
                 await msgtodc('anfuns', e)
                 $.logErr(e)
@@ -2113,30 +1648,6 @@ function anfunsClass() {
             }
 
             return JSON.stringify(backData)
-        }
-
-        combineUrl(url) {
-            if (url === undefined) {
-                return ''
-            }
-            if (url.indexOf(this.url) !== -1) {
-                return url
-            }
-            if (url.startsWith('/')) {
-                return this.url + url
-            }
-            return this.url + '/' + url
-        }
-
-        isIgnoreClassName(className) {
-            return this.ignoreClassName.some((element) => className.includes(element))
-        }
-
-        removeTrailingSlash(str) {
-            if (str.endsWith('/')) {
-                return str.slice(0, -1)
-            }
-            return str
         }
     })()
 }
@@ -2166,7 +1677,7 @@ function newvisionClass() {
                     let allClass = _$('.nav-menu-items > .nav-menu-item > a')
                     let list = []
                     allClass.each((index, element) => {
-                        let isIgnore = this.isIgnoreClassName(_$(element).text())
+                        let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
                         if (isIgnore) {
                             return
                         }
@@ -2298,7 +1809,9 @@ function newvisionClass() {
                             vod_play_url += from[index] + '-' + _$(e).text()
                             vod_play_url += '$'
                             vod_play_url +=
-                                'https://ykusu.ykusu/anfuns/provide/vod?ac=play&url=' + encodeURIComponent(this.combineUrl(_$(e).attr('href'))) + '&n=.m3u8'
+                                'https://ykusu.ykusu/anfuns/provide/vod?ac=play&url=' +
+                                encodeURIComponent(combineUrl(this.url, _$(e).attr('href'))) +
+                                '&n=.m3u8'
                             vod_play_url += '#'
                         })
                         playlist.push(vod_play_url)
@@ -2352,13 +1865,12 @@ function newvisionClass() {
                 let html = await $.http.get({ url: url, headers: this.headers })
 
                 let proData = html.body
-                if (proData) {
-                    const _$ = $.cheerio.load(proData)
-                    let config = JSON.parse(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
-                    // $.log(decodeURIComponent(base64Decode(config.url)))
-                    let playUrl = decodeURIComponent(base64Decode(config.url))
-                    backData.data = playUrl
-                }
+
+                const _$ = $.cheerio.load(proData)
+                let config = JSON.parse(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
+                // $.log(decodeURIComponent(base64Decode(config.url)))
+                let playUrl = decodeURIComponent(base64Decode(config.url))
+                backData.data = playUrl
             } catch (e) {
                 $.logErr(e)
                 backData.error = e.message
@@ -2406,30 +1918,6 @@ function newvisionClass() {
 
             return JSON.stringify(backData)
         }
-
-        combineUrl(url) {
-            if (url === undefined) {
-                return ''
-            }
-            if (url.indexOf(this.url) !== -1) {
-                return url
-            }
-            if (url.startsWith('/')) {
-                return this.url + url
-            }
-            return this.url + '/' + url
-        }
-
-        isIgnoreClassName(className) {
-            return this.ignoreClassName.some((element) => className.includes(element))
-        }
-
-        removeTrailingSlash(str) {
-            if (str.endsWith('/')) {
-                return str.slice(0, -1)
-            }
-            return str
-        }
     })()
 }
 
@@ -2450,48 +1938,46 @@ function zeqahtClass() {
                 const pro = await $.http.get({ url: webUrl, headers: this.headers })
 
                 let proData = pro.body
-                if (proData) {
-                    let obj = JSON.parse(proData)
-                    let categories = [
-                        { type_id: 1, type_name: '电影' },
-                        { type_id: 22, type_name: '喜剧' },
-                        { type_id: 23, type_name: '动作' },
-                        { type_id: 30, type_name: '科幻' },
-                        { type_id: 26, type_name: '爱情' },
-                        { type_id: 27, type_name: '悬疑' },
-                        { type_id: 87, type_name: '奇幻' },
-                        { type_id: 37, type_name: '剧情' },
-                        { type_id: 36, type_name: '恐怖' },
-                        { type_id: 35, type_name: '犯罪' },
-                        { type_id: 33, type_name: '动画' },
-                        { type_id: 34, type_name: '惊悚' },
-                        { type_id: 25, type_name: '战争' },
-                        { type_id: 31, type_name: '冒险' },
-                        { type_id: 81, type_name: '灾难' },
-                        { type_id: 83, type_name: '伦理' },
-                        { type_id: 43, type_name: '其他' },
-                        { type_id: 2, type_name: '电视剧' },
-                        { type_id: 14, type_name: '国产剧' },
-                        { type_id: 15, type_name: '欧美剧' },
-                        { type_id: 16, type_name: '港台剧' },
-                        { type_id: 62, type_name: '日韩剧' },
-                        { type_id: 68, type_name: '其他剧' },
-                        // { type_id: 88, type_name: '短剧' },
-                        { type_id: 3, type_name: '综艺' },
-                        { type_id: 69, type_name: '国产综艺' },
-                        { type_id: 70, type_name: '港台综艺' },
-                        { type_id: 72, type_name: '日韩综艺' },
-                        { type_id: 73, type_name: '欧美综艺' },
-                        { type_id: 74, type_name: '其他综艺' },
-                        { type_id: 4, type_name: '动漫' },
-                        { type_id: 75, type_name: '国产动漫' },
-                        { type_id: 76, type_name: '日韩动漫' },
-                        { type_id: 77, type_name: '欧美动漫' },
-                    ]
+                let obj = JSON.parse(proData)
+                let categories = [
+                    { type_id: 1, type_name: '电影' },
+                    { type_id: 22, type_name: '喜剧' },
+                    { type_id: 23, type_name: '动作' },
+                    { type_id: 30, type_name: '科幻' },
+                    { type_id: 26, type_name: '爱情' },
+                    { type_id: 27, type_name: '悬疑' },
+                    { type_id: 87, type_name: '奇幻' },
+                    { type_id: 37, type_name: '剧情' },
+                    { type_id: 36, type_name: '恐怖' },
+                    { type_id: 35, type_name: '犯罪' },
+                    { type_id: 33, type_name: '动画' },
+                    { type_id: 34, type_name: '惊悚' },
+                    { type_id: 25, type_name: '战争' },
+                    { type_id: 31, type_name: '冒险' },
+                    { type_id: 81, type_name: '灾难' },
+                    { type_id: 83, type_name: '伦理' },
+                    { type_id: 43, type_name: '其他' },
+                    { type_id: 2, type_name: '电视剧' },
+                    { type_id: 14, type_name: '国产剧' },
+                    { type_id: 15, type_name: '欧美剧' },
+                    { type_id: 16, type_name: '港台剧' },
+                    { type_id: 62, type_name: '日韩剧' },
+                    { type_id: 68, type_name: '其他剧' },
+                    // { type_id: 88, type_name: '短剧' },
+                    { type_id: 3, type_name: '综艺' },
+                    { type_id: 69, type_name: '国产综艺' },
+                    { type_id: 70, type_name: '港台综艺' },
+                    { type_id: 72, type_name: '日韩综艺' },
+                    { type_id: 73, type_name: '欧美综艺' },
+                    { type_id: 74, type_name: '其他综艺' },
+                    { type_id: 4, type_name: '动漫' },
+                    { type_id: 75, type_name: '国产动漫' },
+                    { type_id: 76, type_name: '日韩动漫' },
+                    { type_id: 77, type_name: '欧美动漫' },
+                ]
 
-                    obj.class = categories
-                    backData = obj
-                }
+                obj.class = categories
+                backData = obj
             } catch (e) {
                 await msgtodc('zeqaht', e)
                 $.logErr(e)
@@ -2512,13 +1998,12 @@ function zeqahtClass() {
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
                 let proData = pro.body
-                if (proData) {
-                    let obj = JSON.parse(proData)
-                    obj.list.forEach((e) => {
-                        if (!e.vod_pic.includes('http')) e.vod_pic = 'https://obs.gduamoe.com' + e.vod_pic
-                    })
-                    backData = obj
-                }
+
+                let obj = JSON.parse(proData)
+                obj.list.forEach((e) => {
+                    if (!e.vod_pic.includes('http')) e.vod_pic = 'https://obs.gduamoe.com' + e.vod_pic
+                })
+                backData = obj
             } catch (e) {
                 await msgtodc('zeqaht', e)
                 $.logErr('Error fetching list:', e)
@@ -2534,20 +2019,19 @@ function zeqahtClass() {
                 let webUrl = this.url + `/api.php/provide/vod?ac=detail&ids=${ids}`
                 let pro = await $.http.get({ url: webUrl, headers: this.headers })
                 let proData = pro.body
-                if (proData) {
-                    let obj = JSON.parse(proData)
-                    let play_url = obj.list[0].vod_play_url
-                    let playlist = play_url.split('#')
-                    let newPlaylist = []
-                    playlist.forEach((e, i) => {
-                        let parts = e.split('$')
-                        let name = parts[0]
-                        let url = `https://ykusu.ykusu/zeqaht/provide/vod?ac=play&id=${obj.list[0].vod_id}&index=${i}&n=.m3u8`
-                        newPlaylist.push(name + '$' + url)
-                    })
-                    obj.list[0].vod_play_url = newPlaylist.join('#')
-                    backData = obj
-                }
+
+                let obj = JSON.parse(proData)
+                let play_url = obj.list[0].vod_play_url
+                let playlist = play_url.split('#')
+                let newPlaylist = []
+                playlist.forEach((e, i) => {
+                    let parts = e.split('$')
+                    let name = parts[0]
+                    let url = `https://ykusu.ykusu/zeqaht/provide/vod?ac=play&id=${obj.list[0].vod_id}&index=${i}&n=.m3u8`
+                    newPlaylist.push(name + '$' + url)
+                })
+                obj.list[0].vod_play_url = newPlaylist.join('#')
+                backData = obj
             } catch (e) {
                 await msgtodc('zeqaht', e)
                 $.logErr(e)
@@ -2586,11 +2070,9 @@ function zeqahtClass() {
                     },
                 })
                 let proData = pro.body
-                if (proData) {
-                    let obj = JSON.parse(proData)
-                    let playUrl = obj.data.playUrl
-                    backData.data = playUrl
-                }
+                let obj = JSON.parse(proData)
+                let playUrl = obj.data.playUrl
+                backData.data = playUrl
             } catch (e) {
                 await msgtodc('zeqaht', e)
                 $.logErr(e)
@@ -2646,21 +2128,19 @@ function mgtimiClass() {
 
             try {
                 let html = await $.http.get({ url: getSource, headers: this.headers })
-
                 let proData = html.body
-                if (proData) {
-                    let obj = JSON.parse(proData)
-                    if (obj.code == 10023) {
-                        $.msg(obj.msg)
-                        backData.data = null
-                    } else {
-                        let videoSource = obj.data.videoSources[0]
-                        let videoUrl = videoSource.url
-                        let vres = await $.http.get({ url: videoUrl, headers: this.headers })
-                        if (vres.body) {
-                            let playUrl = JSON.parse(vres.body).info
-                            backData.data = playUrl
-                        }
+
+                let obj = JSON.parse(proData)
+                if (obj.code == 10023) {
+                    $.msg(obj.msg)
+                    backData.data = null
+                } else {
+                    let videoSource = obj.data.videoSources[0]
+                    let videoUrl = videoSource.url
+                    let vres = await $.http.get({ url: videoUrl, headers: this.headers })
+                    if (vres.body) {
+                        let playUrl = JSON.parse(vres.body).info
+                        backData.data = playUrl
                     }
                 }
             } catch (e) {
@@ -2690,52 +2170,46 @@ function nonoClass() {
                 const pro = await $.http.get({ url: webUrl, headers: this.headers })
 
                 let proData = await pro.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let allClass = _$('.main-menu .nav-ul-menu a')
-                    let list = []
-                    allClass.each((index, element) => {
-                        let isIgnore = this.isIgnoreClassName(_$(element).text())
-                        if (isIgnore) {
-                            return
-                        }
-                        let type_name = _$(element).text()
-                        let url = _$(element).attr('href') || ''
-                        // url = url.match(/type\/(\d+)\.html/)[1]
 
-                        if (url.length > 0 && type_name.length > 0) {
-                            let videoClass = {}
-                            videoClass.type_id = index
-                            videoClass.type_name = type_name.trim()
-                            list.push(videoClass)
-                        }
+                let _$ = $.cheerio.load(proData)
+                let allClass = _$('.main-menu .nav-ul-menu a')
+                let list = []
+                allClass.each((index, element) => {
+                    let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
+                    if (isIgnore) {
+                        return
+                    }
+                    let type_name = _$(element).text()
+                    let url = _$(element).attr('href') || ''
+
+                    if (url.length > 0 && type_name.length > 0) {
+                        let videoClass = {}
+                        videoClass.type_id = index
+                        videoClass.type_name = type_name.trim()
+                        list.push(videoClass)
+                    }
+                })
+
+                let allVideo = _$('.smart-box')
+                let videos = []
+                allVideo.each((index, element) => {
+                    let nodes = _$(element).find('.video-item')
+                    nodes.each((index, element) => {
+                        let vodUrl = _$(element).find('a').attr('href') || ''
+                        let vodPic = _$(element).find('a img').attr('data-original') || ''
+                        let vodName = _$(element).find('a').attr('title') || ''
+                        let vodDiJiJi = _$(element).find('span.remarks').text() || ''
+
+                        let videoDet = {}
+                        videoDet.vod_id = +vodUrl.match(/net\/.+\/(.+)\.html/)[1]
+                        videoDet.vod_pic = vodPic
+                        videoDet.vod_name = vodName.replace(/^(【.*?】)/g, '')
+                        videoDet.vod_remarks = vodDiJiJi.trim()
+                        videos.push(videoDet)
                     })
+                })
 
-                    let allVideo = _$('.smart-box')
-                    let videos = []
-                    allVideo.each((index, element) => {
-                        let nodes = _$(element).find('.video-item')
-                        nodes.each((index, element) => {
-                            let vodUrl = _$(element).find('a').attr('href') || ''
-                            let vodPic = _$(element).find('a img').attr('data-original') || ''
-                            let vodName = _$(element).find('a').attr('title') || ''
-                            let vodDiJiJi = _$(element).find('span.remarks').text() || ''
-
-                            let videoDet = {}
-                            videoDet.vod_id = +vodUrl.match(/net\/.+\/(.+)\.html/)[1]
-                            videoDet.vod_pic = vodPic
-                            videoDet.vod_name = vodName.replace(/^(【.*?】)/g, '')
-                            videoDet.vod_remarks = vodDiJiJi.trim()
-                            videos.push(videoDet)
-                        })
-                    })
-
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = 1
-                    backData.list = videos
-                    backData.class = list
-                }
+                backData = parseClassList(videos, list)
             } catch (e) {
                 await msgtodc('novipnoad', e)
                 $.logErr(e)
@@ -2798,33 +2272,26 @@ function nonoClass() {
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
                 let proData = pro.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let allVideo = _$('.video-listing-content .video-item')
-                    let lastPage = _$('.wp-pagenavi a.last').text() || '1'
-                    let videos = []
-                    allVideo.each((index, element) => {
-                        let vodUrl = _$(element).find('h3 a').attr('rel') || ''
-                        let vodPic = _$(element).find('img').attr('data-original') || ''
-                        let vodName = _$(element).find('h3 a').attr('title') || ''
-                        let vodDiJiJi = _$(element).find('span.remarks').text() || ''
 
-                        let videoDet = {}
-                        videoDet.vod_id = +vodUrl
-                        videoDet.vod_pic = vodPic
-                        videoDet.vod_name = vodName.replace(/^(【.*?】)/g, '').trim()
-                        videoDet.vod_remarks = vodDiJiJi.trim()
-                        videos.push(videoDet)
-                    })
+                let _$ = $.cheerio.load(proData)
+                let allVideo = _$('.video-listing-content .video-item')
+                let lastPage = _$('.wp-pagenavi a.last').text() || '1'
+                let videos = []
+                allVideo.each((index, element) => {
+                    let vodUrl = _$(element).find('h3 a').attr('rel') || ''
+                    let vodPic = _$(element).find('img').attr('data-original') || ''
+                    let vodName = _$(element).find('h3 a').attr('title') || ''
+                    let vodDiJiJi = _$(element).find('span.remarks').text() || ''
 
-                    backData.code = 1
-                    backData.msg = '數據列表'
-                    backData.page = page.toString()
-                    backData.pagecount = +lastPage
-                    backData.limit = videos.length.toString()
-                    backData.total = videos.length * lastPage
-                    backData.list = videos
-                }
+                    let videoDet = {}
+                    videoDet.vod_id = +vodUrl
+                    videoDet.vod_pic = vodPic
+                    videoDet.vod_name = vodName.replace(/^(【.*?】)/g, '').trim()
+                    videoDet.vod_remarks = vodDiJiJi.trim()
+                    videos.push(videoDet)
+                })
+
+                backData = parseVideoList(videos, page, lastPage)
             } catch (e) {
                 await msgtodc('novipnoad', e)
                 $.logErr('Error fetching list:', e)
@@ -2840,74 +2307,38 @@ function nonoClass() {
                 let webUrl = this.url + `/movie/${ids}.html`
                 let pro = await $.http.get({ url: webUrl, headers: this.headers })
                 let proData = pro.body
-                if (proData) {
-                    let _$ = $.cheerio.load(proData)
-                    let vod_name = _$('.video-item h1').text()
-                    let vod_content = _$('.item-content p').eq(0).text() || ''
-                    let vod_pic = _$('.hl-item-thumb').attr('data-original') || ''
 
-                    let vod_play_url = ''
-                    let playInfo = _$('.item-content script').text()
-                    let pkey = playInfo.match(/pkey:"(.*)"/)[1]
-                    let ref = _$('meta[property="og:url"]')
-                        .attr('content')
-                        .match(/\.net(.*)/)[1]
+                let _$ = $.cheerio.load(proData)
+                let vod_name = _$('.video-item h1').text()
+                let vod_content = _$('.item-content p').eq(0).text() || ''
+                vod_content = vod_content.includes(';') ? vod_content.split(';')[1] : vod_content
+                let vod_pic = _$('.hl-item-thumb').attr('data-original') || ''
 
-                    if (playInfo.includes('vid:')) {
-                        let vid = playInfo.match(/vid:"(.*)",/)[1]
-                        vod_play_url =
-                            '1$' + 'https://ykusu.ykusu/nono/provide/vod?ac=play&vid=' + vid + '&pkey=' + pkey + '&ref=' + encodeURIComponent(ref) + '&n=.m3u8'
-                    } else {
-                        let btns = _$('.multilink-btn')
-                        let playlist = []
-                        btns.each((index, element) => {
-                            let name = _$(element).text()
-                            let vid = _$(element).attr('data-vid')
-                            let url =
-                                name +
-                                '$https://ykusu.ykusu/nono/provide/vod?ac=play&vid=' +
-                                vid +
-                                '&pkey=' +
-                                pkey +
-                                '&ref=' +
-                                encodeURIComponent(ref) +
-                                '&n=.m3u8'
-                            playlist.push(url)
-                        })
-                        vod_play_url = playlist.join('$$$')
-                    }
+                let vod_play_url = ''
+                let playInfo = _$('.item-content script').text()
+                let pkey = playInfo.match(/pkey:"(.*)"/)[1]
+                let ref = _$('meta[property="og:url"]')
+                    .attr('content')
+                    .match(/\.net(.*)/)[1]
 
-                    let temp = {
-                        code: 1,
-                        msg: '数据列表',
-                        page: 1,
-                        pagecount: 1,
-                        limit: '20',
-                        total: 1,
-                        list: [
-                            {
-                                vod_id: 1,
-                                vod_name: '',
-                                vod_pic: '',
-                                vod_remarks: '',
-                                type_name: '',
-                                vod_year: '',
-                                vod_area: '',
-                                vod_actor: '',
-                                vod_director: '',
-                                vod_content: '',
-                                vod_play_from: '',
-                                vod_play_url: '',
-                            },
-                        ],
-                    }
-                    temp.list[0].vod_play_url = vod_play_url
-                    temp.list[0].vod_id = +ids
-                    temp.list[0].vod_name = vod_name
-                    temp.list[0].vod_pic = vod_pic
-                    temp.list[0].vod_content = vod_content.includes(';') ? vod_content.split(';')[1] : vod_content
-                    backData = temp
+                if (playInfo.includes('vid:')) {
+                    let vid = playInfo.match(/vid:"(.*)",/)[1]
+                    vod_play_url =
+                        '1$' + 'https://ykusu.ykusu/nono/provide/vod?ac=play&vid=' + vid + '&pkey=' + pkey + '&ref=' + encodeURIComponent(ref) + '&n=.m3u8'
+                } else {
+                    let btns = _$('.multilink-btn')
+                    let playlist = []
+                    btns.each((index, element) => {
+                        let name = _$(element).text()
+                        let vid = _$(element).attr('data-vid')
+                        let url =
+                            name + '$https://ykusu.ykusu/nono/provide/vod?ac=play&vid=' + vid + '&pkey=' + pkey + '&ref=' + encodeURIComponent(ref) + '&n=.m3u8'
+                        playlist.push(url)
+                    })
+                    vod_play_url = playlist.join('$$$')
                 }
+
+                backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content, vod_play_url)
             } catch (e) {
                 await msgtodc('novipnoad', e)
                 $.logErr(e)
@@ -2936,7 +2367,6 @@ function nonoClass() {
                 const device = player.body.match(/params\['device'\] = '(\w+)';/)[1]
                 const config = data.split(',')
                 const vkey = JSON.parse(
-                    // this.getVkey(config[0], config[1], config[2], config[3], config[4], config[5])
                     this.getVkey(...config)
                         .match(/JSON.stringify\((.*)\)\);/)[1]
                         .replace(/'/g, '"')
@@ -3008,11 +2438,7 @@ function nonoClass() {
                     videos.push(videoDet)
                 })
 
-                backData.code = 1
-                backData.msg = '數據列表'
-                backData.page = pg
-                backData.limit = videos.length.toString()
-                backData.list = videos
+                backData = parseVideoList(videos, pg, '1')
             } catch (e) {
                 await msgtodc('novipnoad', e)
                 $.logErr(e)
@@ -3122,31 +2548,108 @@ function nonoClass() {
 
             return data
         }
-
-        combineUrl(url) {
-            if (url === undefined) {
-                return ''
-            }
-            if (url.indexOf(this.url) !== -1) {
-                return url
-            }
-            if (url.startsWith('/')) {
-                return this.url + url
-            }
-            return this.url + '/' + url
-        }
-
-        isIgnoreClassName(className) {
-            return this.ignoreClassName.some((element) => className.includes(element))
-        }
-
-        removeTrailingSlash(str) {
-            if (str.endsWith('/')) {
-                return str.slice(0, -1)
-            }
-            return str
-        }
     })()
+}
+
+/**
+ * 返回分類列表
+ * @param {Array} allVideos 首頁內容
+ * @param {Array} allClasses 分類內容
+ * @returns {Object} backData
+ */
+function parseClassList(allVideos, allClasses) {
+    let backData = {
+        code: 1,
+        msg: '數據列表',
+        page: 1,
+        list: allVideos,
+        class: allClasses,
+    }
+
+    return backData
+}
+
+/**
+ * 獲取列表
+ * @param {Array} videos
+ * @param {*} page 當前頁
+ * @param {*} lastPage 最後頁
+ * @returns {Object}
+ */
+function parseVideoList(videos, page, lastPage) {
+    let backData = {
+        code: 1,
+        msg: '數據列表',
+        page: page.toString(),
+        pagecount: parseInt(lastPage),
+        limit: videos.length.toString(),
+        total: videos.length * lastPage,
+        list: videos,
+    }
+
+    return backData
+}
+
+/**
+ * 獲取詳情
+ * @param {Number} id
+ * @param {String} name
+ * @param {String} pic
+ * @param {String} content
+ * @param {String} playUrl
+ * @returns {Object}
+ */
+function parseVideoDetail(id, name, pic, content, playUrl) {
+    let backData = {
+        code: 1,
+        msg: '数据列表',
+        page: 1,
+        pagecount: 1,
+        limit: '20',
+        total: 1,
+        list: [
+            {
+                vod_id: id,
+                vod_name: name,
+                vod_pic: pic,
+                vod_remarks: '',
+                type_name: '',
+                vod_year: '',
+                vod_area: '',
+                vod_actor: '',
+                vod_director: '',
+                vod_content: content,
+                vod_play_from: '',
+                vod_play_url: playUrl,
+            },
+        ],
+    }
+
+    return backData
+}
+
+function combineUrl(website, url) {
+    if (url === undefined) {
+        return ''
+    }
+    if (url.indexOf(website) !== -1) {
+        return url
+    }
+    if (url.startsWith('/')) {
+        return website + url
+    }
+    return website + '/' + url
+}
+
+function isIgnoreClassName(ignoreClassName, className) {
+    return ignoreClassName.some((element) => className.includes(element))
+}
+
+function removeTrailingSlash(str) {
+    if (str.endsWith('/')) {
+        return str.slice(0, -1)
+    }
+    return str
 }
 
 function base64Encode(text) {
