@@ -8,47 +8,58 @@ const $ = new Env('XPTV-sources', { logLevel: 'info' })
     const URI = new URIs()
     const { url } = $request
     const queryParams = URI.parse(url).query
-    let spiderInstance
-    switch (true) {
-        case url.includes('/bttwo/'):
-            spiderInstance = new bttwoClass()
-            break
-        case url.includes('/saohuo/'):
-            spiderInstance = new saohuoClass()
-            break
-        case url.includes('/subaibai/'):
-            spiderInstance = new sbbClass()
-            break
-        case url.includes('/hjkk/'):
-            spiderInstance = new hjkkClass()
-            break
-        case url.includes('/nkvod/'):
-            spiderInstance = new nkvodClass()
-            break
-        case url.includes('/anfuns/'):
-            spiderInstance = new anfunsClass()
-            break
-        case url.includes('/zeqaht/'):
-            spiderInstance = new zeqahtClass()
-            break
-        case url.includes('/mgtimi/'):
-            spiderInstance = new mgtimiClass()
-            break
-        case url.includes('/nono/'):
-            spiderInstance = new nonoClass()
-            break
-        case url.includes('getJSON'):
-            getJSON()
-            break
-
-        default:
-            $.logErr('No matching spiderInstance found for the URL: ' + url)
-            $.done()
-            return
-    }
+    const spiderInstance = createSpiderInstance(url)
 
     await handleRequest(spiderInstance, queryParams)
-})().catch((e) => $.logErr(e))
+})().catch((e) => {
+    $.logErr(e)
+    $.done()
+})
+
+function createSpiderInstance(url) {
+    switch (true) {
+        case url.includes('/bttwo/'):
+            return new bttwoClass()
+        case url.includes('/saohuo/'):
+            return new saohuoClass()
+        case url.includes('/subaibai/'):
+            return new sbbClass()
+        case url.includes('/hjkk/'):
+            return new hjkkClass()
+        case url.includes('/nkvod/'):
+            return new nkvodClass()
+        case url.includes('/anfuns/'):
+            return new anfunsClass()
+        case url.includes('/zeqaht/'):
+            return new zeqahtClass()
+        case url.includes('/mgtimi/'):
+            return new mgtimiClass()
+        case url.includes('/nono/'):
+            return new nonoClass()
+        case url.includes('/getJSON/'):
+            getJSON()
+            return null
+        default:
+            throw new Error('No matching spiderInstance found for the URL: ' + url)
+    }
+}
+
+function getJSON() {
+    const subs = {
+        sites: [
+            { name: '文才|偽', type: 1, api: `https://ykusu.ykusu/zeqaht/provide/vod` },
+            { name: '兩個BT|偽', type: 1, api: `https://ykusu.ykusu/bttwo/provide/vod` },
+            { name: '燒火電影|偽', type: 1, api: `https://ykusu.ykusu/saohuo/provide/vod` },
+            { name: '素白白影視|偽', type: 1, api: `https://ykusu.ykusu/subaibai/provide/vod` },
+            { name: '耐看點播|偽', type: 1, api: `https://ykusu.ykusu/nkvod/api.php/provide/vod` },
+            { name: 'anfuns|偽', type: 1, api: `https://ykusu.ykusu/anfuns/provide/vod` },
+            { name: '韓劇看看|偽', type: 1, api: `https://ykusu.ykusu/hjkk/provide/vod` },
+            { name: 'NO視頻|偽', type: 1, api: `https://ykusu.ykusu/nono/api.php/provide/vod` },
+            { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.top/api.php/provide/vod/from/mgtv` },
+        ],
+    }
+    return $.isQuanX() ? $.done({ status: 'HTTP/1.1 200', body: JSON.stringify(subs) }) : $.done({ response: { status: 200, body: JSON.stringify(subs) } })
+}
 
 async function handleRequest(spiderInstance, queryParams) {
     const ac = queryParams?.ac || ''
@@ -122,39 +133,6 @@ async function handleRequest(spiderInstance, queryParams) {
                   },
               })
     }
-}
-
-function getJSON() {
-    const subs = {
-        sites: [
-            { name: '文才|偽', type: 1, api: `https://ykusu.ykusu/zeqaht/provide/vod` },
-            { name: '兩個BT|偽', type: 1, api: `https://ykusu.ykusu/bttwo/provide/vod` },
-            { name: '燒火電影|偽', type: 1, api: `https://ykusu.ykusu/saohuo/provide/vod` },
-            { name: '素白白影視|偽', type: 1, api: `https://ykusu.ykusu/subaibai/provide/vod` },
-            { name: '耐看點播|偽', type: 1, api: `https://ykusu.ykusu/nkvod/api.php/provide/vod` },
-            { name: 'anfuns|偽', type: 1, api: `https://ykusu.ykusu/anfuns/provide/vod` },
-            { name: '韓劇看看|偽', type: 1, api: `https://ykusu.ykusu/hjkk/provide/vod` },
-            { name: 'NO視頻|偽', type: 1, api: `https://ykusu.ykusu/nono/api.php/provide/vod` },
-            { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.top/api.php/provide/vod/from/mgtv` },
-        ],
-    }
-    return $.isQuanX() ? $.done({ status: 'HTTP/1.1 200', body: JSON.stringify(subs) }) : $.done({ response: { status: 200, body: JSON.stringify(subs) } })
-}
-
-function msgtodc(site, e) {
-    const webhook = 'https://discord.com/api/webhooks/1052995873270923314/-lua5joiYT63DjGn6H-a_X3srT0MrNfPZDJjLtvcsHJ69fU1gVz2O-Ldc5wcwzEr7uoA'
-    const err = {
-        time: $.time('yyyy-MM-dd HH:mm:ss'),
-        env: $.getEnv(),
-        site,
-        error: e.message,
-    }
-    return $.http.post({
-        url: webhook,
-        body: {
-            content: $.toStr(err),
-        },
-    })
 }
 
 function bttwoClass() {
@@ -1588,19 +1566,18 @@ function anfunsClass() {
                 let html = await $.http.get({ url: url, headers: this.headers })
                 let proData = html.body
 
-                const pKey = $.CryptoJS.enc.Utf8.parse('AnFunsVapi233290')
+                const _$ = $.cheerio.load(proData)
+                let config = JSON.parse(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
+                let playUrl = getVideoUrl(config.url)
+                backData.data = playUrl
+
                 function getVideoUrl(_0xdfbc96) {
+                    const pKey = $.CryptoJS.enc.Utf8.parse(base64Decode('QW5GdW5zVmFwaTIzMzI5MA=='))
                     const _0x3e603d = $.CryptoJS.AES.decrypt(_0xdfbc96, pKey, {
                         mode: $.CryptoJS.mode.ECB,
                     })
                     return _0x3e603d.toString($.CryptoJS.enc.Utf8)
                 }
-
-                const _$ = $.cheerio.load(proData)
-                let config = JSON.parse(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
-                // let playUrl = decodeURIComponent(base64Decode(config.url))
-                let playUrl = getVideoUrl(config.url)
-                backData.data = playUrl
             } catch (e) {
                 await msgtodc('anfuns', e)
                 $.logErr(e)
@@ -2279,6 +2256,8 @@ function nonoClass() {
     })()
 }
 
+// Utils
+
 /**
  * 返回分類列表
  * @param {Array} allVideos 首頁內容
@@ -2386,6 +2365,22 @@ function base64Encode(text) {
 
 function base64Decode(text) {
     return $.CryptoJS.enc.Utf8.stringify($.CryptoJS.enc.Base64.parse(text))
+}
+
+function msgtodc(site, e) {
+    const webhook = 'https://discord.com/api/webhooks/1052995873270923314/-lua5joiYT63DjGn6H-a_X3srT0MrNfPZDJjLtvcsHJ69fU1gVz2O-Ldc5wcwzEr7uoA'
+    const err = {
+        time: $.time('yyyy-MM-dd HH:mm:ss'),
+        env: $.getEnv(),
+        site,
+        error: e.message,
+    }
+    return $.http.post({
+        url: webhook,
+        body: {
+            content: $.toStr(err),
+        },
+    })
 }
 
 // an URI [ parse | stringify ] to JSON / URI Converter based JavaScript
