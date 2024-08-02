@@ -64,7 +64,7 @@ function getJSON() {
 async function handleRequest(spiderInstance, queryParams) {
     const ac = queryParams?.ac || ''
     if (ac === 'list' || ac === '') {
-        let res = await spiderInstance.getClassList()
+        const res = await spiderInstance.getClassList()
         $.isQuanX()
             ? $.done({ status: 'HTTP/1.1 200', body: res })
             : $.done({
@@ -80,7 +80,7 @@ async function handleRequest(spiderInstance, queryParams) {
         const ids = queryParams.ids
         const wd = queryParams.wd
         if (ids) {
-            let res = await spiderInstance.getVideoDetail(queryParams)
+            const res = await spiderInstance.getVideoDetail(queryParams)
             $.isQuanX()
                 ? $.done({ status: 'HTTP/1.1 200', body: res })
                 : $.done({
@@ -93,7 +93,7 @@ async function handleRequest(spiderInstance, queryParams) {
                       },
                   })
         } else if (wd) {
-            let res = await spiderInstance.searchVideo(queryParams)
+            const res = await spiderInstance.searchVideo(queryParams)
             $.isQuanX()
                 ? $.done({ status: 'HTTP/1.1 200', body: res })
                 : $.done({
@@ -106,7 +106,7 @@ async function handleRequest(spiderInstance, queryParams) {
                       },
                   })
         } else {
-            let res = await spiderInstance.getVideoList(queryParams)
+            const res = await spiderInstance.getVideoList(queryParams)
             $.isQuanX()
                 ? $.done({ status: 'HTTP/1.1 200', body: res })
                 : $.done({
@@ -120,8 +120,8 @@ async function handleRequest(spiderInstance, queryParams) {
                   })
         }
     } else if (ac === 'play') {
-        let res = await spiderInstance.getVideoPlayUrl(queryParams)
-        let playUrl = JSON.parse(res).data
+        const res = await spiderInstance.getVideoPlayUrl(queryParams)
+        const playUrl = JSON.parse(res).data
         $.isQuanX()
             ? $.done({ status: 'HTTP/1.1 302', headers: { Location: playUrl } })
             : $.done({
@@ -1400,7 +1400,7 @@ function nkvodClass() {
 function anfunsClass() {
     return new (class {
         constructor() {
-            this.url = 'https://www.anfuns.cc'
+            this.url = 'https://www.anfuns.org'
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
                 Referer: this.url,
