@@ -1568,16 +1568,31 @@ function anfunsClass() {
 
                 const _$ = $.cheerio.load(proData)
                 let config = JSON.parse(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
-                let playUrl = getVideoUrl(config.url)
-                backData.data = playUrl
-
-                function getVideoUrl(_0xdfbc96) {
-                    const pKey = $.CryptoJS.enc.Utf8.parse(base64Decode('QW5GdW5zVmFwaTIzMzI5MA=='))
-                    const _0x3e603d = $.CryptoJS.AES.decrypt(_0xdfbc96, pKey, {
-                        mode: $.CryptoJS.mode.ECB,
-                    })
-                    return _0x3e603d.toString($.CryptoJS.enc.Utf8)
+                let art = this.url + '/vapi/AIRA/art.php?url=' + config.url
+                let artres = await $.http.get({
+                    url: art,
+                    headers: {
+                        'User-Agent': this.headers['User-Agent'],
+                        Referer: url,
+                    },
+                })
+                if (artres.body) {
+                    const _$ = $.cheerio.load(artres.body)
+                    let playUrl = _$('script:contains(var Config)')
+                        .html()
+                        .match(/url: '(.*)'/)[1]
+                    backData.data = playUrl
                 }
+                // let playUrl = getVideoUrl(config.url)
+                // backData.data = playUrl
+
+                // function getVideoUrl(_0xdfbc96) {
+                //     const pKey = $.CryptoJS.enc.Utf8.parse(base64Decode('QW5GdW5zVmFwaTIzMzI5MA=='))
+                //     const _0x3e603d = $.CryptoJS.AES.decrypt(_0xdfbc96, pKey, {
+                //         mode: $.CryptoJS.mode.ECB,
+                //     })
+                //     return _0x3e603d.toString($.CryptoJS.enc.Utf8)
+                // }
             } catch (e) {
                 await msgtodc('anfuns', e)
                 $.logErr(e)
