@@ -1,6 +1,6 @@
 const $ = new Env('XPTV-sources', { logLevel: 'info' })
 
-!(async () => {
+;(async () => {
     await importRemoteUtils('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js', '', 'CryptoJS', 'crypto-js')
     await importRemoteUtils('https://cdn.jsdelivr.net/gh/Yuheng0101/X@main/Utils/cheerio.js', 'createCheerio', 'cheerio')
     await importRemoteUtils('https://cdn.jsdelivr.net/gh/Yuheng0101/X@main/Utils/Buffer.min.js', 'loadBuffer', 'Buffer')
@@ -19,23 +19,25 @@ const $ = new Env('XPTV-sources', { logLevel: 'info' })
 function createSpiderInstance(url) {
     switch (true) {
         case url.includes('/bttwo/'):
-            return new bttwoClass()
+            return bttwoClass()
         case url.includes('/saohuo/'):
-            return new saohuoClass()
+            return saohuoClass()
         case url.includes('/subaibai/'):
-            return new sbbClass()
+            return sbbClass()
         case url.includes('/hjkk/'):
-            return new hjkkClass()
+            return hjkkClass()
         case url.includes('/nkvod/'):
-            return new nkvodClass()
+            return nkvodClass()
         case url.includes('/anfuns/'):
-            return new anfunsClass()
+            return anfunsClass()
         case url.includes('/zeqaht/'):
-            return new zeqahtClass()
+            return zeqahtClass()
         case url.includes('/mgtimi/'):
-            return new mgtimiClass()
+            return mgtimiClass()
         case url.includes('/nono/'):
-            return new nonoClass()
+            return nonoClass()
+        case url.includes('/zhuiyi/'):
+            return zhuiyiClass()
         case url.includes('/getJSON/'):
             getJSON()
             return null
@@ -58,7 +60,23 @@ function getJSON() {
             { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.top/api.php/provide/vod/from/mgtv` },
         ],
     }
-    return $.isQuanX() ? $.done({ status: 'HTTP/1.1 200', body: JSON.stringify(subs) }) : $.done({ response: { status: 200, body: JSON.stringify(subs) } })
+    return $.isQuanX()
+        ? $.done({
+              status: 'HTTP/1.1 200',
+              headers: {
+                  'Content-Type': 'application/json;charset=utf-8',
+              },
+              body: $.toStr(subs),
+          })
+        : $.done({
+              response: {
+                  status: 200,
+                  headers: {
+                      'Content-Type': 'application/json;charset=utf-8',
+                  },
+                  body: $.toStr(subs),
+              },
+          })
 }
 
 async function handleRequest(spiderInstance, queryParams) {
@@ -121,7 +139,7 @@ async function handleRequest(spiderInstance, queryParams) {
         }
     } else if (ac === 'play') {
         const res = await spiderInstance.getVideoPlayUrl(queryParams)
-        const playUrl = JSON.parse(res).data
+        const playUrl = $.toObj(res).data
         $.isQuanX()
             ? $.done({ status: 'HTTP/1.1 302', headers: { Location: playUrl } })
             : $.done({
@@ -135,9 +153,90 @@ async function handleRequest(spiderInstance, queryParams) {
     }
 }
 
+class spider {
+    constructor() {
+        this.siteName = ''
+        this.url = ''
+        this.headers = ''
+        this.ignoreClassName = ''
+    }
+
+    // ac=list
+    async getClassList() {
+        let backData = {}
+        return $.toStr(backData)
+    }
+
+    // ac=detail&t=&pg=
+    async getVideoList() {
+        let backData = {}
+        return $.toStr(backData)
+    }
+
+    // ac=detail&ids=
+    async getVideoDetail() {
+        let backData = {}
+        return $.toStr(backData)
+    }
+
+    // ac=play
+    async getVideoPlayUrl() {
+        let backData = {}
+        return $.toStr(backData)
+    }
+
+    // ac=detail&wd=
+    async searchVideo() {
+        let backData = {}
+        return $.toStr(backData)
+    }
+
+    combineUrl(url) {
+        if (url === undefined) {
+            return ''
+        }
+        if (url.indexOf(this.url) !== -1) {
+            return url
+        }
+        if (url.startsWith('/')) {
+            return this.url + url
+        }
+        return this.url + '/' + url
+    }
+
+    isIgnoreClassName(className) {
+        return this.ignoreClassName.some((element) => className.includes(element))
+    }
+
+    removeTrailingSlash(str) {
+        if (str.endsWith('/')) {
+            return str.slice(0, -1)
+        }
+        return str
+    }
+
+    msgtodc(e) {
+        const webhook = 'https://discord.com/api/webhooks/1052995873270923314/-lua5joiYT63DjGn6H-a_X3srT0MrNfPZDJjLtvcsHJ69fU1gVz2O-Ldc5wcwzEr7uoA'
+        const err = {
+            time: $.time('yyyy-MM-dd HH:mm:ss'),
+            env: $.getEnv(),
+            site: this.siteName,
+            error: e.message,
+        }
+        return $.http.post({
+            url: webhook,
+            body: {
+                content: $.toStr(err),
+            },
+        })
+    }
+}
+
 function bttwoClass() {
-    return new (class {
+    return new (class extends spider {
         constructor() {
+            super()
+            this.siteName = '兩個BT'
             this.url = 'https://www.bttwoo.com'
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
@@ -157,14 +256,14 @@ function bttwoClass() {
                     let allClass = _$('.navlist a')
                     let list = []
                     allClass.each((index, element) => {
-                        let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
+                        let isIgnore = this.isIgnoreClassName(_$(element).text())
                         if (isIgnore) {
                             return
                         }
                         let type_name = _$(element).text()
                         let url = _$(element).attr('href') ?? ''
 
-                        url = combineUrl(this.url, url)
+                        url = this.combineUrl(url)
 
                         if (url.length > 0 && type_name.length > 0) {
                             let videoClass = {}
@@ -199,12 +298,12 @@ function bttwoClass() {
                     backData = parseClassList(videos, list)
                 }
             } catch (e) {
-                await msgtodc('bttwo', e)
+                await this.msgtodc(e)
                 $.logErr(e.message)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoList(queryParams) {
@@ -229,7 +328,7 @@ function bttwoClass() {
                     realTypeName = '/jpsrtv'
                     break
             }
-            let listUrl = removeTrailingSlash(this.url) + realTypeName + '/page/' + page.toString()
+            let listUrl = this.removeTrailingSlash(this.url) + realTypeName + '/page/' + page.toString()
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
@@ -263,11 +362,11 @@ function bttwoClass() {
                     backData = parseVideoList(videos, page, lastPage)
                 }
             } catch (e) {
-                await msgtodc('bttwo', e)
+                await this.msgtodc(e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoDetail(queryParams) {
@@ -292,12 +391,12 @@ function bttwoClass() {
                     backData = parseVideoDetail(+ids, '', '', '', vod_play_url)
                 }
             } catch (e) {
-                await msgtodc('bttwo', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoPlayUrl(queryParams) {
@@ -326,18 +425,18 @@ function bttwoClass() {
                     }
                 } else backData.data = 'https://shattereddisk.github.io/rickroll/rickroll.mp4'
             } catch (e) {
-                await msgtodc('bttwo', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async searchVideo(queryParams) {
             const pg = queryParams.pg
             const wd = queryParams.wd
             let backData = {}
-            let url = removeTrailingSlash(this.url) + `/xssssearch?q=${wd}$f=_all&p=${pg}`
+            let url = this.removeTrailingSlash(this.url) + `/xssssearch?q=${wd}$f=_all&p=${pg}`
 
             try {
                 let pro = await $.http.get({ url: url, headers: this.headers })
@@ -363,12 +462,12 @@ function bttwoClass() {
                     backData = parseVideoList(videos, pg, '1')
                 }
             } catch (e) {
-                await msgtodc('bttwo', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         aesCbcDecode(ciphertext, key, iv) {
@@ -391,8 +490,10 @@ function bttwoClass() {
 }
 
 function saohuoClass() {
-    return new (class {
+    return new (class extends spider {
         constructor() {
+            super()
+            this.siteName = '燒火'
             this.url = 'https://saohuo.tv'
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36',
@@ -412,7 +513,7 @@ function saohuoClass() {
                     let allClass = _$('nav.top_bar > a')
                     let list = []
                     allClass.each((index, element) => {
-                        let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
+                        let isIgnore = this.isIgnoreClassName(_$(element).text())
                         if (isIgnore) {
                             return
                         }
@@ -486,12 +587,12 @@ function saohuoClass() {
                     backData = parseClassList(videos, list)
                 }
             } catch (e) {
-                await msgtodc('saohuo', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoList(queryParams) {
@@ -500,7 +601,7 @@ function saohuoClass() {
 
             if (type === '') return this.getClassList()
 
-            let listUrl = removeTrailingSlash(this.url) + '/list/' + type + '-' + page.toString() + '.html'
+            let listUrl = this.removeTrailingSlash(this.url) + '/list/' + type + '-' + page.toString() + '.html'
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
@@ -533,11 +634,11 @@ function saohuoClass() {
                     backData = parseVideoList(videos, page, lastPage)
                 }
             } catch (e) {
-                await msgtodc('saohuo', e)
+                await this.msgtodc(e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoDetail(queryParams) {
@@ -579,12 +680,12 @@ function saohuoClass() {
                     backData.list[0].vod_play_note = '$$$'
                 }
             } catch (e) {
-                await msgtodc('saohuo', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoPlayUrl(queryParams) {
@@ -616,16 +717,20 @@ function saohuoClass() {
                             },
                             body: `url=${url}&t=${t}&key=${key}&act=0&play=1`,
                         })
-                        let purl = JSON.parse(presp.body).url
-                        backData.data = /http/.test(purl) ? purl : this.getHostFromURL(iframeUrl) + purl
+                        if ($.toObj(presp.body).code !== 200) {
+                            $.msg($.toObj(presp.body).msg)
+                        } else {
+                            let purl = $.toObj(presp.body).url
+                            backData.data = /http/.test(purl) ? purl : this.getHostFromURL(iframeUrl) + purl
+                        }
                     } else backData.error = 'resp is empty'
                 }
             } catch (e) {
-                await msgtodc('saohuo', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async searchVideo(queryParams) {
@@ -638,15 +743,13 @@ function saohuoClass() {
             try {
                 // 搜尋需要通過圖形驗證碼
                 let img = await $.http.get({ url: validate, headers: this.headers, 'binary-mode': true })
-                // $.log(JSON.stringify(img))
                 let b64 = $.Buffer.from(img.body).toString('base64')
-                // $.log(b64)
                 let ocrRes = await $.http.post({
                     url: ocrApi,
                     headers: { headers: this.headers },
                     body: b64,
                 })
-                let vd = JSON.parse(ocrRes.body).result
+                let vd = $.toObj(ocrRes.body).result
                 let searchUrl = this.url + '/search.php?scheckAC=check&page=&searchtype=&order=&tid=&area=&year=&letter=&yuyan=&state=&money=&ver=&jq='
                 let searchRes = await $.http.post({
                     url: searchUrl,
@@ -672,12 +775,12 @@ function saohuoClass() {
 
                 backData = parseVideoList(videos, pg, '1')
             } catch (e) {
-                await msgtodc('saohuo', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         getHostFromURL(url) {
@@ -695,17 +798,15 @@ function saohuoClass() {
 }
 
 function sbbClass() {
-    return new (class {
+    return new (class extends spider {
         constructor() {
-            this.key = '素白白'
+            super()
+            this.siteName = '素白白'
             this.url = 'https://www.subaibaiys.com'
-            this.siteKey = ''
-            this.siteType = 0
             this.headers = {
                 'User-Agent':
                     'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
             }
-            this.cookie = {}
             this.ignoreClassName = ['首页', '公告留言']
         }
 
@@ -721,7 +822,7 @@ function sbbClass() {
                     let allClass = _$('ul.navlist a')
                     let list = []
                     allClass.each((index, element) => {
-                        let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
+                        let isIgnore = this.isIgnoreClassName(_$(element).text())
                         if (isIgnore) {
                             return
                         }
@@ -758,12 +859,12 @@ function sbbClass() {
                     backData = parseClassList(videos, list)
                 }
             } catch (e) {
-                await msgtodc('sbb', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoList(queryParams) {
@@ -805,7 +906,7 @@ function sbbClass() {
                     break
             }
 
-            let listUrl = removeTrailingSlash(this.url) + realTypeName + '/page/' + page
+            let listUrl = this.removeTrailingSlash(this.url) + realTypeName + '/page/' + page
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
@@ -838,11 +939,11 @@ function sbbClass() {
                     backData = parseVideoList(videos, page, lastPage)
                 }
             } catch (e) {
-                await msgtodc('sbb', e)
+                await this.msgtodc(e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoDetail(queryParams) {
@@ -870,12 +971,12 @@ function sbbClass() {
                     backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content.trim(), vod_play_url)
                 }
             } catch (e) {
-                await msgtodc('sbb', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoPlayUrl(queryParams) {
@@ -890,7 +991,7 @@ function sbbClass() {
                     let isVip = _$('.noplay').text()
                     if (isVip) {
                         $.msg('仅对会员开放')
-                        return JSON.stringify({ data: null })
+                        return $.toStr({ data: null })
                     }
                     let iframe = _$('iframe').filter((i, iframe) => $(iframe).attr('src').includes('Cloud'))
 
@@ -928,11 +1029,11 @@ function sbbClass() {
                     }
                 }
             } catch (e) {
-                await msgtodc('sbb', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async searchVideo(queryParams) {
@@ -965,19 +1066,21 @@ function sbbClass() {
 
                 backData = parseVideoList(videos, pg, '1')
             } catch (e) {
-                await msgtodc('sbb', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
     })()
 }
 
 function hjkkClass() {
-    return new (class {
+    return new (class extends spider {
         constructor() {
+            super()
+            this.siteName = '韓劇看看'
             this.url = 'https://www.hanjukankan.com'
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
@@ -996,7 +1099,7 @@ function hjkkClass() {
                 let allClass = _$('ul.myui-header__menu a')
                 let list = []
                 allClass.each((index, element) => {
-                    let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
+                    let isIgnore = this.isIgnoreClassName(_$(element).text())
                     if (isIgnore) {
                         return
                     }
@@ -1032,12 +1135,12 @@ function hjkkClass() {
 
                 backData = parseClassList(videos, list)
             } catch (e) {
-                await msgtodc('hjkk', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoList(queryParams) {
@@ -1046,7 +1149,7 @@ function hjkkClass() {
 
             if (type === '') return this.getClassList()
 
-            let listUrl = removeTrailingSlash(this.url) + '/frim/index' + type + '-' + page + '.html'
+            let listUrl = this.removeTrailingSlash(this.url) + '/frim/index' + type + '-' + page + '.html'
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
@@ -1079,11 +1182,11 @@ function hjkkClass() {
 
                 backData = parseVideoList(videos, page, lastPage)
             } catch (e) {
-                await msgtodc('hjkk', e)
+                await this.msgtodc(e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoDetail(queryParams) {
@@ -1105,18 +1208,18 @@ function hjkkClass() {
                     vod_play_url += _$(element).text()
                     vod_play_url += '$'
                     vod_play_url +=
-                        'https://ykusu.ykusu/hjkk/provide/vod?ac=play&url=' + encodeURIComponent(combineUrl(this.url, _$(element).attr('href'))) + '&n=.m3u8'
+                        'https://ykusu.ykusu/hjkk/provide/vod?ac=play&url=' + encodeURIComponent(this.combineUrl(_$(element).attr('href'))) + '&n=.m3u8'
                     vod_play_url += '#'
                 })
 
                 backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content.trim(), vod_play_url)
             } catch (e) {
-                await msgtodc('hjkk', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoPlayUrl(queryParams) {
@@ -1135,11 +1238,11 @@ function hjkkClass() {
 
                 backData.data = playUrl
             } catch (e) {
-                await msgtodc('hjkk', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async searchVideo(queryParams) {
@@ -1172,19 +1275,21 @@ function hjkkClass() {
 
                 backData = parseVideoList(videos, pg, '1')
             } catch (e) {
-                await msgtodc('hjkk', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
     })()
 }
 
 function nkvodClass() {
-    return new (class {
+    return new (class extends spider {
         constructor() {
+            super()
+            this.siteName = '耐看'
             this.url = 'https://nkvod.com'
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -1208,9 +1313,9 @@ function nkvodClass() {
                     if (!item.parse) return
                     parseMap[item.show] = item.parse
                 })
-                $.setdata(JSON.stringify(parseMap), 'xptv-sources-nkvod-parseMap')
+                $.setdata($.toStr(parseMap), 'xptv-sources-nkvod-parseMap')
             } catch (e) {
-                await msgtodc('nkvod', e)
+                await this.msgtodc(e)
                 $.logErr(e)
             }
         }
@@ -1233,12 +1338,12 @@ function nkvodClass() {
 
                 backData = parseClassList([], list)
             } catch (e) {
-                await msgtodc('nkvod', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoList(queryParams) {
@@ -1247,18 +1352,18 @@ function nkvodClass() {
 
             // if (type === '') return this.getClassList()
 
-            let listUrl = removeTrailingSlash(this.url) + `/index.php/ajax/data?mid=1&tid=${type}&page=${page}&limit=20`
+            let listUrl = this.removeTrailingSlash(this.url) + `/index.php/ajax/data?mid=1&tid=${type}&page=${page}&limit=20`
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
                 let proData = pro.body
-                backData = JSON.parse(proData)
+                backData = $.toObj(proData)
             } catch (e) {
-                await msgtodc('nkvod', e)
+                await this.msgtodc(e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoDetail(queryParams) {
@@ -1292,7 +1397,7 @@ function nkvodClass() {
                     let line = from[index]
                     let allvideos = _$(element).find('ul.anthology-list-play li a')
                     allvideos.each((index, element) => {
-                        let playerUrl = combineUrl(this.url, _$(element).attr('href'))
+                        let playerUrl = this.combineUrl(_$(element).attr('href'))
                         vod_play_url += line + '-' + _$(element).text()
                         vod_play_url += '$'
                         vod_play_url +=
@@ -1306,16 +1411,16 @@ function nkvodClass() {
                 backData.list[0].vod_play_from = from.join('$$$')
                 backData.list[0].vod_play_note = '$$$'
             } catch (e) {
-                await msgtodc('nkvod', e)
+                await this.msgtodc(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoPlayUrl(queryParams) {
             let backData = {}
-            let parseMap = JSON.parse($.getdata('xptv-sources-nkvod-parseMap'))
+            let parseMap = $.toObj($.getdata('xptv-sources-nkvod-parseMap'))
             let parts = decodeURIComponent(queryParams.url).split('@@@')
             let from = parts[0]
             let url = parts[1]
@@ -1324,7 +1429,7 @@ function nkvodClass() {
                 let proData = html.body
 
                 let _$ = $.cheerio.load(proData)
-                const js = JSON.parse(_$('script:contains(player_aaaa)').html().replace('var player_aaaa=', ''))
+                const js = $.toObj(_$('script:contains(player_aaaa)').html().replace('var player_aaaa=', ''))
                 let playUrl = js.url
                 if (js.encrypt == 1) {
                     playUrl = unescape(playUrl)
@@ -1346,21 +1451,20 @@ function nkvodClass() {
                         const matches = parseHtml.match(/let ConFig = {([\w\W]*)},box/)
                         if (matches && matches.length > 1) {
                             const configJson = '{' + matches[1].trim() + '}'
-                            const config = JSON.parse(configJson)
+                            const config = $.toObj(configJson)
                             playUrl = this.decryptUrl(config)
                         }
                     }
                     backData.data = playUrl
                 }
             } catch (e) {
-                await msgtodc('nkvod', e)
+                await this.msgtodc(e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async searchVideo(queryParams) {
-            // https://www.nkvod.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=10
             const pg = queryParams.pg
             const wd = queryParams.wd
             let backData = {}
@@ -1372,13 +1476,13 @@ function nkvodClass() {
                     headers: this.headers,
                 })
 
-                backData = JSON.stringify(searchRes.body)
+                backData = $.toStr(searchRes.body)
             } catch (e) {
-                await msgtodc('nkvod', e)
+                await this.msgtodc(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         decryptUrl(jsConfig) {
@@ -1398,8 +1502,10 @@ function nkvodClass() {
 }
 
 function anfunsClass() {
-    return new (class {
+    return new (class extends spider {
         constructor() {
+            super()
+            this.siteName = 'anfuns'
             this.url = 'https://www.anfuns.org'
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -1419,7 +1525,7 @@ function anfunsClass() {
                 let allClass = _$('.hl-menus li a')
                 let list = []
                 allClass.each((index, element) => {
-                    let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).find('span').text())
+                    let isIgnore = this.isIgnoreClassName(_$(element).find('span').text())
                     if (isIgnore) {
                         return
                     }
@@ -1458,12 +1564,12 @@ function anfunsClass() {
 
                 backData = parseClassList(videos, list)
             } catch (e) {
-                await msgtodc('anfuns', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoList(queryParams) {
@@ -1506,11 +1612,11 @@ function anfunsClass() {
 
                 backData = parseVideoList(videos, page, lastPage)
             } catch (e) {
-                await msgtodc('anfuns', e)
+                await this.msgtodc(e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoDetail(queryParams) {
@@ -1541,7 +1647,7 @@ function anfunsClass() {
                         vod_play_url += from[index] + '-' + _$(e).text()
                         vod_play_url += '$'
                         vod_play_url +=
-                            'https://ykusu.ykusu/anfuns/provide/vod?ac=play&url=' + encodeURIComponent(combineUrl(this.url, _$(e).attr('href'))) + '&n=.m3u8'
+                            'https://ykusu.ykusu/anfuns/provide/vod?ac=play&url=' + encodeURIComponent(this.combineUrl(_$(e).attr('href'))) + '&n=.m3u8'
                         vod_play_url += '#'
                     })
                     playlist.push(vod_play_url)
@@ -1551,12 +1657,12 @@ function anfunsClass() {
                 backData.list[0].vod_play_from = from.join('$$$')
                 backData.list[0].vod_play_note = '$$$'
             } catch (e) {
-                await msgtodc('anfuns', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoPlayUrl(queryParams) {
@@ -1567,7 +1673,7 @@ function anfunsClass() {
                 let proData = html.body
 
                 const _$ = $.cheerio.load(proData)
-                let config = JSON.parse(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
+                let config = $.toObj(_$('script:contains(player_)').html().replace('var player_aaaa=', ''))
                 let art = this.url + '/vapi/AIRA/art.php?url=' + config.url
                 let artres = await $.http.get({
                     url: art,
@@ -1594,11 +1700,11 @@ function anfunsClass() {
                 //     return _0x3e603d.toString($.CryptoJS.enc.Utf8)
                 // }
             } catch (e) {
-                await msgtodc('anfuns', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async searchVideo(queryParams) {
@@ -1631,19 +1737,21 @@ function anfunsClass() {
 
                 backData = parseVideoList(videos, pg, '1')
             } catch (e) {
-                await msgtodc('anfuns', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
     })()
 }
 
 function zeqahtClass() {
-    return new (class {
+    return new (class extends spider {
         constructor() {
+            super()
+            this.siteName = '文才'
             this.url = 'https://api.zeqaht.com'
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -1658,7 +1766,7 @@ function zeqahtClass() {
                 const pro = await $.http.get({ url: webUrl, headers: this.headers })
 
                 let proData = pro.body
-                let obj = JSON.parse(proData)
+                let obj = $.toObj(proData)
                 let categories = [
                     { type_id: 1, type_name: '电影' },
                     { type_id: 22, type_name: '喜剧' },
@@ -1699,12 +1807,12 @@ function zeqahtClass() {
                 obj.class = categories
                 backData = obj
             } catch (e) {
-                await msgtodc('zeqaht', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoList(queryParams) {
@@ -1719,17 +1827,17 @@ function zeqahtClass() {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
                 let proData = pro.body
 
-                let obj = JSON.parse(proData)
+                let obj = $.toObj(proData)
                 obj.list.forEach((e) => {
                     if (!e.vod_pic.includes('http')) e.vod_pic = 'https://obs.gduamoe.com' + e.vod_pic
                 })
                 backData = obj
             } catch (e) {
-                await msgtodc('zeqaht', e)
+                await this.msgtodc(e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoDetail(queryParams) {
@@ -1740,7 +1848,7 @@ function zeqahtClass() {
                 let pro = await $.http.get({ url: webUrl, headers: this.headers })
                 let proData = pro.body
 
-                let obj = JSON.parse(proData)
+                let obj = $.toObj(proData)
                 let play_url = obj.list[0].vod_play_url
                 let playlist = play_url.split('#')
                 let newPlaylist = []
@@ -1753,12 +1861,12 @@ function zeqahtClass() {
                 obj.list[0].vod_play_url = newPlaylist.join('#')
                 backData = obj
             } catch (e) {
-                await msgtodc('zeqaht', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoPlayUrl(queryParams) {
@@ -1790,15 +1898,15 @@ function zeqahtClass() {
                     },
                 })
                 let proData = pro.body
-                let obj = JSON.parse(proData)
+                let obj = $.toObj(proData)
                 let playUrl = obj.data.playUrl
                 backData.data = playUrl
             } catch (e) {
-                await msgtodc('zeqaht', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async searchVideo(queryParams) {
@@ -1812,14 +1920,14 @@ function zeqahtClass() {
                     url: searchUrl,
                     headers: this.headers,
                 })
-                backData = JSON.parse(searchRes.body)
+                backData = $.toObj(searchRes.body)
             } catch (e) {
-                await msgtodc('zeqaht', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         getUUID() {
@@ -1830,8 +1938,10 @@ function zeqahtClass() {
 
 function mgtimiClass() {
     // from ios151
-    return new (class {
+    return new (class extends spider {
         constructor() {
+            super()
+            this.siteName = 'mg'
             this.headers = {
                 'User-Agent': 'MGTV-iPhone-appstore/8.0.2 (iPhone; iOS 17.1; Scale/3.00)',
             }
@@ -1850,7 +1960,7 @@ function mgtimiClass() {
                 let html = await $.http.get({ url: getSource, headers: this.headers })
                 let proData = html.body
 
-                let obj = JSON.parse(proData)
+                let obj = $.toObj(proData)
                 if (obj.code == 10023) {
                     $.msg(obj.msg)
                     backData.data = null
@@ -1859,23 +1969,25 @@ function mgtimiClass() {
                     let videoUrl = videoSource.url
                     let vres = await $.http.get({ url: videoUrl, headers: this.headers })
                     if (vres.body) {
-                        let playUrl = JSON.parse(vres.body).info
+                        let playUrl = $.toObj(vres.body).info
                         backData.data = playUrl
                     }
                 }
             } catch (e) {
-                await msgtodc('mgtv', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
     })()
 }
 
 function nonoClass() {
-    return new (class {
+    return new (class extends spider {
         constructor() {
+            super()
+            this.siteName = 'NO視頻'
             this.url = 'https://www.novipnoad.net'
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -1895,7 +2007,7 @@ function nonoClass() {
                 let allClass = _$('.main-menu .nav-ul-menu a')
                 let list = []
                 allClass.each((index, element) => {
-                    let isIgnore = isIgnoreClassName(this.ignoreClassName, _$(element).text())
+                    let isIgnore = this.isIgnoreClassName(_$(element).text())
                     if (isIgnore) {
                         return
                     }
@@ -1931,12 +2043,12 @@ function nonoClass() {
 
                 backData = parseClassList(videos, list)
             } catch (e) {
-                await msgtodc('novipnoad', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoList(queryParams) {
@@ -2013,11 +2125,11 @@ function nonoClass() {
 
                 backData = parseVideoList(videos, page, lastPage)
             } catch (e) {
-                await msgtodc('novipnoad', e)
+                await this.msgtodc(e)
                 $.logErr('Error fetching list:', e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoDetail(queryParams) {
@@ -2060,12 +2172,12 @@ function nonoClass() {
 
                 backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content, vod_play_url)
             } catch (e) {
-                await msgtodc('novipnoad', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async getVideoPlayUrl(queryParams) {
@@ -2086,7 +2198,7 @@ function nonoClass() {
                 const data = player.body.match(/decodeURIComponent\(escape\(r\)\)\}(.*)\)/)[1].replace(/["\(\)]/g, '')
                 const device = player.body.match(/params\['device'\] = '(\w+)';/)[1]
                 const config = data.split(',')
-                const vkey = JSON.parse(
+                const vkey = $.toObj(
                     this.getVkey(...config)
                         .match(/JSON.stringify\((.*)\)\);/)[1]
                         .replace(/'/g, '"')
@@ -2118,11 +2230,11 @@ function nonoClass() {
                 playUrl = playUrl.quality[playUrl.defaultQuality].url
                 backData.data = playUrl
             } catch (e) {
-                await msgtodc('novipnoad', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         async searchVideo(queryParams) {
@@ -2160,12 +2272,12 @@ function nonoClass() {
 
                 backData = parseVideoList(videos, pg, '1')
             } catch (e) {
-                await msgtodc('novipnoad', e)
+                await this.msgtodc(e)
                 $.logErr(e)
                 backData.error = e.message
             }
 
-            return JSON.stringify(backData)
+            return $.toStr(backData)
         }
 
         getVkey(h, u, n, t, e, r) {
@@ -2271,10 +2383,153 @@ function nonoClass() {
     })()
 }
 
+function zhuiyiClass() {
+    return new (class extends spider {
+        constructor() {
+            super()
+            this.siteName = '追憶'
+            this.url = 'http://app.alovo.cn:1122'
+            this.headers = {
+                'User-Agent': 'Dart/2.14',
+            }
+        }
+
+        async getClassList(page) {
+            let backData = {}
+            try {
+                let categories = [
+                    { type_id: 1, type_name: '電影' },
+                    { type_id: 7, type_name: '電視劇' },
+                    { type_id: 8, type_name: '動漫' },
+                    { type_id: 3, type_name: '綜藝' },
+                    { type_id: 48, type_name: '短劇' },
+                    { type_id: 49, type_name: '直播' },
+                ]
+
+                backData = parseClassList([], categories)
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return $.toStr(backData)
+        }
+
+        async getVideoList(queryParams) {
+            const page = queryParams.pg
+            const type = queryParams.t
+
+            if (type === '') return this.getClassList(page)
+
+            let listUrl = `${this.url}/api.php/app/video?&tid=${type}&pg=${page}&limit=20`
+            let backData = {}
+            try {
+                let pro = await $.http.get({ url: listUrl, headers: this.headers })
+                let proData = pro.body
+
+                let obj = $.toObj(proData)
+                backData = obj
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr('Error fetching list:', e)
+                backData.error = e.message
+            }
+            return $.toStr(backData)
+        }
+
+        async getVideoDetail(queryParams) {
+            let ids = queryParams.ids
+            let backData = {}
+            try {
+                let webUrl = this.url + `/api.php/app/video_detail?&id=${ids}`
+                let pro = await $.http.get({ url: webUrl, headers: this.headers })
+                let proData = pro.body
+
+                let obj = $.toObj(proData)
+                let id = obj.data.vod_id
+                let name = obj.data.vod_name
+                let pic = obj.data.vod_pic
+                let content = obj.data.vod_content
+
+                let from = obj.data.vod_play_from.split('$$$')
+                let playlist = obj.data.vod_url_with_player
+                let newPlaylist = []
+                playlist.forEach((e, i) => {
+                    let ep = e.url.split('#')
+                    let temp = []
+                    let site = e.code
+                    ep.forEach((e, i) => {
+                        let parts = e.split('$')
+                        let name = site + '-' + parts[0].trim()
+                        let url = `https://ykusu.ykusu/zhuiyi/provide/vod?ac=play&url=${encodeURIComponent(parts[1])}&n=.m3u8`
+                        temp.push(name + '$' + url)
+                    })
+
+                    newPlaylist.push(temp.join('#'))
+                })
+                backData = parseVideoDetail(id, name, pic, content, newPlaylist.join('$$$'))
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return $.toStr(backData)
+        }
+
+        async getVideoPlayUrl(queryParams) {
+            let backData = {}
+            let url = decodeURIComponent(queryParams.url)
+            let jx = 'http://115.231.220.36:8801/jx/tvbox/zy2.php?url=' + url
+            try {
+                if (/\.m3u8/.test(url)) {
+                    backData.data = url
+                } else {
+                    let res = await $.http.get({ url: jx, headers: this.headers })
+                    let obj = $.toObj(res.body)
+                    if (obj.code !== 200) {
+                        $.log(obj.msg)
+                        $.msg('XPTV-sources', obj.msg)
+                    } else {
+                        backData.data = obj.url
+                    }
+                }
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+            return $.toStr(backData)
+        }
+
+        async searchVideo(queryParams) {
+            const pg = queryParams.pg
+            const wd = queryParams.wd
+            let backData = {}
+
+            try {
+                let searchUrl = this.url + `/api.php/provide/vod?ac=detail&wd=${wd}&pg=${pg}`
+                let searchRes = await $.http.get({
+                    url: searchUrl,
+                    headers: this.headers,
+                })
+                backData = $.toObj(searchRes.body)
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return $.toStr(backData)
+        }
+    })()
+}
+
 // Utils
 
 /**
- * 返回分類列表
+ * @description 返回分類列表
  * @param {Array} allVideos 首頁內容
  * @param {Array} allClasses 分類內容
  * @returns {Object}
@@ -2292,7 +2547,7 @@ function parseClassList(allVideos, allClasses) {
 }
 
 /**
- * 獲取列表
+ * @description 獲取列表
  * @param {Array} videos
  * @param {*} page 當前頁
  * @param {*} lastPage 最後頁
@@ -2313,7 +2568,7 @@ function parseVideoList(videos, page, lastPage) {
 }
 
 /**
- * 獲取詳情
+ * @description 獲取詳情
  * @param {Number} id
  * @param {String} name
  * @param {String} pic
@@ -2350,52 +2605,12 @@ function parseVideoDetail(id, name, pic, content, playUrl) {
     return backData
 }
 
-function combineUrl(website, url) {
-    if (url === undefined) {
-        return ''
-    }
-    if (url.indexOf(website) !== -1) {
-        return url
-    }
-    if (url.startsWith('/')) {
-        return website + url
-    }
-    return website + '/' + url
-}
-
-function isIgnoreClassName(ignoreClassName, className) {
-    return ignoreClassName.some((element) => className.includes(element))
-}
-
-function removeTrailingSlash(str) {
-    if (str.endsWith('/')) {
-        return str.slice(0, -1)
-    }
-    return str
-}
-
 function base64Encode(text) {
     return $.CryptoJS.enc.Base64.stringify($.CryptoJS.enc.Utf8.parse(text))
 }
 
 function base64Decode(text) {
     return $.CryptoJS.enc.Utf8.stringify($.CryptoJS.enc.Base64.parse(text))
-}
-
-function msgtodc(site, e) {
-    const webhook = 'https://discord.com/api/webhooks/1052995873270923314/-lua5joiYT63DjGn6H-a_X3srT0MrNfPZDJjLtvcsHJ69fU1gVz2O-Ldc5wcwzEr7uoA'
-    const err = {
-        time: $.time('yyyy-MM-dd HH:mm:ss'),
-        env: $.getEnv(),
-        site,
-        error: e.message,
-    }
-    return $.http.post({
-        url: webhook,
-        body: {
-            content: $.toStr(err),
-        },
-    })
 }
 
 // an URI [ parse | stringify ] to JSON / URI Converter based JavaScript
