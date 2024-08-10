@@ -2837,20 +2837,47 @@ function xyClass() {
             super()
             this.siteName = '星芽短劇'
             this.url = 'https://app.whjzjx.cn'
+            // this.headers = {
+            //     'User-Agent': 'okhttp/4.10.0',
+            //     'Accept-Encoding': 'gzip',
+            //     'x-app-id': '7',
+            //     authorization:
+            //         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjMxNzQ2MjgsIlVzZXJJZCI6NTA5MDg3NDEsInJlZ2lzdGVyX3RpbWUiOiIyMDI0LTA3LTA5IDIwOjUwOjIxIiwiaXNfbW9iaWxlX2JpbmQiOmZhbHNlfQ.lS-X8Mck6WCISgbp9wjysfIMAlWgThVmbEM4N54cup8',
+            //     platform: '1',
+            //     manufacturer: 'realme',
+            //     version_name: '3.1.0.1',
+            //     user_agent:
+            //         'Mozilla/5.0 (Linux; Android 9; RMX1931 Build/PQ3A.190605.05081124; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36',
+            //     dev_token:
+            //         'BFdbZBGOEgG7QDt01ldOQNNfhO2F-rv4QcugZoFZm5_3DlPJEo_bSBeJ6dW2X3eKzxxKKWz3xJCM_u5PppGMqRuYPxcsVg9a-jriWiIoPZvHMSLbcbxTFuasqgTivTY3GabW1yP57LQSsJNQfKoX1BKYGHducrhb0bTwvigfn3gE*',
+            //     app_version: '3.1.0.1',
+            //     device_platform: 'android',
+            //     personalized_recommend_status: '1',
+            //     device_type: 'RMX1931',
+            //     device_brand: 'realme',
+            //     os_version: '9',
+            //     channel: 'default',
+            //     raw_channel: 'default',
+            //     oaid: '',
+            //     msa_oaid: '',
+            //     uuid: 'randomUUID_8a0324bf-03c8-4789-8ef8-12d3bcff28f5',
+            //     device_id: '24250683a3bdb3f118dff25ba4b1cba1a',
+            //     ab_id: '',
+            //     support_h265: '1',
+            // }
             this.headers = {
                 'User-Agent': 'okhttp/4.10.0',
-                'Accept-Encoding': 'gzip',
                 'x-app-id': '7',
                 authorization:
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjMxNzQ2MjgsIlVzZXJJZCI6NTA5MDg3NDEsInJlZ2lzdGVyX3RpbWUiOiIyMDI0LTA3LTA5IDIwOjUwOjIxIiwiaXNfbW9iaWxlX2JpbmQiOmZhbHNlfQ.lS-X8Mck6WCISgbp9wjysfIMAlWgThVmbEM4N54cup8',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjQ2MjIyNDIsIlVzZXJJZCI6NTQwMDU5NTMsInJlZ2lzdGVyX3RpbWUiOiIyMDI0LTA4LTExIDA1OjQzOjA0IiwiaXNfbW9iaWxlX2JpbmQiOmZhbHNlfQ.jTlMQyYFpjCJJ0T0hziH9mj2A0uGnZ8lFeWJzjSU8wc',
                 platform: '1',
                 manufacturer: 'realme',
-                version_name: '3.1.0.1',
+                version_name: '3.0.0.1',
                 user_agent:
                     'Mozilla/5.0 (Linux; Android 9; RMX1931 Build/PQ3A.190605.05081124; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36',
                 dev_token:
-                    'BFdbZBGOEgG7QDt01ldOQNNfhO2F-rv4QcugZoFZm5_3DlPJEo_bSBeJ6dW2X3eKzxxKKWz3xJCM_u5PppGMqRuYPxcsVg9a-jriWiIoPZvHMSLbcbxTFuasqgTivTY3GabW1yP57LQSsJNQfKoX1BKYGHducrhb0bTwvigfn3gE*',
-                app_version: '3.1.0.1',
+                    'BqU-Xm_tyKyrlzdfLCIiSZUEPxDbJ5wsZ6ajiltu77EF0SdTdyyXi0oZRHnZEicMFF2SalGVmz1p5kc9YooTR_DkCGIttK_DQjmfvICY2mUqUPzUWn7bQl6AsaQMO57BvemcXtn9BJib1BjZ-1sx9N9k-wtJJX80_A5-PeKO0YyU*',
+                app_version: '3.0.0.1',
                 device_platform: 'android',
                 personalized_recommend_status: '1',
                 device_type: 'RMX1931',
@@ -2860,10 +2887,9 @@ function xyClass() {
                 raw_channel: 'default',
                 oaid: '',
                 msa_oaid: '',
-                uuid: 'randomUUID_8a0324bf-03c8-4789-8ef8-12d3bcff28f5',
+                uuid: 'randomUUID_a8f870fe-d890-4a10-9e85-05d90d41d731',
                 device_id: '24250683a3bdb3f118dff25ba4b1cba1a',
                 ab_id: '',
-                support_h265: '1',
             }
             this.ignoreClassName = []
         }
