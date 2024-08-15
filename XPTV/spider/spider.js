@@ -1310,8 +1310,15 @@ function nkvodClass() {
             const date = new Date()
             const t = '' + date.getFullYear() + (date.getMonth() + 1) + date.getDate()
             const url = this.url + '/static/js/playerconfig.js?t=' + t
-            const js = (await $.http.get({ url: url, headers: this.headers })).body
+
             try {
+                const res = await $.http.get({ url: url, headers: this.headers })
+                let isGuard = await this.checkGuard(url)
+                if (isGuard) {
+                    let cookie = await this.getCookie(url, isGuard['set-cookie'] || isGuard['Set-Cookie'])
+                    $.log('cookie = ' + cookie)
+                }
+                const js = res.body
                 const jsEval = js + '\nMacPlayerConfig'
                 const playerList = eval(jsEval).player_list
                 const players = Object.values(playerList)
@@ -1365,6 +1372,7 @@ function nkvodClass() {
             try {
                 let pro = await $.http.get({ url: listUrl, headers: this.headers })
                 let proData = pro.body
+                // $.msg(proData)
                 backData = $.toObj(proData)
             } catch (e) {
                 await this.msgtodc(e)
@@ -1505,6 +1513,60 @@ function nkvodClass() {
             })
             const decryptedUrl = $.CryptoJS.enc.Utf8.stringify(decrypted)
             return decryptedUrl
+        }
+
+        async checkGuard(url) {
+            let res = await $.http.get({
+                url: url,
+                headers: this.headers,
+            })
+            if (res.body.includes('/_guard/html.js')) return res.headers
+            return false
+        }
+
+        async getCookie(url, cookie) {
+            let guard = this.g(cookie)
+            let ret = this.setRet(guard)
+            let reqCookie = 'guard=' + guard + '; ' + ret
+            let headers = {
+                'user-agent': this.headers['User-Agent'],
+                referer: url,
+                cookie: reqCookie,
+            }
+
+            // 先等5秒再發送請求獲取guardok，否則伺服器端不認得guardret
+            await $.wait(5000)
+
+            let res = await $.http.get({ url: url, headers: headers })
+            let guardok = res.headers['set-cookie'] || res.headers['Set-Cookie']
+            return guardok
+        }
+
+        g(cookie) {
+            var _0x15aae7 = '; ' + cookie,
+                parts = _0x15aae7.split('; ' + 'guard' + '=')
+            if (parts.length == 2) return parts.pop().split(';').shift()
+        }
+
+        setRet(_0x34d4ed) {
+            var _0x3a9f4b = _0x34d4ed.substr(0, 8)
+            var time_num_plain = _0x34d4ed.substr(12)
+            var _0x305bd1 = parseInt(time_num_plain.substr(10))
+            var _0x552e00 = _0x305bd1 * 2 + 17 - 2
+            var encrypted = this.x(_0x552e00.toString(), _0x3a9f4b)
+
+            var guard_encrypted = base64Encode(encrypted)
+            return 'guardret=' + guard_encrypted
+        }
+
+        x(input, _0x3a0115) {
+            let output = ''
+            var _0x3a0115 = _0x3a0115 + 'PTNo2n3Ev5'
+            for (let _0x4a215b = 0; _0x4a215b < input.length; _0x4a215b++) {
+                const charCode = input.charCodeAt(_0x4a215b) ^ _0x3a0115.charCodeAt(_0x4a215b % _0x3a0115.length)
+                output += String.fromCharCode(charCode)
+            }
+            return output
         }
     })()
 }
