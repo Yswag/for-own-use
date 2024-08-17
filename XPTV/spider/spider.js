@@ -1535,6 +1535,7 @@ function nkvodClass() {
             }
 
             // 先等5秒再發送請求獲取guardok，否則伺服器端不認得guardret
+            $.log('wait 5s')
             await $.wait(5000)
 
             let res = await $.http.get({ url: url, headers: headers })
@@ -2903,7 +2904,7 @@ function xyClass() {
                 'User-Agent': 'okhttp/4.10.0',
                 'x-app-id': '7',
                 authorization:
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjQ2MjIyNDIsIlVzZXJJZCI6NTQwMDU5NTMsInJlZ2lzdGVyX3RpbWUiOiIyMDI0LTA4LTExIDA1OjQzOjA0IiwiaXNfbW9iaWxlX2JpbmQiOmZhbHNlfQ.jTlMQyYFpjCJJ0T0hziH9mj2A0uGnZ8lFeWJzjSU8wc',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjUxNzcxMzYsIlVzZXJJZCI6NTQwMDU5NTMsInJlZ2lzdGVyX3RpbWUiOiIyMDI0LTA4LTExIDA1OjQzOjA0IiwiaXNfbW9iaWxlX2JpbmQiOmZhbHNlfQ.QDFAaVWTWVV_B0079ve7_DUsYBXs8NT7WHZBtr-T_FI',
                 platform: '1',
                 manufacturer: 'realme',
                 version_name: '3.0.0.1',
