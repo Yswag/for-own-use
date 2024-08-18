@@ -44,6 +44,8 @@ function createSpiderInstance(url) {
             return sxClass()
         case url.includes('/xy/'):
             return xyClass()
+        case url.includes('/liteapple/'):
+            return liteAppleClass()
         case url.includes('/getJSON/'):
             getJSON()
             return null
@@ -65,6 +67,7 @@ function getJSON() {
             { name: 'NO視頻|偽', type: 1, api: `https://ykusu.ykusu/nono/api.php/provide/vod` },
             { name: 'BILFUN|偽', type: 1, api: `https://ykusu.ykusu/bilfun/api.php/provide/vod` },
             { name: '星芽短劇|偽', type: 1, api: `https://ykusu.ykusu/xy/api.php/provide/vod` },
+            { name: '小蘋果|偽', type: 1, api: `https://ykusu.ykusu/liteapple/api.php/provide/vod` },
             { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.top/api.php/provide/vod/from/mgtv` },
         ],
     }
@@ -3088,6 +3091,229 @@ function xyClass() {
                 })
 
                 backData = parseVideoList(videos, pg, '1')
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return $.toStr(backData)
+        }
+    })()
+}
+
+function liteAppleClass() {
+    return new (class extends spider {
+        constructor() {
+            super()
+            this.siteName = '小蘋果'
+            this.url = 'http://tipu.xjqxz.top'
+            this.headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+                Referer: 'http://tipu.xjqxz.top/',
+            }
+        }
+
+        async getClassList(page) {
+            let pg = page ? page : 1
+            let webUrl = this.url + '/api.php/v2.main/androidhome'
+            let backData = {}
+            try {
+                const pro = await $.http.get({ url: webUrl, headers: this.headers })
+
+                let proData = pro.body
+                let obj = $.toObj(proData)
+                let allVideo = []
+                let type = obj.data.list
+                type.forEach((e) => {
+                    let videos = e.list
+                    videos.forEach((element) => {
+                        let id = element.id
+                        let name = element.name
+                        let pic = element.pic
+                        let remarks = element.state
+                        allVideo.push({
+                            vod_id: id,
+                            vod_name: name,
+                            vod_pic: pic,
+                            vod_remarks: remarks,
+                        })
+                    })
+                })
+                let categories = [
+                    {
+                        type_id: 1,
+                        type_name: '电影',
+                    },
+                    {
+                        type_id: 2,
+                        type_name: '电视',
+                    },
+                    {
+                        type_id: 3,
+                        type_name: '综艺',
+                    },
+                    {
+                        type_id: 4,
+                        type_name: '动漫',
+                    },
+                    // {
+                    //     type_id: 35,
+                    //     type_name: '直播',
+                    // },
+                ]
+                backData = parseClassList(allVideo, categories)
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return $.toStr(backData)
+        }
+
+        async getVideoList(queryParams) {
+            const page = queryParams.pg
+            const type = queryParams.t
+
+            if (type === '') return this.getClassList(page)
+
+            let listUrl = `${this.url}/api.php/v2.vod/androidfilter10086?page=${page}&type=${type}`
+            let backData = {}
+            try {
+                let pro = await $.http.get({ url: listUrl, headers: this.headers })
+                let proData = pro.body
+
+                let obj = $.toObj(proData)
+                let videolist = obj.data
+                let videos = []
+                videolist.forEach((e) => {
+                    let id = e.id
+                    let name = e.name
+                    let pic = e.pic
+                    let remarks = e.state
+                    videos.push({
+                        vod_id: id,
+                        vod_name: name,
+                        vod_pic: pic,
+                        vod_remarks: remarks,
+                    })
+                })
+                const hasMore = videos.length > 0
+                const pgCount = hasMore ? parseInt(page) + 1 : parseInt(page)
+                backData = parseVideoList(videos, page, pgCount)
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr('Error fetching list:', e)
+                backData.error = e.message
+            }
+            return $.toStr(backData)
+        }
+
+        async getVideoDetail(queryParams) {
+            let ids = queryParams.ids
+            let backData = {}
+            try {
+                let webUrl = this.url + `/api.php/v3.vod/androiddetail2?vod_id=${ids}`
+                let pro = await $.http.get({ url: webUrl, headers: this.headers })
+                let proData = pro.body
+
+                let obj = $.toObj(proData)
+                let vod_name = obj.data.name
+                let vod_content = obj.data.content
+                let vod_pic = obj.data.pic
+
+                let vod_play_url = []
+                let playlist = obj.data.urls
+                playlist.forEach((element) => {
+                    let name = element.key
+                    let url = element.url
+                    url = 'https://ykusu.ykusu/liteapple/api.php/provide/vod?ac=play&url=' + encodeURIComponent(url) + '&n=.m3u8'
+
+                    vod_play_url.push(`${name}$${url}`)
+                })
+
+                backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content, vod_play_url.join('#'))
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return $.toStr(backData)
+        }
+
+        async getVideoPlayUrl(queryParams) {
+            let backData = {}
+            let key = decodeURIComponent(queryParams.url)
+            try {
+                // m3u8 link requires encrypted headers, but .ts links don't, so return fake response here is easier than return 302 since you can't modify request headers in XPTV.
+                let url = 'http://c.xpgtv.net/m3u8/' + key + '.m3u8'
+                let headers = {
+                    token2: 'enxerhSl0jk2TGhbZCygMdwoKqOmyxsk/Kw8tVy4dsRBE1o1xBhWhoFbh98=',
+                    token: 'RXQbgQKl3QkFZkIPGwGvH5kofvCokkkn/a893wC2IId7HQFmy0Eh24osz555X12xGVFxQLTaGuBqU/Y7KU4lStp4UjR7giPxdwoTOsU6R3oc4yZZTQc/yTKh1mH3ckZhx6VsQCEoFf6q',
+                    version: 'XPGBOX com.phoenix.tv1.3.3',
+                    user_id: 'XPGBOX',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+                    screenx: '1280',
+                    screeny: '720',
+                }
+                headers['timestamp'] = Math.floor(Date.now() / 1e3)
+                headers['hash'] = $.CryptoJS.MD5(
+                    '||||DC6FFCB55FA||861824127032820||12702720||Asus/Asus/ASUS_I003DD:7.1.2/20171130.376229:user/release-keysXPGBOX com.phoenix.tv1.3.3' +
+                        headers['timestamp']
+                )
+                    .toString()
+                    .toLowerCase()
+                    .substring(8, 12)
+                let res = await $.http.get({ url, headers })
+                let body = res.body
+                $.isQuanX()
+                    ? $.done({ status: 'HTTP/1.1 200', body: body.replace('/m3u8key/', 'http://c.xpgtv.net/m3u8key/') })
+                    : $.done({
+                          response: {
+                              status: 200,
+                              body: body.replace('/m3u8key/', 'http://c.xpgtv.net/m3u8key/'),
+                          },
+                      })
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+            return $.toStr(backData)
+        }
+
+        async searchVideo(queryParams) {
+            const pg = queryParams.pg
+            const wd = queryParams.wd
+            let backData = {}
+
+            try {
+                let searchUrl = this.url + `/api.php/v2.vod/androidsearch10086?page=${pg}&wd=${wd}`
+                let searchRes = await $.http.get({
+                    url: searchUrl,
+                    headers: this.headers,
+                })
+                let proData = $.toObj(searchRes.body)
+
+                let videolist = proData.data
+                let videos = []
+                videolist.forEach((e) => {
+                    let id = e.id
+                    let name = e.name
+                    let pic = e.pic
+                    let remarks = e.state
+                    videos.push({
+                        vod_id: id,
+                        vod_name: name,
+                        vod_pic: pic,
+                        vod_remarks: remarks,
+                    })
+                })
+                const hasMore = videos.length > 0
+                const pgCount = hasMore ? parseInt(pg) + 1 : parseInt(pg)
+                backData = parseVideoList(videos, pg, pgCount)
             } catch (e) {
                 await this.msgtodc(e)
                 $.logErr(e)
