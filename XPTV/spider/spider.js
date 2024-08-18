@@ -1050,7 +1050,7 @@ function sbbClass() {
             let backData = {}
 
             try {
-                let searchUrl = this.url + '/search?q=' + wd
+                let searchUrl = this.url + `/page/${pg}?s=${wd}`
                 let searchRes = await $.http.get({
                     url: searchUrl,
                     headers: this.headers,
