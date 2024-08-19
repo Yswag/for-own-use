@@ -46,6 +46,8 @@ function createSpiderInstance(url) {
             return xyClass()
         case url.includes('/liteapple/'):
             return liteAppleClass()
+        case url.includes('/gzys/'):
+            return gzysClass()
         case url.includes('/getJSON/'):
             getJSON()
             return null
@@ -68,6 +70,7 @@ function getJSON() {
             { name: 'BILFUN|偽', type: 1, api: `https://ykusu.ykusu/bilfun/api.php/provide/vod` },
             { name: '星芽短劇|偽', type: 1, api: `https://ykusu.ykusu/xy/api.php/provide/vod` },
             { name: '小蘋果|偽', type: 1, api: `https://ykusu.ykusu/liteapple/api.php/provide/vod` },
+            { name: '瓜子影視|偽', type: 1, api: `https://ykusu.ykusu/gzys/api.php/provide/vod` },
             { name: 'timimg|偽', type: 1, api: `https://vipcj.timizy.top/api.php/provide/vod/from/mgtv` },
         ],
     }
@@ -3321,6 +3324,208 @@ function liteAppleClass() {
             }
 
             return $.toStr(backData)
+        }
+    })()
+}
+
+function gzysClass() {
+    return new (class extends spider {
+        constructor() {
+            super()
+            this.siteName = '瓜子影視'
+            this.url = 'https://api.zaqohu.com'
+            this.headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+            }
+            this.ignoreClassName = []
+        }
+
+        async getClassList() {
+            let backData = {}
+            try {
+                let classes = [
+                    {
+                        type_id: 3,
+                        type_name: '电影',
+                    },
+                    {
+                        type_id: 4,
+                        type_name: '电视剧',
+                    },
+                    {
+                        type_id: 5,
+                        type_name: '动漫',
+                    },
+                    {
+                        type_id: 6,
+                        type_name: '综艺',
+                    },
+                ]
+                let videos = [
+                    {
+                        vod_id: 1,
+                        vod_name: '右上角選分類',
+                    },
+                ]
+
+                backData = parseClassList(videos, classes)
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return $.toStr(backData)
+        }
+
+        async getVideoList(queryParams) {
+            const page = queryParams.pg
+            const type = queryParams.t
+            if (type === '') return this.getClassList()
+
+            let listUrl = `${this.url}/H5/Category/GetChoiceList`
+            let params = {
+                pid: type,
+                pageSize: 24,
+                page: page,
+            }
+            let enbody = this.aesEncode($.toStr(params), '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
+            let backData = {}
+            try {
+                let pro = await $.http.post({
+                    url: listUrl,
+                    headers: this.headers,
+                    body: { params: enbody },
+                })
+                let proData = pro.body
+
+                let data = this.aesDecode($.toObj(proData).data, '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
+                let obj = $.toObj(data)
+                let allVideo = obj.list
+                let videos = []
+                allVideo.forEach((e) => {
+                    let vodUrl = e.vod_id || ''
+                    let vodPic = e.c_pic || ''
+                    let vodName = e.c_name || ''
+                    let vodDiJiJi = e.vod_continu || ''
+
+                    let videoDet = {}
+                    videoDet.vod_id = +vodUrl
+                    videoDet.vod_pic = vodPic
+                    videoDet.vod_name = vodName.trim()
+                    videoDet.vod_remarks = vodDiJiJi.trim()
+                    videos.push(videoDet)
+                })
+                const hasMore = videos.length > 0
+                const pgCount = hasMore ? parseInt(page) + 1 : parseInt(page)
+
+                backData = parseVideoList(videos, page, pgCount)
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr('Error fetching list:', e)
+                backData.error = e.message
+            }
+            return $.toStr(backData)
+        }
+
+        async getVideoDetail(queryParams) {
+            let ids = queryParams.ids
+            let backData = {}
+            try {
+                let webUrl = `${this.url}/H5/Resource/GetVodInfo`
+                let params = { vod_id: ids }
+                let enbody = this.aesEncode($.toStr(params), '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
+                let pro = await $.http.post({ url: webUrl, headers: this.headers, body: { params: enbody } })
+                let proData = pro.body
+
+                let data = this.aesDecode($.toObj(proData).data, '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
+                let obj = $.toObj(data).vodInfo
+                let vod_name = obj.vod_name || ''
+                let vod_content = obj.vod_use_content || ''
+                let vod_pic = obj.pic || ''
+
+                // get playlist
+                let playlistUrl = `${this.url}/H5/Resource/GetOnePlayList`
+                let params2 = { vod_id: ids, pageSize: 10000, page: 1 }
+                let enbody2 = this.aesEncode($.toStr(params2), '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
+                let playres = await $.http.post({ url: playlistUrl, headers: this.headers, body: { params: enbody2 } })
+                let body = playres.body
+                let data2 = this.aesDecode($.toObj(body).data, '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
+                let json = $.toObj(data2)
+                let vod_play_url = json.urls.map((item) => item.name + '$' + item.url).join('#')
+
+                backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content, vod_play_url)
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return $.toStr(backData)
+        }
+
+        // async getVideoPlayUrl(queryParams) {
+        //     let backData = {}
+        //     let url = decodeURIComponent(queryParams.url)
+        //     try {
+        //         backData.data = url
+        //     } catch (e) {
+        //         await this.msgtodc(e)
+        //         $.logErr(e)
+        //         backData.error = e.message
+        //     }
+        //     return $.toStr(backData)
+        // }
+
+        async searchVideo(queryParams) {
+            const pg = queryParams.pg
+            const wd = queryParams.wd
+            let backData = {}
+
+            try {
+                // h5版不能搜尋
+            } catch (e) {
+                await this.msgtodc(e)
+                $.logErr(e)
+                backData.error = e.message
+            }
+
+            return $.toStr(backData)
+        }
+
+        aesEncode(str, keyStr, ivStr, type) {
+            const key = $.CryptoJS.enc.Utf8.parse(keyStr)
+            let encData = $.CryptoJS.AES.encrypt(str, key, {
+                iv: $.CryptoJS.enc.Utf8.parse(ivStr),
+                mode: $.CryptoJS.mode.CBC,
+                padding: $.CryptoJS.pad.Pkcs7,
+            })
+            if (type === 'hex') return encData.ciphertext.toString($.CryptoJS.enc.Hex)
+            return encData.toString($.CryptoJS.enc.Utf8)
+        }
+
+        aesDecode(str, keyStr, ivStr, type) {
+            const key = $.CryptoJS.enc.Utf8.parse(keyStr)
+            if (type === 'hex') {
+                str = $.CryptoJS.enc.Hex.parse(str)
+                return $.CryptoJS.AES.decrypt(
+                    {
+                        ciphertext: str,
+                    },
+                    key,
+                    {
+                        iv: $.CryptoJS.enc.Utf8.parse(ivStr),
+                        mode: $.CryptoJS.mode.CBC,
+                        padding: $.CryptoJS.pad.Pkcs7,
+                    }
+                ).toString($.CryptoJS.enc.Utf8)
+            } else {
+                return $.CryptoJS.AES.decrypt(str, key, {
+                    iv: $.CryptoJS.enc.Utf8.parse(ivStr),
+                    mode: $.CryptoJS.mode.CBC,
+                    padding: $.CryptoJS.pad.Pkcs7,
+                }).toString($.CryptoJS.enc.Utf8)
+            }
         }
     })()
 }
