@@ -3464,8 +3464,11 @@ function gzysClass() {
             try {
                 let pro = await $.http.post({
                     url: listUrl,
-                    headers: this.headers,
-                    body: { params: enbody },
+                    headers: {
+                        'User-Agent': this.headers['User-Agent'],
+                        'Content-Type': 'application/json',
+                    },
+                    body: $.toStr({ params: enbody }),
                 })
 
                 let data = this.aesDecode($.toObj(pro.body).data, '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
@@ -3504,7 +3507,14 @@ function gzysClass() {
                 let webUrl = `${this.url}/H5/Resource/GetVodInfo`
                 let params = { vod_id: ids }
                 let enbody = this.aesEncode($.toStr(params), '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
-                let pro = await $.http.post({ url: webUrl, headers: this.headers, body: { params: enbody } })
+                let pro = await $.http.post({
+                    url: webUrl,
+                    headers: {
+                        'User-Agent': this.headers['User-Agent'],
+                        'Content-Type': 'application/json',
+                    },
+                    body: $.toStr({ params: enbody }),
+                })
                 let proData = pro.body
 
                 let data = this.aesDecode($.toObj(proData).data, '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
@@ -3517,7 +3527,14 @@ function gzysClass() {
                 let playlistUrl = `${this.url}/H5/Resource/GetOnePlayList`
                 let params2 = { vod_id: ids, pageSize: 10000, page: 1 }
                 let enbody2 = this.aesEncode($.toStr(params2), '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
-                let playres = await $.http.post({ url: playlistUrl, headers: this.headers, body: { params: enbody2 } })
+                let playres = await $.http.post({
+                    url: playlistUrl,
+                    headers: {
+                        'User-Agent': this.headers['User-Agent'],
+                        'Content-Type': 'application/json',
+                    },
+                    body: $.toStr({ params: enbody2 }),
+                })
                 let body = playres.body
                 let data2 = this.aesDecode($.toObj(body).data, '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
                 let json = $.toObj(data2)
