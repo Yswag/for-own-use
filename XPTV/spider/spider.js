@@ -1825,6 +1825,7 @@ function anfunsClass() {
 }
 
 function zeqahtClass() {
+    // cnnyy.com
     return new (class extends spider {
         constructor() {
             super()
@@ -3346,20 +3347,74 @@ function gzysClass() {
                 let classes = [
                     {
                         type_id: 3,
-                        type_name: '电影',
+                        type_name: '热播电影',
                     },
+                    { type_name: 'TC搶先看', type_id: 19260 },
+                    { type_name: '院線大片', type_id: 15649 },
+                    { type_name: '網路新片速遞', type_id: 12814 },
+                    { type_name: 'Netflix最新', type_id: 15510 },
+                    { type_name: '動作片', type_id: 9153 },
+                    { type_name: '\u60AC\u7591\u72AF\u7F6A\u7247', type_id: 12558 },
+                    { type_name: '\u559C\u5267\u7247', type_id: 14 },
+                    { type_name: '\u60CA\u609A\u6050\u6016\u7247', type_id: 15511 },
+                    { type_name: '\u79D1\u5E7B\u9B54\u5E7B\u7247', type_id: 11517 },
+                    { type_name: '\u60C5\u611F\u5267\u60C5\u7247', type_id: 466 },
+                    { type_name: '\u6218\u4E89\u7247', type_id: 18046 },
+                    { type_name: '\u8C46\u74E3\u7535\u5F71TOP250', type_id: 17613 },
+                    { type_name: '\u6296\u97F3\u201C\u6BD2\u820C\u7535\u5F71\u201D\u89E3\u8BF4\u539F\u7247', type_id: 16215 },
+                    { type_name: '\u5165\u56F4\u5965\u65AF\u5361\u7684LGBT\u7535\u5F71\u7ECF\u5178', type_id: 17054 },
+                    { type_name: '\u51B7\u95E8\u60AC\u7591\u4F73\u7247Top20', type_id: 8 },
+                    { type_name: '\u5386\u5C4A\u91D1\u9A6C\u5956\u6700\u4F73\u5F71\u7247', type_id: 16308 },
+                    { type_name: '\u5386\u5C4A\u91D1\u50CF\u5956\u6700\u4F73\u5F71\u7247', type_id: 16506 },
+                    { type_name: '\u5386\u5C4A\u5965\u65AF\u5361\u6700\u4F73\u5F71\u7247', type_id: 16560 },
                     {
                         type_id: 4,
-                        type_name: '电视剧',
+                        type_name: '热播电视剧',
                     },
+                    { type_name: '\u7231\u4F18\u817E\u8292\u6700\u65B0', type_id: 16768 },
+                    { type_name: 'Netflix', type_id: 16540 },
+                    { type_name: '\u6700\u65B0\u65E5\u97E9\u5267', type_id: 16692 },
+                    { type_name: '\u6E2F\u5267TVB', type_id: 17473 },
+                    { type_name: '\u6700\u65B0\u7F8E\u5267', type_id: 16941 },
+                    { type_name: '\u6700\u65B0\u6CF0\u5267', type_id: 18598 },
+                    { type_name: '\u9AD8\u5206\u60AC\u7591\u72AF\u7F6A\u5267', type_id: 6611 },
+                    { type_name: '\u9AD8\u5206\u7ECF\u5178\u5927\u9646\u5267', type_id: 15386 },
+                    { type_name: '\u8FD1\u5E74\u6765\u9AD8\u5206\u53F0\u5267', type_id: 17084 },
+                    { type_name: '\u300A9\u53F7\u79D8\u4E8B\u300B\u7CFB\u5217', type_id: 18319 },
+                    { type_name: 'Netflix\u83B7\u5956\u5F71\u7247', type_id: 18371 },
                     {
                         type_id: 5,
-                        type_name: '动漫',
+                        type_name: '热播动漫',
                     },
+                    { type_name: '\u4ECA\u65E5\u4E0A\u65B0', type_id: 6175 },
+                    { type_name: '\u756A\u5267\u65B0\u70ED\u63A8\u8350', type_id: 10679 },
+                    { type_name: '\u56FD\u4EA7\u52A8\u6F2B', type_id: 127 },
+                    { type_name: '\u65E5\u672C\u52A8\u6F2B', type_id: 446 },
+                    { type_name: '\u6B27\u7F8E\u52A8\u6F2B', type_id: 128 },
+                    { type_name: '\u52A8\u6F2B\u7535\u5F71', type_id: 14182 },
+                    { type_name: '\u5165\u7AD9\u5FC5\u8FFD\u2726\u7D2F\u8BA12\u4EBF\u8FFD\u756A', type_id: 10772 },
+                    { type_name: '\u70ED\u8840\u756A\u5267\u699C', type_id: 8101 },
+                    { type_name: '\u5947\u5E7B\u756A\u5267\u699C', type_id: 12655 },
+                    { type_name: '\u300A\u6076\u641E\u4E4B\u5BB6\u300B\u7CFB\u5217', type_id: 20215 },
+                    { type_name: '\u7403\u7C7B\u8FD0\u52A8\u7CFB\u5217', type_id: 9282 },
+                    { type_name: '\u706B\u5F71\u5FCD\u8005\u5267\u573A\u7248\u7CFB\u5217', type_id: 13300 },
+                    { type_name: '\u300A\u95F4\u8C0D\u4E9A\u5951\u300B\u7CFB\u5217', type_id: 129 },
+                    { type_name: '\u70ED\u8840\u673A\u6218\u7CFB\u5217', type_id: 6163 },
                     {
                         type_id: 6,
-                        type_name: '综艺',
+                        type_name: '热播综艺',
                     },
+                    { type_name: '\u8FD1\u671F\u70ED\u95E8\u7EFC\u827A', type_id: 6663 },
+                    { type_name: 'NetFlix\u6700\u65B0\u7EFC\u827A', type_id: 14244 },
+                    { type_name: '\u65E5\u97E9\u6700\u65B0\u7EFC\u827A', type_id: 7017 },
+                    { type_name: '\u604B\u7231\u751C\u7EFC', type_id: 8249 },
+                    { type_name: '\u63A8\u7406\u903B\u8F91\u6574\u86CA', type_id: 8063 },
+                    { type_name: '\u751F\u6D3B\u804C\u573A', type_id: 8321 },
+                    { type_name: '\u7206\u7B11\u8BED\u8A00\u7EFC\u827A', type_id: 10119 },
+                    { type_name: '\u660E\u661F\u5927\u96C6\u5408', type_id: 6757 },
+                    { type_name: '\u97F3\u4E50\u6709\u563B\u54C8', type_id: 156 },
+                    { type_name: '\u5706\u684C\u6D3E', type_id: 158 },
+                    { type_name: '\u536B\u89C6\u70ED\u64AD\u7EFC\u827A', type_id: 9384 },
                 ]
                 let videos = [
                     {
@@ -3384,10 +3439,25 @@ function gzysClass() {
             if (type === '') return this.getClassList()
 
             let listUrl = `${this.url}/H5/Category/GetChoiceList`
-            let params = {
-                pid: type,
-                pageSize: 24,
-                page: page,
+            let params = { pid: type, pageSize: 24, page: page }
+            if (type > 6) {
+                function findKeyByValue(input) {
+                    let obj = {
+                        3: [19260, 15649, 12814, 15510, 9153, 12558, 14, 15511, 11517, 466, 18046, 17613, 16215, 17054, 8, 16308, 16506, 16560],
+                        4: [16768, 16540, 16692, 17473, 16941, 18598, 6611, 15386, 17084, 18319, 18371],
+                        5: [6175, 10679, 127, 446, 128, 14182, 10772, 8101, 12655, 20215, 9282, 13300, 129, 6163],
+                        6: [6663, 14244, 7017, 8249, 8063, 8321, 10119, 6757, 156, 158, 9384],
+                    }
+                    for (const key in obj) {
+                        if (obj[key].includes(input)) {
+                            return parseInt(key)
+                        }
+                    }
+                    return null
+                }
+                let pid = findKeyByValue(+type)
+                listUrl = `${this.url}/H5/Category/GetModuleList`
+                params = { show_id: type, show_pid: pid, pageSize: 24, page: page }
             }
             let enbody = this.aesEncode($.toStr(params), '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
             let backData = {}
@@ -3397,16 +3467,15 @@ function gzysClass() {
                     headers: this.headers,
                     body: { params: enbody },
                 })
-                let proData = pro.body
 
-                let data = this.aesDecode($.toObj(proData).data, '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
+                let data = this.aesDecode($.toObj(pro.body).data, '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
                 let obj = $.toObj(data)
                 let allVideo = obj.list
                 let videos = []
                 allVideo.forEach((e) => {
                     let vodUrl = e.vod_id || ''
-                    let vodPic = e.c_pic || ''
-                    let vodName = e.c_name || ''
+                    let vodPic = e.c_pic || e.vod_pic
+                    let vodName = e.c_name || e.vod_name
                     let vodDiJiJi = e.vod_continu || ''
 
                     let videoDet = {}
