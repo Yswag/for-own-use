@@ -2910,8 +2910,6 @@ function xyClass() {
             this.headers = {
                 'User-Agent': 'okhttp/4.10.0',
                 'x-app-id': '7',
-                authorization:
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjUxNzcxMzYsIlVzZXJJZCI6NTQwMDU5NTMsInJlZ2lzdGVyX3RpbWUiOiIyMDI0LTA4LTExIDA1OjQzOjA0IiwiaXNfbW9iaWxlX2JpbmQiOmZhbHNlfQ.QDFAaVWTWVV_B0079ve7_DUsYBXs8NT7WHZBtr-T_FI',
                 platform: '1',
                 manufacturer: 'realme',
                 version_name: '3.0.0.1',
@@ -2985,7 +2983,7 @@ function xyClass() {
             let listUrl = `${this.url}/cloud/v2/theater/home_page?theater_class_id=${type}&type=1&class2_ids=0&page_num=${page}&page_size=24`
             let backData = {}
             try {
-                let pro = await $.http.get({ url: listUrl, headers: this.headers })
+                let pro = await $.http.get({ url: listUrl, headers: await this.getHeader() })
                 let proData = pro.body
 
                 let obj = $.toObj(proData)
@@ -3022,7 +3020,7 @@ function xyClass() {
             let backData = {}
             try {
                 let webUrl = `${this.url}/v2/theater_parent/detail?theater_parent_id=${ids}`
-                let pro = await $.http.get({ url: webUrl, headers: this.headers })
+                let pro = await $.http.get({ url: webUrl, headers: await this.getHeader() })
                 let proData = pro.body
 
                 let obj = $.toObj(proData)
@@ -3072,7 +3070,7 @@ function xyClass() {
                 let searchUrl = this.url + '/v3/search'
                 let searchRes = await $.http.post({
                     url: searchUrl,
-                    headers: this.headers,
+                    headers: await this.getHeader(),
                     body: {
                         text: wd,
                     },
@@ -3102,6 +3100,69 @@ function xyClass() {
             }
 
             return $.toStr(backData)
+        }
+
+        async getHeader() {
+            let header = this.headers
+            let jwt = $.getval('xptv-xingya-jwt')
+            if (!jwt) {
+                jwt = await this.getJWT()
+                $.setval(jwt, 'xptv-xingya-jwt')
+            }
+            let currentTime = Math.floor(Date.now() / 1000)
+            let exp = this.decodeJWT(jwt).payload.exp
+
+            if (currentTime > exp) {
+                // token expired
+                jwt = await this.getJWT()
+                $.setval(jwt, 'xptv-xingya-jwt')
+            }
+            header['authorization'] = jwt
+            return header
+        }
+
+        async getJWT() {
+            const login = `${this.url}/v1/account/login`
+            let headers = this.headers
+            headers['Content-Type'] = 'application/json'
+            const body = { device: headers.uuid }
+
+            const res = await $.http.post({
+                url: login,
+                headers: headers,
+                body: body,
+            })
+            const jwt = $.toObj(res.body).data.token
+            return jwt
+        }
+
+        decodeJWT(token) {
+            function base64UrlDecode(str) {
+                // Replace URL-safe characters with Base64 characters
+                let base64 = str.replace(/-/g, '+').replace(/_/g, '/')
+                // Add padding if necessary
+                while (base64.length % 4) {
+                    base64 += '='
+                }
+                // Decode Base64 string
+                return base64Decode(base64)
+            }
+
+            // Split JWT into parts
+            const parts = token.split('.')
+            if (parts.length !== 3) {
+                throw new Error('Invalid JWT token')
+            }
+
+            // Decode header and payload
+            const header = JSON.parse(base64UrlDecode(parts[0]))
+            const payload = JSON.parse(base64UrlDecode(parts[1]))
+
+            return {
+                header: header,
+                payload: payload,
+                signature: parts[2],
+            }
         }
     })()
 }
