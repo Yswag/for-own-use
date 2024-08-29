@@ -2931,7 +2931,6 @@ function xyClass() {
                 device_id: '24250683a3bdb3f118dff25ba4b1cba1a',
                 ab_id: '',
             }
-            this.ignoreClassName = []
         }
 
         async getClassList() {
@@ -3172,10 +3171,10 @@ function liteAppleClass() {
         constructor() {
             super()
             this.siteName = '小蘋果'
-            this.url = 'http://tipu.xjqxz.top'
+            this.url = 'http://item.xpgtv.xyz'
             this.headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
-                Referer: 'http://tipu.xjqxz.top/',
+                'User-Agent': 'okhttp/3.12.11',
+                Referer: 'http://item.xpgtv.xyz/',
             }
         }
 
