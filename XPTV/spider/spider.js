@@ -2614,7 +2614,7 @@ function bilfunClass() {
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
             }
-            this.ignoreClassName = ['首页', '预告片', '追剧周表', '今日更新', '热搜榜', '主题切换', '收藏页']
+            this.ignoreClassName = ['首页', '预告片', '追剧周表', '今日更新', '热搜榜', '主题切换', '收藏页', 'APP', '地址']
         }
 
         async getClassList() {
