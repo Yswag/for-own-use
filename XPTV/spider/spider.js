@@ -2748,10 +2748,40 @@ function bilfunClass() {
                         url = 'https://ykusu.ykusu/bilfun/api.php/provide/vod?ac=play&url=' + encodeURIComponent(url)
                         temp.push(`${line}-${name}$${url}&n=.m3u8`)
                     })
+
                     vod_play_url.push(temp.join('#'))
                 })
+                // 重新排序
+                let lz = []
+                let ff = []
+                let nby = []
+                let backup = []
+                let sxcz = []
+                let xundm = []
+                let btjson = []
+                let others = []
+                vod_play_url.forEach((e) => {
+                    if (e.includes('量子')) {
+                        lz.push(e)
+                    } else if (e.includes('非凡')) {
+                        ff.push(e)
+                    } else if (e.includes('NBY')) {
+                        nby.push(e)
+                    } else if (e.includes('SXCZ')) {
+                        sxcz.push(e)
+                    } else if (e.includes('讯动漫')) {
+                        xundm.push(e)
+                    } else if (e.includes('备用')) {
+                        backup.push(e)
+                    } else if (e.includes('BTJSON')) {
+                        btjson.push(e)
+                    } else {
+                        others.push(e)
+                    }
+                })
+                let newArr = sxcz.concat(xundm, nby, btjson, others, lz, ff, backup)
 
-                backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content, vod_play_url.join('$$$'))
+                backData = parseVideoDetail(+ids, vod_name, vod_pic, vod_content, newArr.join('$$$'))
             } catch (e) {
                 await this.msgtodc(e)
                 $.logErr(e)
