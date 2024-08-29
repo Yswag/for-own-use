@@ -2939,27 +2939,29 @@ function xyClass() {
             this.url = 'https://app.whjzjx.cn'
             this.headers = {
                 'User-Agent': 'okhttp/4.10.0',
+                'Accept-Encoding': 'gzip',
                 'x-app-id': '7',
                 platform: '1',
-                manufacturer: 'realme',
-                version_name: '3.0.0.1',
+                manufacturer: 'asus',
+                version_name: '3.3.1',
                 user_agent:
-                    'Mozilla/5.0 (Linux; Android 9; RMX1931 Build/PQ3A.190605.05081124; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36',
+                    'Mozilla/5.0 (Linux; Android 14; Zenfone 5Z Build/AP2A.240705.005; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/125.0.6422.165 Mobile Safari/537.36',
                 dev_token:
-                    'BqU-Xm_tyKyrlzdfLCIiSZUEPxDbJ5wsZ6ajiltu77EF0SdTdyyXi0oZRHnZEicMFF2SalGVmz1p5kc9YooTR_DkCGIttK_DQjmfvICY2mUqUPzUWn7bQl6AsaQMO57BvemcXtn9BJib1BjZ-1sx9N9k-wtJJX80_A5-PeKO0YyU*',
-                app_version: '3.0.0.1',
+                    'Bsg4gWzOoQc9UEvsnDHZWNlpphiWxQ9MIDNUZIqU6k_irRIWCyYEABtuSI5OBkJ9gDNLzcr1wBQSku05JgYmeQN-lmGn94m-On-JSrqecxcFQdU8VkskVkugV4qUF_mW1sHjcYWeXbfdHM5b2VytKSUCRzlJ-Ix4QuRrll15Rmxo*',
+                app_version: '3.3.1',
                 device_platform: 'android',
                 personalized_recommend_status: '1',
-                device_type: 'RMX1931',
-                device_brand: 'realme',
-                os_version: '9',
+                device_type: 'Zenfone+5Z',
+                device_brand: 'asus',
+                os_version: '14',
                 channel: 'default',
                 raw_channel: 'default',
                 oaid: '',
                 msa_oaid: '',
-                uuid: 'randomUUID_a8f870fe-d890-4a10-9e85-05d90d41d731',
-                device_id: '24250683a3bdb3f118dff25ba4b1cba1a',
+                uuid: 'randomUUID_9e91d3ce-8658-4d6e-9d1b-6f351611163d',
+                device_id: '2885ce2d34c9634b287ab022f2f3a6cfb',
                 ab_id: '',
+                support_h265: '1',
             }
         }
 
@@ -3009,7 +3011,8 @@ function xyClass() {
             let type = queryParams.t
             type === '' ? (type = '1') : type
 
-            let listUrl = `${this.url}/cloud/v2/theater/home_page?theater_class_id=${type}&type=1&class2_ids=0&page_num=${page}&page_size=24`
+            let listUrl = `${this.url}/cloud/v2/theater/home_page?theater_class_id=${type}&type=1&page_num=${page}&page_size=24`
+            if (type === '1') listUrl = listUrl.replace('&page_num=', '&class2_ids=0&page_num=')
             let backData = {}
             try {
                 let pro = await $.http.get({ url: listUrl, headers: await this.getHeader() })
@@ -3151,10 +3154,10 @@ function xyClass() {
         }
 
         async getJWT() {
-            const login = `${this.url}/v1/account/login`
+            const login = `https://u.shytkjgs.com/user/v1/account/login`
             let headers = this.headers
-            headers['Content-Type'] = 'application/json'
-            const body = { device: headers.uuid }
+            headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            const body = `device=${headers.device_id}`
 
             const res = await $.http.post({
                 url: login,
