@@ -3509,12 +3509,36 @@ function gzysClass() {
                     { type_name: '\u5706\u684C\u6D3E', type_id: 158 },
                     { type_name: '\u536B\u89C6\u70ED\u64AD\u7EFC\u827A', type_id: 9384 },
                 ]
-                let videos = [
-                    {
-                        vod_id: 1,
-                        vod_name: '右上角選分類',
+                // let videos = [
+                //     {
+                //         vod_id: 1,
+                //         vod_name: '右上角選分類',
+                //     },
+                // ]
+                let videos = []
+                let url = `${this.url}/H5/Index/CategoryList`
+                let body = { params: '576c9247bb660b67b10050ff8e67f7e2' }
+                let res = await $.http.post({
+                    url: url,
+                    body: $.toStr(body),
+                    headers: {
+                        'User-Agent': this.headers['User-Agent'],
+                        'Content-Type': 'application/json',
                     },
-                ]
+                })
+                let resBody = this.aesDecode($.toObj(res.body).data, '181cc88340ae5b2b', '4423d1e2773476ce', 'hex')
+                let list = $.toObj(resBody).list
+                list.forEach((e) => {
+                    let vods = e.list
+                    vods.forEach((i) => {
+                        videos.push({
+                            vod_id: +i.vod_id,
+                            vod_name: i.vod_name || i.c_name,
+                            vod_pic: i.vod_pic || i.c_pic,
+                            vod_remarks: i.vod_continu || '',
+                        })
+                    })
+                })
 
                 backData = parseClassList(videos, classes)
             } catch (e) {
@@ -3662,7 +3686,19 @@ function gzysClass() {
             let backData = {}
 
             try {
-                // h5版不能搜尋
+                let url = base64Decode('aHR0cHM6Ly95a2suNDk4MjQ2Lnh5ei9hcGkucGhwL2d6YXBw') + `?ac=detail&wd=${wd}&pg=${pg}`
+                let res = await $.http.get(url)
+                let list = $.toObj(res.body).list
+                let videos = []
+                list.forEach((e) => {
+                    videos.push({
+                        vod_id: +e.vod_id,
+                        vod_name: e.vod_name,
+                        vod_pic: e.vod_pic,
+                        vod_remarks: '',
+                    })
+                })
+                backData = parseVideoList(videos, '1', '1')
             } catch (e) {
                 await this.msgtodc(e)
                 $.logErr(e)
