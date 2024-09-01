@@ -1305,6 +1305,7 @@ function nkvodClass() {
             super()
             this.siteName = '耐看'
             this.url = 'https://nkvod.com'
+            // this.url = 'https://www.nkdyw.us'
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
                 Referer: this.url,
@@ -2614,7 +2615,7 @@ function bilfunClass() {
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
             }
-            this.ignoreClassName = ['首页', '预告片', '追剧周表', '今日更新', '热搜榜', '主题切换', '收藏页', 'APP', '地址']
+            this.ignoreClassName = ['首页', '预告片', '追剧周表', '今日更新', '热搜榜', '主题切换', '收藏页', 'APP', '地址', '备用线路']
         }
 
         async getClassList() {
@@ -2634,10 +2635,12 @@ function bilfunClass() {
                     }
                     let type_name = _$(element).text()
                     let url = _$(element).attr('href') || ''
+                    let match = url.match(/\/bilfun\/(\d+)\.html/)
+                    let urlNumber = match && match[1] ? +match[1] : 999
 
                     if (url.length > 0 && type_name.length > 0) {
                         let videoClass = {}
-                        videoClass.type_id = +url.match(/\/bilfun\/(\d+)\.html/)[1]
+                        videoClass.type_id = urlNumber
                         videoClass.type_name = type_name.trim()
                         list.push(videoClass)
                     }
