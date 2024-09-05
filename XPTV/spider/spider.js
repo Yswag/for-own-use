@@ -251,6 +251,7 @@ function bttwoClass() {
         constructor() {
             super()
             this.siteName = '兩個BT'
+            // 發布頁 https://bttwo.vip
             this.url = 'https://www.bttwoo.com'
             this.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
@@ -2973,10 +2974,6 @@ function xyClass() {
             try {
                 let classes = [
                     {
-                        type_id: 1,
-                        type_name: '剧场',
-                    },
-                    {
                         type_id: 2,
                         type_name: '热播剧',
                     },
@@ -3029,7 +3026,7 @@ function xyClass() {
                     let vodUrl = item.id || ''
                     let vodPic = item.cover_url || ''
                     let vodName = item.title || ''
-                    let vodDiJiJi = `更新到${item.total}集` || ''
+                    let vodDiJiJi = `${item.total}集全` || ''
 
                     let videoDet = {}
                     videoDet.vod_id = +vodUrl
