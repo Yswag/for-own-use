@@ -77,7 +77,7 @@ let adCount = 0
       length()
       filterAds(ffzy)
       break
-    case url.includes('bfengbf.com'):
+    case url.includes('rrcdnbf'):
       filterAds(bfeng)
       break
     case url.includes('kuaikan'):
