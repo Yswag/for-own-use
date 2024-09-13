@@ -1,17 +1,17 @@
 const $ = new Env('cmsAdblock')
 
 // heimuer
-let hmrvideo = []
+let hmrvideo = ['tang.hz']
 
 // 量子資源
 let lzzy = []
 
 // 非凡資源
 let ffzy = [
-    //":6.400000,",
-    //":3.700000,",
-    //":2.800000,",
-    //":1.766667,",
+  //":6.400000,",
+  //":3.700000,",
+  //":2.800000,",
+  //":1.766667,",
 ]
 
 // 暴風
@@ -42,326 +42,270 @@ let temp = []
 
 let arg = getArg()
 let isMsg = arg.toLowerCase() === 'true'
-$.log('arg = ' + arg)
-$.log('isMsg = ' + isMsg)
 
 //if (arg === '2') {
 //	$.log('using 2nd method')
 //	fixAdM3u8Ai($request.url)
 //}
 
-if ($response.body === undefined || !$response.body.includes('#EXTM3U')) $.done({})
+if ($response.body === undefined || !$response.body.includes('#EXTM3U'))
+  $.done({})
 
 const url = $request.url
-const lines = $response.body.trim().split('\n')
+let lines = $response.body.trim().split('\n')
 
 let adCount = 0
 
 ;(async () => {
-    switch (true) {
-        case url.includes('m3u8.hmrvideo.com'):
-        case url.includes('m3u8.heimuertv.com'):
-            // filterAds(hmrvideo)
-            hmr()
-            break
-        case url.includes('wgslsw'):
-            hostsCount(yhzy, /^https?:\/\/(.*?)\//)
-            filterAds(yhzy)
-            break
-        case url.includes('v.cdnlz'):
-        case url.includes('lz-cdn'):
-        case url.includes('lzcdn'):
-            await fetchJxResult()
-            length()
-            filterAds(lzzy)
-            break
-        case url.includes('ffzy'):
-            await fetchJxResult()
-            length()
-            filterAds(ffzy)
-            break
-        case url.includes('bfengbf.com'):
-            filterAds(bfeng)
-            break
-        case url.includes('kuaikan'):
-            await fetchJxResult()
-            hostsCount(kuaikan, /(.+)\/hls\//)
-            filterAds(kuaikan)
-            break
-        case url.includes('97img'):
-            filterAds(t097img)
-            break
-        case url.includes('feidaozy'):
-            vodId(temp, 10)
-            filterAds(temp)
-            break
-        case url.includes('bfikuncdn'):
-        case url.includes('modujx'):
-        case url.includes('lyhuicheng'):
-        case url.includes('ukzy'):
-        case url.includes('askzy'):
-        case url.includes('bfbfhao'):
-        case url.includes('cl9987'):
-        case url.includes('ykv3'):
-        case url.includes('sybf'):
-        case url.includes('bfnxxcdn'):
-        case url.includes('huangguam3u'):
-        case url.includes('leshiyuncdn'):
-            await fetchJxResult()
-            vodId(temp, 15)
-            filterAds(temp)
-            break
-        default:
-            await fetchJxResult()
-            vodId(temp, 10)
-            filterAds(temp)
-            break
-    }
+  switch (true) {
+    case url.includes('hmrvideo'):
+      await fetchJxResult()
+      break
+    case url.includes('wgslsw'):
+      hostsCount(yhzy, /^https?:\/\/(.*?)\//)
+      filterAds(yhzy)
+      break
+    case url.includes('v.cdnlz'):
+    case url.includes('lz-cdn'):
+    case url.includes('lzcdn'):
+      await fetchJxResult()
+      length()
+      filterAds(lzzy)
+      break
+    case url.includes('ffzy'):
+      await fetchJxResult()
+      length()
+      filterAds(ffzy)
+      break
+    case url.includes('bfengbf.com'):
+      filterAds(bfeng)
+      break
+    case url.includes('kuaikan'):
+      await fetchJxResult()
+      hostsCount(kuaikan, /(.+)\/hls\//)
+      filterAds(kuaikan)
+      break
+    case url.includes('97img'):
+      filterAds(t097img)
+      break
+    case url.includes('feidaozy'):
+      vodId(temp, 10)
+      filterAds(temp)
+      break
+    case url.includes('bfikuncdn'):
+    case url.includes('modujx'):
+    case url.includes('lyhuicheng'):
+    case url.includes('ukzy'):
+    case url.includes('askzy'):
+    case url.includes('bfbfhao'):
+    case url.includes('cl9987'):
+    case url.includes('ykv3'):
+    case url.includes('sybf'):
+    case url.includes('bfnxxcdn'):
+    case url.includes('huangguam3u'):
+    case url.includes('leshiyuncdn'):
+      await fetchJxResult()
+      vodId(temp, 15)
+      filterAds(temp)
+      break
+    default:
+      await fetchJxResult()
+      vodId(temp, 10)
+      filterAds(temp)
+      break
+  }
 })()
 
 function filterAds(valuesToRemove) {
-    for (let i = lines.length - 1; i >= 0; i--) {
-        if (valuesToRemove.some((value) => lines[i].includes(value))) {
-            let value = valuesToRemove.find((value) => lines[i].includes(value))
-            $.log('Match:' + value)
-            if (value.includes('kb')) {
-                $.log('Remove ad(by bitrate):' + lines[i])
-                lines.splice(i - 1, 2)
-                adCount++
-            } else if (!lines[i].startsWith('#')) {
-                $.log('Remove ad(by url):' + lines[i])
-                lines.splice(i - 1, 2)
-                adCount++
-            } else if (i < lines.length - 1 && lines[i + 1].includes('.ts')) {
-                $.log('Remove ad(by duration):' + lines[i + 1])
-                lines.splice(i, 2)
-                adCount++
-            }
-        }
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (valuesToRemove.some((value) => lines[i].includes(value))) {
+      let value = valuesToRemove.find((value) => lines[i].includes(value))
+      $.log('Match:' + value)
+      if (value.includes('kb')) {
+        $.log('Remove ad(by bitrate):' + lines[i])
+        lines.splice(i - 1, 2)
+        adCount++
+      } else if (!lines[i].startsWith('#')) {
+        $.log('Remove ad(by url):' + lines[i])
+        lines.splice(i - 1, 2)
+        adCount++
+      } else if (i < lines.length - 1 && lines[i + 1].includes('.ts')) {
+        $.log('Remove ad(by duration):' + lines[i + 1])
+        lines.splice(i, 2)
+        adCount++
+      }
     }
+  }
 
-    if (isMsg) $.msg('cmsAdblock', `移除廣告${adCount}行`)
-    $.log(`移除廣告${adCount}行`)
-    $.done({ body: lines.join('\n') })
+  if (isMsg) $.msg('cmsAdblock', `移除廣告${adCount}行`)
+  $.log(`移除廣告${adCount}行`)
+  $.done({ body: lines.join('\n') })
 }
 
-function hmr() {
-    let lines = $response.body.trim().split('\n')
-    lines = lines.slice(0, -5)
-
-    let toRemove = []
-    let removedTsLinks = []
-    let inSegment = false
-    let segmentStart = 0
-    let segmentEnd = 0
-
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim()
-
-        if (line === '#EXT-X-DISCONTINUITY') {
-            if (inSegment) {
-                const extinfCounts = {} //用於計數
-                const extinfIndices = {} // 紀錄出現的索引值
-                for (let j = segmentStart; j < segmentEnd; j++) {
-                    const currentLine = lines[j].trim()
-                    if (currentLine.startsWith('#EXTINF:')) {
-                        extinfCounts[currentLine] = (extinfCounts[currentLine] || 0) + 1
-
-                        // extinfIndices[currentLine] 是數組才能push
-                        if (!extinfIndices[currentLine]) {
-                            extinfIndices[currentLine] = []
-                        }
-                        extinfIndices[currentLine].push(j)
-                    }
-                }
-
-                // 重複三次以上的時長
-                for (const extinf in extinfCounts) {
-                    if (extinfCounts[extinf] >= 3) {
-                        // const value = parseFloat(extinf.replace('#EXTINF:', ''))
-                        // if (Number.isInteger(value)) {
-                        // }
-                        const tempRemovedTsLinks = []
-                        extinfIndices[extinf].forEach((index) => {
-                            if (lines[index + 1] && lines[index + 1].includes('.ts')) {
-                                tempRemovedTsLinks.push(lines[index + 1])
-                            }
-                        })
-
-                        // 標記移除
-                        if (tempRemovedTsLinks.length >= 1) {
-                            extinfIndices[extinf].forEach((index) => {
-                                if (lines[index + 1] && lines[index + 1].includes('.ts')) {
-                                    toRemove.push(index, index + 1)
-                                    removedTsLinks.push(lines[index + 1])
-                                }
-                            })
-                            break
-                        }
-                    }
-                }
-
-                segmentStart = i + 1
-            } else {
-                inSegment = true
-                segmentStart = i + 1
-            }
-
-            segmentEnd = i
-        } else {
-            if (inSegment) {
-                segmentEnd = i
-            }
-        }
+function filterHmr(valuesToRemove) {
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (valuesToRemove.some((value) => lines[i].includes(value))) {
+      let value = valuesToRemove.find((value) => lines[i].includes(value))
+      $.log('Match:' + value)
+      if (value.includes('kb')) {
+        $.log('Remove ad(by bitrate):' + lines[i])
+        lines.splice(i - 1, 2)
+        adCount++
+      } else if (!lines[i].startsWith('#')) {
+        $.log('Remove ad(by url):' + lines[i])
+        lines.splice(i - 1, 2)
+        adCount++
+      } else if (
+        i < lines.length - 1 &&
+        lines[i + 1].includes('.ts') &&
+        lines[i - 1].includes('DISCONTINUITY') &&
+        lines[i + 2].includes('DISCONTINUITY')
+      ) {
+        $.log('Remove ad(by duration):' + lines[i + 1])
+        lines.splice(i, 2)
+        adCount++
+      }
     }
+  }
 
-    // 開始去廣告
-    if (removedTsLinks.length >= 1) {
-        toRemove = [...new Set(toRemove)].sort((a, b) => a - b)
-        toRemove.forEach((index) => {
-            lines[index] = null // 設為 null
-        })
-
-        // 清理 null 行
-        const cleanedLines = lines.filter((line) => line !== null)
-
-        // 移除重複的 #EXT-X-DISCONTINUITY
-        for (let i = cleanedLines.length - 1; i > 0; i--) {
-            if (cleanedLines[i] === '#EXT-X-DISCONTINUITY' && cleanedLines[i - 1] === '#EXT-X-DISCONTINUITY') {
-                cleanedLines.splice(i, 1)
-            }
-        }
-
-        // 補上 M3U 結尾
-        cleanedLines.push('#EXT-X-ENDLIST')
-
-        const cleanedContent = cleanedLines.join('\n')
-
-        // console.log('Cleaned M3U8 content:', cleanedContent)
-        $.log('Removed TS links:', removedTsLinks)
-        $.log(`移除廣告${removedTsLinks.length}行`)
-        $.done({ body: cleanedContent })
-    } else {
-        $.log('No sufficient TS links found for removal.')
-    }
+  $.msg('debug', `移除廣告${adCount}行`)
+  $.log(`移除廣告${adCount}行`)
+  $.done({ body: lines.join('\n') })
 }
 
 function hostsCount(name, regex) {
-    const hostsCount = {}
-    lines.forEach((line) => {
-        if (line.includes('.ts')) {
-            const hostname = line.match(regex)[1]
-            hostsCount[hostname] = (hostsCount[hostname] || 0) + 1
-        }
-    })
+  const hostsCount = {}
+  lines.forEach((line) => {
+    if (line.includes('.ts')) {
+      const hostname = line.match(regex)[1]
+      hostsCount[hostname] = (hostsCount[hostname] || 0) + 1
+    }
+  })
 
-    $.log(hostsCount)
-    const keys = Object.keys(hostsCount)
-    if (keys.length > 1) {
-        keys.sort((a, b) => hostsCount[b] - hostsCount[a])
-        let temp = keys.slice(1)
-        name.push(...temp)
-    } else return
+  $.log(hostsCount)
+  const keys = Object.keys(hostsCount)
+  if (keys.length > 1) {
+    keys.sort((a, b) => hostsCount[b] - hostsCount[a])
+    let temp = keys.slice(1)
+    name.push(...temp)
+  } else return
 }
 
 function vodId(name, length) {
-    const vodIds = {}
-    lines.forEach((line) => {
-        if (!line.startsWith('#')) {
-            const vodId = line.slice(0, length)
-            vodIds[vodId] = (vodIds[vodId] || 0) + 1
-        }
-    })
-    $.log(JSON.stringify(vodIds))
-    const keys = Object.keys(vodIds)
+  const vodIds = {}
+  lines.forEach((line) => {
+    if (!line.startsWith('#')) {
+      const vodId = line.slice(0, length)
+      vodIds[vodId] = (vodIds[vodId] || 0) + 1
+    }
+  })
+  $.log(JSON.stringify(vodIds))
+  const keys = Object.keys(vodIds)
 
-    if (keys.length > 1) {
-        keys.sort((a, b) => vodIds[b] - vodIds[a])
-        let temp = keys.slice(1)
-        name.push(...temp)
-    } else return
+  if (keys.length > 1) {
+    keys.sort((a, b) => vodIds[b] - vodIds[a])
+    let temp = keys.slice(1)
+    name.push(...temp)
+  } else return
 }
 
 function length() {
-    const fileLength = {}
-    let files = lines.filter((i) => !i.startsWith('#'))
+  const fileLength = {}
+  let files = lines.filter((i) => !i.startsWith('#'))
 
-    files.forEach((file) => {
-        fileLength[file.length] = (fileLength[file.length] || 0) + 1
-    })
-    $.log(JSON.stringify(fileLength))
+  files.forEach((file) => {
+    fileLength[file.length] = (fileLength[file.length] || 0) + 1
+  })
+  $.log(JSON.stringify(fileLength))
 
-    const keys = Object.keys(fileLength)
-    if (keys.length > 1) {
-        keys.sort((a, b) => fileLength[b] - fileLength[a])
-        let ad = keys.slice(1)[0]
-        $.log(ad)
-        for (let i = lines.length - 1; i >= 0; i--) {
-            if (lines[i].length == ad && lines[i].endsWith('.ts')) {
-                $.log('Remove ad(by file length):' + lines[i])
-                lines.splice(i - 1, 2)
-                adCount++
-            }
-        }
-    } else return
+  const keys = Object.keys(fileLength)
+  if (keys.length > 1) {
+    keys.sort((a, b) => fileLength[b] - fileLength[a])
+    let ad = keys.slice(1)[0]
+    $.log(ad)
+    for (let i = lines.length - 1; i >= 0; i--) {
+      if (lines[i].length == ad && lines[i].endsWith('.ts')) {
+        $.log('Remove ad(by file length):' + lines[i])
+        lines.splice(i - 1, 2)
+        adCount++
+      }
+    }
+  } else return
 }
 
 async function fetchJxResult() {
-    if (url.includes('hls')) return
+  if (url.includes('hls')) return
 
-    let jx
+  let jx
 
-    if (url.includes('hmrvideo')) {
-        jx = 'https://tang.hz.cz/jx/hmr?noads='
-    } else {
-        jx = 'https://jscdn.centos.chat/bilfun.php/?url='
-    }
-
-    const requestUrl = jx + url
+  if (url.includes('hmrvideo')) {
+    let newUrl = url.replace('m3u8.', 'mycj-m3u8.')
+    jx = 'https://speed.tang.hz.cz/noads?token=334078da&url='
+    const requestUrl = jx + newUrl
+    $.log('requestIrl:', requestUrl)
     const req = {
-        url: requestUrl,
-        headers: { 'User-Agent': 'okhttp/3.12' },
-        timeout: 5000,
+      url: requestUrl,
+      headers: { 'User-Agent': 'okhttp/5.0.0-alpha.14' },
+      timeout: 5000,
     }
     try {
-        const resp = await $.http.get(req)
-        const body = JSON.parse(resp.body)
-        $.log(resp.body)
-        if (body.url !== $request.url) {
-            const m3u8 = (
-                await $.http.get({
-                    url: body.url,
-                    headers: { 'User-Agent': 'okhttp/3.12' },
-                    timeout: 8000,
-                })
-            ).body
-            if (isMsg) $.msg('cmsAdblock', 'Redirect to' + body.url)
-            $.isQuanX()
-                ? $.done({
-                      status: 'HTTP/1.1 200',
-                      headers: { 'Content-Type': 'application/vnd.apple.mpegURL' },
-                      body: m3u8,
-                  })
-                : $.done({
-                      status: 200,
-                      headers: { 'Content-Type': 'application/vnd.apple.mpegURL' },
-                      body: m3u8,
-                  })
-            //$.log('Redirect to', body.url)
-            //$.msg('Redirect to', body.url)
-        } else return
+      const resp = await $.http.get(req)
+      const body = resp.body
+      lines = body.trim().split('\n')
+      filterAds(hmrvideo)
+      //$.done({ body: body })
     } catch (e) {
-        $.log(e)
-        $.done({})
+      $.log(e)
+      $.done({})
     }
+  } else {
+    jx = 'https://jscdn.centos.chat/bilfun.php/?url='
+    const requestUrl = jx + url
+    const req = {
+      url: requestUrl,
+      headers: { 'User-Agent': 'okhttp/5.0.0-alpha.14' },
+      timeout: 5000,
+    }
+    try {
+      const resp = await $.http.get(req)
+      const body = JSON.parse(resp.body)
+      $.log(resp.body)
+      if (body.url !== $request.url) {
+        const m3u8 = (
+          await $.http.get({
+            url: body.url,
+            headers: { 'User-Agent': 'okhttp/3.12' },
+            timeout: 8000,
+          })
+        ).body
+        if (isMsg) $.msg('cmsAdblock', 'Redirect to ' + body.url)
+        $.isQuanX()
+          ? $.done({
+              status: 'HTTP/1.1 200',
+              headers: { 'Content-Type': 'application/vnd.apple.mpegURL' },
+              body: m3u8,
+            })
+          : $.done({
+              status: 200,
+              headers: { 'Content-Type': 'application/vnd.apple.mpegURL' },
+              body: m3u8,
+            })
+        //$.log('Redirect to', body.url)
+        //$.msg('Redirect to', body.url)
+      } else return
+    } catch (e) {
+      $.log(e)
+      $.done({})
+    }
+  }
 }
 
 function getArg() {
-    if ($.isLoon()) return $persistentStore.read('彈窗通知')
-    if (typeof $argument === 'undefined') {
-        return false
-    }
-    return $argument
+  if ($.isLoon()) return $persistentStore.read('彈窗通知')
+  if (typeof $argument === 'undefined') {
+    return false
+  }
+  return $argument
 }
 
 //prettier-ignore
