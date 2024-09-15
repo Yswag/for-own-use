@@ -246,12 +246,15 @@ async function fetchJxResult() {
     const req = {
       url: requestUrl,
       headers: { 'User-Agent': 'okhttp/5.0.0-alpha.14' },
-      timeout: 5000,
+      timeout: 10000,
     }
     try {
       const resp = await $.http.get(req)
       const body = resp.body
-      if (!body.startsWith('{')) $.done({})
+      if (body.startsWith('{')) {
+        $.log('error')
+        $.done({})
+      }
       lines = body.trim().split('\n')
       filterAds(hmrvideo)
       //$.done({ body: body })
