@@ -240,7 +240,7 @@ async function fetchJxResult() {
 
   if (url.includes('hmrvideo')) {
     let newUrl = url.replace('m3u8.', 'mycj-m3u8.')
-    jx = 'https://speed.tang.hz.cz/noads?token=334078da&url='
+    jx = 'https://speed.tang.hz.cz/noads?token=e50317a7&url='
     const requestUrl = jx + newUrl
     $.log('requestIrl:', requestUrl)
     const req = {
@@ -251,6 +251,7 @@ async function fetchJxResult() {
     try {
       const resp = await $.http.get(req)
       const body = resp.body
+      if (!body.startsWith('{')) $.done({})
       lines = body.trim().split('\n')
       filterAds(hmrvideo)
       //$.done({ body: body })
