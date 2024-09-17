@@ -2,7 +2,7 @@
 #!desc=嗶哩嗶哩 UI 自定義及去廣告
 #!category=Bilibili
 #!arguments=IP:DIRECT,BiliBili.字幕簡轉繁:BiliBili.字幕簡轉繁,BiliBili.Upos.Redirect:BiliBili.Upos.Redirect,[開屏]去除廣告:true,[推薦]去除廣告:true,[推薦]去除“活動大圖”:false,[首頁]去除短片串流廣告:true,[番劇電影]去除廣告:true,[用戶投稿]去除影片廣告:true,[搜索]去除廣告:true,[彈幕]去除互動式彈幕:false,[彈幕]替換大會員彈幕:false,[評論區]去除廣告:true,[直播]去除廣告:true,[搜索]去除“熱搜”:true,[動態]去除“熱門話題”:true,[動態]去除“最常訪問”:true,[動態]去除廣告動態:true
-#!arguments-desc=IP:可能影響 IP 屬地的Ruleset，預設策略為 DIRECT\nBiliBili.字幕簡轉繁:輸入#時關閉\nBiliBili.Upos.Redirect:修改播放 CDN 地址，輸入#時關閉\n其餘細項透過boxjs修改
+#!arguments-desc=IP:可能影響 IP 屬地的Ruleset，預設策略為 DIRECT\nBiliBili.字幕簡轉繁:輸入#時關閉\nBiliBili.Upos.Redirect:修改播放 CDN 地址，輸入#時關閉
 # Thanks to VirgilClyne,app2smile,RuCu6,ClydeTime
 
 [General]
@@ -40,7 +40,7 @@ URL-REGEX,https://api.bilibili.com/x/v2/reply/add
 # Reject IP 請求
 ^https?:\/\/app\.bilibili\.com\/x\/resource\/ip - reject
 # 去除 DefaultWords
-^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$ - reject
+^https://(app|grpc).(biliapi|bilibili).(net|com)/bilibili.app.interface.v1.Search/DefaultWords$ - reject
 
 [Map Local]
 # 去除搜索中的大家都在搜
