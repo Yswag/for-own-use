@@ -1,5 +1,3 @@
-// import fs from 'fs'
-
 class ENV {
     static name = 'ENV'
     static version = '1.8.3'
@@ -3101,25 +3099,14 @@ class RelateCard$Type extends MessageType {
     constructor() {
         super('bilibili.app.viewunite.common.RelateCard', [
             { no: 1, name: 'relate_card_type', kind: 'enum', T: () => ['bilibili.app.viewunite.common.RelateCardType', RelateCardType] },
-            { no: 2, name: 'av', kind: 'message', oneof: 'card', T: () => RelateAVCard },
-            { no: 3, name: 'bangumi', kind: 'message', oneof: 'card', T: () => RelateBangumiCard },
-            { no: 4, name: 'resource', kind: 'message', oneof: 'card', T: () => RelateBangumiResourceCard },
-            // { no: 5, name: 'game', kind: 'message', oneof: 'card', T: () => RelateGameCard },
-            { no: 6, name: 'cm', kind: 'message', oneof: 'card', T: () => RelateCMCard },
-            { no: 7, name: 'live', kind: 'message', oneof: 'card', T: () => RelateLiveCard },
-            { no: 8, name: 'bangumi_av', kind: 'message', oneof: 'card', T: () => RelateBangumiAvCard },
-            { no: 9, name: 'ai_card', kind: 'message', oneof: 'card', T: () => RelatedAICard },
-            { no: 13, name: 'bangumi_ugc', kind: 'message', oneof: 'card', T: () => RelateBangumiUgcCard },
-            // { no: 14, name: 'special', kind: 'message', oneof: 'card', T: () => RelateSpecial },
-            // { no: 10, name: 'three_point', kind: 'message', T: () => RelateThreePoint },
-            // { no: 11, name: 'cm_stock', kind: 'message', T: () => Any },
-            { no: 12, name: 'basic_info', kind: 'message', T: () => CardBasicInfo },
         ])
     }
     create(value) {
-        const message = globalThis.Object.create(this.messagePrototype)
-        message.relateCardType = 0
-        message.card = { oneofKind: undefined }
+        const message = {
+            relateCardType: 0,
+            card: { oneofKind: undefined },
+        }
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
         if (value !== undefined) reflectionMergePartial < RelateCard > (this, message, value)
         return message
     }
@@ -3129,77 +3116,8 @@ class RelateCard$Type extends MessageType {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag()
             switch (fieldNo) {
-                case /* bilibili.app.viewunite.common.RelateCardType relate_card_type */ 1:
+                case 1:
                     message.relateCardType = reader.int32()
-                    break
-                case /* bilibili.app.viewunite.common.RelateAVCard av */ 2:
-                    message.card = {
-                        oneofKind: 'av',
-                        av: RelateAVCard.internalBinaryRead(reader, reader.uint32(), options, message.card.av),
-                    }
-                    break
-                case /* bilibili.app.viewunite.common.RelateBangumiCard bangumi */ 3:
-                    message.card = {
-                        oneofKind: 'bangumi',
-                        bangumi: RelateBangumiCard.internalBinaryRead(reader, reader.uint32(), options, message.card.bangumi),
-                    }
-                    break
-                case /* bilibili.app.viewunite.common.RelateBangumiResourceCard resource */ 4:
-                    message.card = {
-                        oneofKind: 'resource',
-                        resource: RelateBangumiResourceCard.internalBinaryRead(reader, reader.uint32(), options, message.card.resource),
-                    }
-                    break
-                // case /* bilibili.app.viewunite.common.RelateGameCard game */ 5:
-                //     message.card = {
-                //         oneofKind: 'game',
-                //         game.internalBinaryRead(reader, reader.uint32(), options, message.card.game),
-                //     }
-                //     break
-                case /* bilibili.app.viewunite.common.RelateCMCard cm */ 6:
-                    message.card = {
-                        oneofKind: 'cm',
-                        cm: RelateCMCard.internalBinaryRead(reader, reader.uint32(), options, message.card.cm),
-                    }
-                    break
-                case /* bilibili.app.viewunite.common.RelateLiveCard live */ 7:
-                    message.card = {
-                        oneofKind: 'live',
-                        live: RelateLiveCard.internalBinaryRead(reader, reader.uint32(), options, message.card.live),
-                    }
-                    break
-                case /* bilibili.app.viewunite.common.RelateBangumiAvCard bangumi_av */ 8:
-                    message.card = {
-                        oneofKind: 'bangumiAv',
-                        bangumiAv: RelateBangumiAvCard.internalBinaryRead(reader, reader.uint32(), options, message.card.bangumiAv),
-                    }
-                    break
-                case /* bilibili.app.viewunite.common.RelatedAICard ai_card */ 9:
-                    message.card = {
-                        oneofKind: 'aiCard',
-                        aiCard: RelatedAICard.internalBinaryRead(reader, reader.uint32(), options, message.card.aiCard),
-                    }
-                    break
-                case /* bilibili.app.viewunite.common.RelateBangumiUgcCard bangumi_ugc */ 13:
-                    message.card = {
-                        oneofKind: 'bangumiUgc',
-                        bangumiUgc: RelateBangumiUgcCard.internalBinaryRead(reader, reader.uint32(), options, message.card.bangumiUgc),
-                    }
-                    break
-                case /* bilibili.app.viewunite.common.RelateSpecial special */ 14:
-                    message.card = {
-                        oneofKind: 'special',
-                        special: RelateSpecial.internalBinaryRead(reader, reader.uint32(), options, message.card.special),
-                    }
-                    break
-                // case /* bilibili.app.viewunite.common.RelateThreePoint three_point */ 10:
-                //     message.threePoint = RelateThreePoint.internalBinaryRead(reader, reader.uint32(), options, message.threePoint)
-                //     break
-                // case /* google.protobuf.Any cm_stock */ 11:
-                //     message.cmStock = Any.internalBinaryRead(reader, reader.uint32(), options, message.cmStock)
-                //     break
-                case /* bilibili.app.viewunite.common.CardBasicInfo basic_info */ 12:
-                    message.basicInfo = CardBasicInfo.internalBinaryRead(reader, reader.uint32(), options, message.basicInfo)
                     break
                 default:
                     let u = options.readUnknownField
@@ -3211,42 +3129,7 @@ class RelateCard$Type extends MessageType {
         return message
     }
     internalBinaryWrite(message, writer, options) {
-        /* bilibili.app.viewunite.common.RelateCardType relate_card_type = 1; */
         if (message.relateCardType !== 0) writer.tag(1, WireType.Varint).int32(message.relateCardType)
-        /* bilibili.app.viewunite.common.RelateAVCard av = 2; */
-        if (message.card.oneofKind === 'av') RelateAVCard.internalBinaryWrite(message.card.av, writer.tag(2, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.RelateBangumiCard bangumi = 3; */
-        if (message.card.oneofKind === 'bangumi')
-            RelateBangumiCard.internalBinaryWrite(message.card.bangumi, writer.tag(3, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.RelateBangumiResourceCard resource = 4; */
-        if (message.card.oneofKind === 'resource')
-            RelateBangumiResourceCard.internalBinaryWrite(message.card.resource, writer.tag(4, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.RelateGameCard game = 5; */
-        if (message.card.oneofKind === 'game')
-            RelateGameCard.internalBinaryWrite(message.card.game, writer.tag(5, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.RelateCMCard cm = 6; */
-        if (message.card.oneofKind === 'cm') RelateCMCard.internalBinaryWrite(message.card.cm, writer.tag(6, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.RelateLiveCard live = 7; */
-        if (message.card.oneofKind === 'live')
-            RelateLiveCard.internalBinaryWrite(message.card.live, writer.tag(7, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.RelateBangumiAvCard bangumi_av = 8; */
-        if (message.card.oneofKind === 'bangumiAv')
-            RelateBangumiAvCard.internalBinaryWrite(message.card.bangumiAv, writer.tag(8, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.RelatedAICard ai_card = 9; */
-        if (message.card.oneofKind === 'aiCard')
-            RelatedAICard.internalBinaryWrite(message.card.aiCard, writer.tag(9, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.RelateBangumiUgcCard bangumi_ugc = 13; */
-        if (message.card.oneofKind === 'bangumiUgc')
-            RelateBangumiUgcCard.internalBinaryWrite(message.card.bangumiUgc, writer.tag(13, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.RelateSpecial special = 14; */
-        if (message.card.oneofKind === 'special')
-            RelateSpecial.internalBinaryWrite(message.card.special, writer.tag(14, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.RelateThreePoint three_point = 10; */
-        if (message.threePoint) RelateThreePoint.internalBinaryWrite(message.threePoint, writer.tag(10, WireType.LengthDelimited).fork(), options).join()
-        /* google.protobuf.Any cm_stock = 11; */
-        if (message.cmStock) Any.internalBinaryWrite(message.cmStock, writer.tag(11, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.CardBasicInfo basic_info = 12; */
-        if (message.basicInfo) CardBasicInfo.internalBinaryWrite(message.basicInfo, writer.tag(12, WireType.LengthDelimited).fork(), options).join()
         let u = options.writeUnknownFields
         if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
         return writer
@@ -3254,375 +3137,12 @@ class RelateCard$Type extends MessageType {
 }
 const RelateCard = new RelateCard$Type()
 
-class CardBasicInfo$Type extends MessageType {
-    constructor() {
-        super('bilibili.app.viewunite.common.CardBasicInfo', [
-            { no: 1, name: 'title', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: 'desc', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: 'cover', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: 'uri', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 5, name: 'track_id', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 6, name: 'unique_id', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 7, name: 'from_source_type', kind: 'scalar', T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 8, name: 'from_source_id', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 9, name: 'material_id', kind: 'scalar', T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 10, name: 'cover_gif', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 11, name: 'author', kind: 'message', T: () => Owner },
-            { no: 12, name: 'id', kind: 'scalar', T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 13, name: 'from', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 14, name: 'from_spmid_suffix', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 15, name: 'report_flow_data', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-        ])
-    }
-    create(value) {
-        const message = globalThis.Object.create(this.messagePrototype)
-        message.title = ''
-        message.desc = ''
-        message.cover = ''
-        message.uri = ''
-        message.trackId = ''
-        message.uniqueId = ''
-        message.fromSourceType = 0n
-        message.fromSourceId = ''
-        message.materialId = 0n
-        message.coverGif = ''
-        message.id = 0n
-        message.from = ''
-        message.fromSpmidSuffix = ''
-        message.reportFlowData = ''
-        if (value !== undefined) reflectionMergePartial < CardBasicInfo > (this, message, value)
-        return message
-    }
-    internalBinaryRead(reader, length, options, target) {
-        let message = target ?? this.create(),
-            end = reader.pos + length
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag()
-            switch (fieldNo) {
-                case /* string title */ 1:
-                    message.title = reader.string()
-                    break
-                case /* string desc */ 2:
-                    message.desc = reader.string()
-                    break
-                case /* string cover */ 3:
-                    message.cover = reader.string()
-                    break
-                case /* string uri */ 4:
-                    message.uri = reader.string()
-                    break
-                case /* string track_id */ 5:
-                    message.trackId = reader.string()
-                    break
-                case /* string unique_id */ 6:
-                    message.uniqueId = reader.string()
-                    break
-                case /* int64 from_source_type */ 7:
-                    message.fromSourceType = reader.int64().toBigInt()
-                    break
-                case /* string from_source_id */ 8:
-                    message.fromSourceId = reader.string()
-                    break
-                case /* int64 material_id */ 9:
-                    message.materialId = reader.int64().toBigInt()
-                    break
-                case /* string cover_gif */ 10:
-                    message.coverGif = reader.string()
-                    break
-                // case /* bilibili.app.viewunite.common.Owner author */ 11:
-                //     message.author = Owner.internalBinaryRead(reader, reader.uint32(), options, message.author)
-                //     break
-                case /* int64 id */ 12:
-                    message.id = reader.int64().toBigInt()
-                    break
-                case /* string from */ 13:
-                    message.from = reader.string()
-                    break
-                case /* string from_spmid_suffix */ 14:
-                    message.fromSpmidSuffix = reader.string()
-                    break
-                case /* string report_flow_data */ 15:
-                    message.reportFlowData = reader.string()
-                    break
-                default:
-                    let u = options.readUnknownField
-                    if (u === 'throw') throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`)
-                    let d = reader.skip(wireType)
-                    if (u !== false) (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
-            }
-        }
-        return message
-    }
-    internalBinaryWrite(message, writer, options) {
-        /* string title = 1; */
-        if (message.title !== '') writer.tag(1, WireType.LengthDelimited).string(message.title)
-        /* string desc = 2; */
-        if (message.desc !== '') writer.tag(2, WireType.LengthDelimited).string(message.desc)
-        /* string cover = 3; */
-        if (message.cover !== '') writer.tag(3, WireType.LengthDelimited).string(message.cover)
-        /* string uri = 4; */
-        if (message.uri !== '') writer.tag(4, WireType.LengthDelimited).string(message.uri)
-        /* string track_id = 5; */
-        if (message.trackId !== '') writer.tag(5, WireType.LengthDelimited).string(message.trackId)
-        /* string unique_id = 6; */
-        if (message.uniqueId !== '') writer.tag(6, WireType.LengthDelimited).string(message.uniqueId)
-        /* int64 from_source_type = 7; */
-        if (message.fromSourceType !== 0n) writer.tag(7, WireType.Varint).int64(message.fromSourceType)
-        /* string from_source_id = 8; */
-        if (message.fromSourceId !== '') writer.tag(8, WireType.LengthDelimited).string(message.fromSourceId)
-        /* int64 material_id = 9; */
-        if (message.materialId !== 0n) writer.tag(9, WireType.Varint).int64(message.materialId)
-        /* string cover_gif = 10; */
-        if (message.coverGif !== '') writer.tag(10, WireType.LengthDelimited).string(message.coverGif)
-        /* bilibili.app.viewunite.common.Owner author = 11; */
-        if (message.author) Owner.internalBinaryWrite(message.author, writer.tag(11, WireType.LengthDelimited).fork(), options).join()
-        /* int64 id = 12; */
-        if (message.id !== 0n) writer.tag(12, WireType.Varint).int64(message.id)
-        /* string from = 13; */
-        if (message.from !== '') writer.tag(13, WireType.LengthDelimited).string(message.from)
-        /* string from_spmid_suffix = 14; */
-        if (message.fromSpmidSuffix !== '') writer.tag(14, WireType.LengthDelimited).string(message.fromSpmidSuffix)
-        /* string report_flow_data = 15; */
-        if (message.reportFlowData !== '') writer.tag(15, WireType.LengthDelimited).string(message.reportFlowData)
-        let u = options.writeUnknownFields
-        if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
-        return writer
-    }
-}
-const CardBasicInfo = new CardBasicInfo$Type()
-
-class RelateDislike$Type extends MessageType {
-    constructor() {
-        super('bilibili.app.viewunite.common.RelateDislike', [
-            { no: 1, name: 'title', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: 'sub_title', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: 'closed_sub_title', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: 'paste_text', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 5, name: 'closed_paste_text', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 6, name: 'dislike_reason', kind: 'message', repeat: 1 /*RepeatType.PACKED*/, T: () => DislikeReasons },
-            { no: 7, name: 'toast', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 8, name: 'closed_toast', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-        ])
-    }
-    create(value) {
-        const message = globalThis.Object.create(this.messagePrototype)
-        message.title = ''
-        message.subTitle = ''
-        message.closedSubTitle = ''
-        message.pasteText = ''
-        message.closedPasteText = ''
-        message.dislikeReason = []
-        message.toast = ''
-        message.closedToast = ''
-        if (value !== undefined) reflectionMergePartial < RelateDislike > (this, message, value)
-        return message
-    }
-    internalBinaryRead(reader, length, options, target) {
-        let message = target ?? this.create(),
-            end = reader.pos + length
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag()
-            switch (fieldNo) {
-                case /* string title */ 1:
-                    message.title = reader.string()
-                    break
-                case /* string sub_title */ 2:
-                    message.subTitle = reader.string()
-                    break
-                case /* string closed_sub_title */ 3:
-                    message.closedSubTitle = reader.string()
-                    break
-                case /* string paste_text */ 4:
-                    message.pasteText = reader.string()
-                    break
-                case /* string closed_paste_text */ 5:
-                    message.closedPasteText = reader.string()
-                    break
-                case /* repeated bilibili.app.viewunite.common.DislikeReasons dislike_reason */ 6:
-                    message.dislikeReason.push(DislikeReasons.internalBinaryRead(reader, reader.uint32(), options))
-                    break
-                case /* string toast */ 7:
-                    message.toast = reader.string()
-                    break
-                case /* string closed_toast */ 8:
-                    message.closedToast = reader.string()
-                    break
-                default:
-                    let u = options.readUnknownField
-                    if (u === 'throw') throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`)
-                    let d = reader.skip(wireType)
-                    if (u !== false) (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
-            }
-        }
-        return message
-    }
-    internalBinaryWrite(message, writer, options) {
-        /* string title = 1; */
-        if (message.title !== '') writer.tag(1, WireType.LengthDelimited).string(message.title)
-        /* string sub_title = 2; */
-        if (message.subTitle !== '') writer.tag(2, WireType.LengthDelimited).string(message.subTitle)
-        /* string closed_sub_title = 3; */
-        if (message.closedSubTitle !== '') writer.tag(3, WireType.LengthDelimited).string(message.closedSubTitle)
-        /* string paste_text = 4; */
-        if (message.pasteText !== '') writer.tag(4, WireType.LengthDelimited).string(message.pasteText)
-        /* string closed_paste_text = 5; */
-        if (message.closedPasteText !== '') writer.tag(5, WireType.LengthDelimited).string(message.closedPasteText)
-        /* repeated bilibili.app.viewunite.common.DislikeReasons dislike_reason = 6; */
-        for (let i = 0; i < message.dislikeReason.length; i++)
-            DislikeReasons.internalBinaryWrite(message.dislikeReason[i], writer.tag(6, WireType.LengthDelimited).fork(), options).join()
-        /* string toast = 7; */
-        if (message.toast !== '') writer.tag(7, WireType.LengthDelimited).string(message.toast)
-        /* string closed_toast = 8; */
-        if (message.closedToast !== '') writer.tag(8, WireType.LengthDelimited).string(message.closedToast)
-        let u = options.writeUnknownFields
-        if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
-        return writer
-    }
-}
-const RelateDislike = new RelateDislike$Type()
-
-class RelateAVCard$Type extends MessageType {
-    constructor() {
-        super('bilibili.app.viewunite.common.RelateAVCard', [
-            { no: 1, name: 'duration', kind: 'scalar', T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 2, name: 'cid', kind: 'scalar', T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 3, name: 'dimension', kind: 'message', T: () => Dimension },
-            { no: 4, name: 'stat', kind: 'message', T: () => Stat },
-            { no: 5, name: 'jump_url', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-            { no: 6, name: 'show_up_name', kind: 'scalar', T: 8 /*ScalarType.BOOL*/ },
-            { no: 7, name: 'rcmd_reason', kind: 'message', T: () => BadgeInfo },
-        ])
-    }
-    create(value) {
-        const message = globalThis.Object.create(this.messagePrototype)
-        message.duration = 0n
-        message.cid = 0n
-        message.jumpUrl = ''
-        message.showUpName = false
-        if (value !== undefined) reflectionMergePartial < RelateAVCard > (this, message, value)
-        return message
-    }
-    internalBinaryRead(reader, length, options, target) {
-        let message = target ?? this.create(),
-            end = reader.pos + length
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag()
-            switch (fieldNo) {
-                case /* int64 duration */ 1:
-                    message.duration = reader.int64().toBigInt()
-                    break
-                case /* int64 cid */ 2:
-                    message.cid = reader.int64().toBigInt()
-                    break
-                // case /* bilibili.app.viewunite.common.Dimension dimension */ 3:
-                //     message.dimension = Dimension.internalBinaryRead(reader, reader.uint32(), options, message.dimension)
-                //     break
-                // case /* bilibili.app.viewunite.common.Stat stat */ 4:
-                //     message.stat = Stat.internalBinaryRead(reader, reader.uint32(), options, message.stat)
-                //     break
-                case /* string jump_url */ 5:
-                    message.jumpUrl = reader.string()
-                    break
-                case /* bool show_up_name */ 6:
-                    message.showUpName = reader.bool()
-                    break
-                // case /* bilibili.app.viewunite.common.BadgeInfo rcmd_reason */ 7:
-                //     message.rcmdReason = BadgeInfo.internalBinaryRead(reader, reader.uint32(), options, message.rcmdReason)
-                //     break
-                default:
-                    let u = options.readUnknownField
-                    if (u === 'throw') throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`)
-                    let d = reader.skip(wireType)
-                    if (u !== false) (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
-            }
-        }
-        return message
-    }
-    internalBinaryWrite(message, writer, options) {
-        /* int64 duration = 1; */
-        if (message.duration !== 0n) writer.tag(1, WireType.Varint).int64(message.duration)
-        /* int64 cid = 2; */
-        if (message.cid !== 0n) writer.tag(2, WireType.Varint).int64(message.cid)
-        /* bilibili.app.viewunite.common.Dimension dimension = 3; */
-        if (message.dimension) Dimension.internalBinaryWrite(message.dimension, writer.tag(3, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.app.viewunite.common.Stat stat = 4; */
-        if (message.stat) Stat.internalBinaryWrite(message.stat, writer.tag(4, WireType.LengthDelimited).fork(), options).join()
-        /* string jump_url = 5; */
-        if (message.jumpUrl !== '') writer.tag(5, WireType.LengthDelimited).string(message.jumpUrl)
-        /* bool show_up_name = 6; */
-        if (message.showUpName !== false) writer.tag(6, WireType.Varint).bool(message.showUpName)
-        /* bilibili.app.viewunite.common.BadgeInfo rcmd_reason = 7; */
-        if (message.rcmdReason) BadgeInfo.internalBinaryWrite(message.rcmdReason, writer.tag(7, WireType.LengthDelimited).fork(), options).join()
-        let u = options.writeUnknownFields
-        if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
-        return writer
-    }
-}
-const RelateAVCard = new RelateAVCard$Type()
-
-class Pagination$Type extends MessageType {
-    constructor() {
-        super('bilibili.pagination.Pagination', [
-            { no: 1, name: 'page_size', kind: 'scalar', T: 5 /*ScalarType.INT32*/ },
-            { no: 2, name: 'next', kind: 'scalar', T: 9 /*ScalarType.STRING*/ },
-        ])
-    }
-    create(value) {
-        // const message = globalThis.Object.create(this.messagePrototype)
-        const message = {
-            pageSize: 0,
-            next: '',
-        }
-        // message.pageSize = 0
-        // message.next = ''
-        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
-        if (value !== undefined) reflectionMergePartial(this, message, value)
-        return message
-    }
-    internalBinaryRead(reader, length, options, target) {
-        let message = target ?? this.create(),
-            end = reader.pos + length
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag()
-            switch (fieldNo) {
-                case /* int32 page_size */ 1:
-                    message.pageSize = reader.int32()
-                    break
-                case /* string next */ 2:
-                    message.next = reader.string()
-                    break
-                default:
-                    let u = options.readUnknownField
-                    if (u === 'throw') throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`)
-                    let d = reader.skip(wireType)
-                    if (u !== false) (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
-            }
-        }
-        return message
-    }
-    internalBinaryWrite(message, writer, options) {
-        /* int32 page_size = 1; */
-        if (message.pageSize !== 0) writer.tag(1, WireType.Varint).int32(message.pageSize)
-        /* string next = 2; */
-        if (message.next !== '') writer.tag(2, WireType.LengthDelimited).string(message.next)
-        let u = options.writeUnknownFields
-        if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
-        return writer
-    }
-}
-const Pagination = new Pagination$Type()
-
 class RelatesFeedReply$Type extends MessageType {
     constructor() {
-        super('bilibili.app.viewunite.v1.RelatesFeedReply', [
-            { no: 1, name: 'relates', kind: 'message', repeat: 1 /*RepeatType.PACKED*/, T: () => RelateCard },
-            { no: 2, name: 'pagination', kind: 'message', T: () => Pagination },
-        ])
+        super('bilibili.app.viewunite.v1.RelatesFeedReply', [{ no: 1, name: 'relates', kind: 'message', repeat: 1, T: () => RelateCard }])
     }
     create(value) {
-        // const message = globalThis.Object.create(this.messagePrototype)
         const message = { relates: [] }
-        // message.relates = []
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
         if (value !== undefined) reflectionMergePartial(this, message, value)
         return message
@@ -3633,11 +3153,8 @@ class RelatesFeedReply$Type extends MessageType {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag()
             switch (fieldNo) {
-                case /* repeated bilibili.app.viewunite.common.RelateCard relates */ 1:
+                case 1:
                     message.relates.push(RelateCard.internalBinaryRead(reader, reader.uint32(), options))
-                    break
-                case /* bilibili.pagination.Pagination pagination */ 2:
-                    message.pagination = Pagination.internalBinaryRead(reader, reader.uint32(), options, message.pagination)
                     break
                 default:
                     let u = options.readUnknownField
@@ -3649,11 +3166,8 @@ class RelatesFeedReply$Type extends MessageType {
         return message
     }
     internalBinaryWrite(message, writer, options) {
-        /* repeated bilibili.app.viewunite.common.RelateCard relates = 1; */
         for (let i = 0; i < message.relates.length; i++)
             RelateCard.internalBinaryWrite(message.relates[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join()
-        /* bilibili.pagination.Pagination pagination = 2; */
-        if (message.pagination) Pagination.internalBinaryWrite(message.pagination, writer.tag(2, WireType.LengthDelimited).fork(), options).join()
         let u = options.writeUnknownFields
         if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
         return writer
@@ -3699,7 +3213,6 @@ function addgRPCHeader({ header, body }, encoding = undefined) {
 const $ = new ENV('RelatesFeed')
 
 let data = $response.body
-// let data = fs.readFileSync('RelatesFeed')
 let rawBody = new Uint8Array(data)
 
 // 先拆分B站gRPC校验头和protobuf数据体
@@ -3718,8 +3231,13 @@ switch (header?.[0]) {
 }
 
 let test = RelatesFeedReply.fromBinary(body)
-test.relates.forEach((item) => {
-    console.log(item.basicInfo.title)
+test.relates = test.relates.filter((item) => {
+    if (item.relateCardType == 5) {
+        $.log('Remove RelatesFeed CM ads')
+        $.msg('Remove RelatesFeed CM ads')
+        return false
+    }
+    return true
 })
 body = RelatesFeedReply.toBinary(test)
 // protobuf部分处理完后，重新计算并添加B站gRPC校验头
