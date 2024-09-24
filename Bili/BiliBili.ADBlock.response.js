@@ -10703,14 +10703,21 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                                                     await fixPosition().then((result) => (item = result)) //小广告补位
                                                                 }
                                                             } else if (cardGoto === 'live' && cardType === 'small_cover_v9') {
-                                                                let blockUpLiveList = Settings?.Detail?.blockUpLiveList
-                                                                if (typeof blockUpLiveList === 'number') {
-                                                                    blockUpLiveList = blockUpLiveList.toString()
-                                                                }
-                                                                if (blockUpLiveList && blockUpLiveList.includes(item?.args?.up_id?.toString())) {
-                                                                    $.log(`🎉 屏蔽Up主<${item?.args?.up_name}>直播推广`)
+                                                                // 直播直接移除
+                                                                $.log('🎉移除直播')
+                                                                if (url.searchParams.get('device') !== 'phone') {
+                                                                    return undefined //pad直接去除
+                                                                } else {
                                                                     await fixPosition().then((result) => (item = result)) //小广告补位
                                                                 }
+                                                                // let blockUpLiveList = Settings?.Detail?.blockUpLiveList
+                                                                // if (typeof blockUpLiveList === 'number') {
+                                                                //     blockUpLiveList = blockUpLiveList.toString()
+                                                                // }
+                                                                // if (blockUpLiveList && blockUpLiveList.includes(item?.args?.up_id?.toString())) {
+                                                                //     $.log(`🎉 屏蔽Up主<${item?.args?.up_name}>直播推广`)
+                                                                //     await fixPosition().then((result) => (item = result)) //小广告补位
+                                                                // }
                                                             } else if (
                                                                 cardType === 'cm_v2' &&
                                                                 ['ad_player', 'ad_inline_3d', 'ad_inline_eggs', 'ad_inline_live'].includes(cardGoto)
