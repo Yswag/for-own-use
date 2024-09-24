@@ -10963,7 +10963,162 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                 case 'app.bilibili.com': // HTTP/1.1
                                     /******************  initialization start  *******************/
                                     // google.protobuf.Any
-                                    class Any$Type extends MessageType{constructor(){super("google.protobuf.Any",[{no:1,name:"type_url",kind:"scalar",T:9},{no:2,name:"value",kind:"scalar",T:12}])}pack(message,type){return{typeUrl:this.typeNameToUrl(type.typeName),value:type.toBinary(message)}}unpack(any,type,options){if(!this.contains(any,type))throw new Error("Cannot unpack google.protobuf.Any with typeUrl '"+any.typeUrl+"' as "+type.typeName+".");return type.fromBinary(any.value,options)}contains(any,type){if(!any.typeUrl.length)return false;let wants=typeof type=="string"?type:type.typeName;let has=this.typeUrlToName(any.typeUrl);return wants===has}internalJsonWrite(any,options){if(any.typeUrl==="")return{};let typeName=this.typeUrlToName(any.typeUrl);let opt=jsonWriteOptions(options);let type=opt.typeRegistry?.find(t=>t.typeName===typeName);if(!type)throw new globalThis.Error("Unable to convert google.protobuf.Any with typeUrl '"+any.typeUrl+"' to JSON. The specified type "+typeName+" is not available in the type registry.");let value=type.fromBinary(any.value,{readUnknownField:false});let json=type.internalJsonWrite(value,opt);if(typeName.startsWith("google.protobuf.")||!isJsonObject(json))json={value:json};json["@type"]=any.typeUrl;return json}internalJsonRead(json,options,target){if(!isJsonObject(json))throw new globalThis.Error("Unable to parse google.protobuf.Any from JSON "+typeofJsonValue(json)+".");if(typeof json["@type"]!="string"||json["@type"]=="")return this.create();let typeName=this.typeUrlToName(json["@type"]);let type=options?.typeRegistry?.find(t=>t.typeName==typeName);if(!type)throw new globalThis.Error("Unable to parse google.protobuf.Any from JSON. The specified type "+typeName+" is not available in the type registry.");let value;if(typeName.startsWith("google.protobuf.")&&json.hasOwnProperty("value"))value=type.fromJson(json["value"],options);else{let copy=Object.assign({},json);delete copy["@type"];value=type.fromJson(copy,options)}if(target===undefined)target=this.create();target.typeUrl=json["@type"];target.value=type.toBinary(value);return target}typeNameToUrl(name){if(!name.length)throw new Error("invalid type name: "+name);return"type.googleapis.com/"+name}typeUrlToName(url){if(!url.length)throw new Error("invalid type url: "+url);let slash=url.lastIndexOf("/");let name=slash>0?url.substring(slash+1):url;if(!name.length)throw new Error("invalid type url: "+url);return name}create(value){const message={typeUrl:"",value:new Uint8Array(0)};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.typeUrl=reader.string();break;case 2:message.value=reader.bytes();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.typeUrl!=="")writer.tag(1,WireType.LengthDelimited).string(message.typeUrl);if(message.value.length)writer.tag(2,WireType.LengthDelimited).bytes(message.value);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const Any=new Any$Type;class CM$Type extends MessageType{constructor(){super("CM",[{no:1,name:"source_content",kind:"message",T:()=>Any}])}create(value){const message={};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.sourceContent=Any.internalBinaryRead(reader,reader.uint32(),options,message.sourceContent);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.sourceContent)Any.internalBinaryWrite(message.sourceContent,writer.tag(1,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const CM=new CM$Type;
+                                    class Any$Type extends MessageType {
+                                        constructor() {
+                                            super('google.protobuf.Any', [
+                                                { no: 1, name: 'type_url', kind: 'scalar', T: 9 },
+                                                { no: 2, name: 'value', kind: 'scalar', T: 12 },
+                                            ])
+                                        }
+                                        pack(message, type) {
+                                            return { typeUrl: this.typeNameToUrl(type.typeName), value: type.toBinary(message) }
+                                        }
+                                        unpack(any, type, options) {
+                                            if (!this.contains(any, type))
+                                                throw new Error(
+                                                    "Cannot unpack google.protobuf.Any with typeUrl '" + any.typeUrl + "' as " + type.typeName + '.'
+                                                )
+                                            return type.fromBinary(any.value, options)
+                                        }
+                                        contains(any, type) {
+                                            if (!any.typeUrl.length) return false
+                                            let wants = typeof type == 'string' ? type : type.typeName
+                                            let has = this.typeUrlToName(any.typeUrl)
+                                            return wants === has
+                                        }
+                                        internalJsonWrite(any, options) {
+                                            if (any.typeUrl === '') return {}
+                                            let typeName = this.typeUrlToName(any.typeUrl)
+                                            let opt = jsonWriteOptions(options)
+                                            let type = opt.typeRegistry?.find((t) => t.typeName === typeName)
+                                            if (!type)
+                                                throw new globalThis.Error(
+                                                    "Unable to convert google.protobuf.Any with typeUrl '" +
+                                                        any.typeUrl +
+                                                        "' to JSON. The specified type " +
+                                                        typeName +
+                                                        ' is not available in the type registry.'
+                                                )
+                                            let value = type.fromBinary(any.value, { readUnknownField: false })
+                                            let json = type.internalJsonWrite(value, opt)
+                                            if (typeName.startsWith('google.protobuf.') || !isJsonObject(json)) json = { value: json }
+                                            json['@type'] = any.typeUrl
+                                            return json
+                                        }
+                                        internalJsonRead(json, options, target) {
+                                            if (!isJsonObject(json))
+                                                throw new globalThis.Error('Unable to parse google.protobuf.Any from JSON ' + typeofJsonValue(json) + '.')
+                                            if (typeof json['@type'] != 'string' || json['@type'] == '') return this.create()
+                                            let typeName = this.typeUrlToName(json['@type'])
+                                            let type = options?.typeRegistry?.find((t) => t.typeName == typeName)
+                                            if (!type)
+                                                throw new globalThis.Error(
+                                                    'Unable to parse google.protobuf.Any from JSON. The specified type ' +
+                                                        typeName +
+                                                        ' is not available in the type registry.'
+                                                )
+                                            let value
+                                            if (typeName.startsWith('google.protobuf.') && json.hasOwnProperty('value'))
+                                                value = type.fromJson(json['value'], options)
+                                            else {
+                                                let copy = Object.assign({}, json)
+                                                delete copy['@type']
+                                                value = type.fromJson(copy, options)
+                                            }
+                                            if (target === undefined) target = this.create()
+                                            target.typeUrl = json['@type']
+                                            target.value = type.toBinary(value)
+                                            return target
+                                        }
+                                        typeNameToUrl(name) {
+                                            if (!name.length) throw new Error('invalid type name: ' + name)
+                                            return 'type.googleapis.com/' + name
+                                        }
+                                        typeUrlToName(url) {
+                                            if (!url.length) throw new Error('invalid type url: ' + url)
+                                            let slash = url.lastIndexOf('/')
+                                            let name = slash > 0 ? url.substring(slash + 1) : url
+                                            if (!name.length) throw new Error('invalid type url: ' + url)
+                                            return name
+                                        }
+                                        create(value) {
+                                            const message = { typeUrl: '', value: new Uint8Array(0) }
+                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                            return message
+                                        }
+                                        internalBinaryRead(reader, length, options, target) {
+                                            let message = target ?? this.create(),
+                                                end = reader.pos + length
+                                            while (reader.pos < end) {
+                                                let [fieldNo, wireType] = reader.tag()
+                                                switch (fieldNo) {
+                                                    case 1:
+                                                        message.typeUrl = reader.string()
+                                                        break
+                                                    case 2:
+                                                        message.value = reader.bytes()
+                                                        break
+                                                    default:
+                                                        let u = options.readUnknownField
+                                                        if (u === 'throw')
+                                                            throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`)
+                                                        let d = reader.skip(wireType)
+                                                        if (u !== false)
+                                                            (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                }
+                                            }
+                                            return message
+                                        }
+                                        internalBinaryWrite(message, writer, options) {
+                                            if (message.typeUrl !== '') writer.tag(1, WireType.LengthDelimited).string(message.typeUrl)
+                                            if (message.value.length) writer.tag(2, WireType.LengthDelimited).bytes(message.value)
+                                            let u = options.writeUnknownFields
+                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                            return writer
+                                        }
+                                    }
+                                    const Any = new Any$Type()
+                                    // CM 广告
+                                    class CM$Type extends MessageType {
+                                        constructor() {
+                                            super('CM', [{ no: 1, name: 'source_content', kind: 'message', T: () => Any }])
+                                        }
+                                        create(value) {
+                                            const message = {}
+                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                            return message
+                                        }
+                                        internalBinaryRead(reader, length, options, target) {
+                                            let message = target ?? this.create(),
+                                                end = reader.pos + length
+                                            while (reader.pos < end) {
+                                                let [fieldNo, wireType] = reader.tag()
+                                                switch (fieldNo) {
+                                                    case 1:
+                                                        message.sourceContent = Any.internalBinaryRead(reader, reader.uint32(), options, message.sourceContent)
+                                                        break
+                                                    default:
+                                                        let u = options.readUnknownField
+                                                        if (u === 'throw')
+                                                            throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`)
+                                                        let d = reader.skip(wireType)
+                                                        if (u !== false)
+                                                            (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                }
+                                            }
+                                            return message
+                                        }
+                                        internalBinaryWrite(message, writer, options) {
+                                            if (message.sourceContent)
+                                                Any.internalBinaryWrite(message.sourceContent, writer.tag(1, WireType.LengthDelimited).fork(), options).join()
+                                            let u = options.writeUnknownFields
+                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                            return writer
+                                        }
+                                    }
+                                    const CM = new CM$Type()
                                     /******************  initialization finish  ******************/
                                     switch (PATHs?.[0]) {
                                         case 'bilibili.app.playurl.v1.PlayURL': // 投稿视频
@@ -10971,7 +11126,240 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                                 case 'PlayView': // 播放地址
                                                     /******************  initialization start  *******************/
                                                     // protobuf/bilibili/app/playurl/playurl.proto
-                                                    class PlayViewReply$Type extends MessageType{constructor(){super("PlayViewReply",[{no:5,name:"play_arc",kind:"message",T:()=>PlayArcConf}])}create(value){const message={};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 5:message.playArc=PlayArcConf.internalBinaryRead(reader,reader.uint32(),options,message.playArc);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.playArc)PlayArcConf.internalBinaryWrite(message.playArc,writer.tag(5,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const PlayViewReply=new PlayViewReply$Type;class PlayArcConf$Type extends MessageType{constructor(){super("PlayArcConf",[{no:1,name:"background_play_conf",kind:"message",T:()=>ArcConf}])}create(value){const message={};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.backgroundPlayConf=ArcConf.internalBinaryRead(reader,reader.uint32(),options,message.backgroundPlayConf);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.backgroundPlayConf)ArcConf.internalBinaryWrite(message.backgroundPlayConf,writer.tag(1,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const PlayArcConf=new PlayArcConf$Type;class ArcConf$Type extends MessageType{constructor(){super("ArcConf",[{no:1,name:"is_support",kind:"scalar",T:8},{no:2,name:"disabled",kind:"scalar",T:8},{no:3,name:"extra_content",kind:"message",T:()=>ExtraContent}])}create(value){const message={isSupport:false,disabled:false};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.isSupport=reader.bool();break;case 2:message.disabled=reader.bool();break;case 3:message.extraContent=ExtraContent.internalBinaryRead(reader,reader.uint32(),options,message.extraContent);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.isSupport!==false)writer.tag(1,WireType.Varint).bool(message.isSupport);if(message.disabled!==false)writer.tag(2,WireType.Varint).bool(message.disabled);if(message.extraContent)ExtraContent.internalBinaryWrite(message.extraContent,writer.tag(3,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const ArcConf=new ArcConf$Type;class ExtraContent$Type extends MessageType{constructor(){super("ExtraContent",[{no:1,name:"disabled_reason",kind:"scalar",T:9},{no:2,name:"disabled_code",kind:"scalar",T:3,L:0}])}create(value){const message={disabledReason:"",disabledCode:0n};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.disabledReason=reader.string();break;case 2:message.disabledCode=reader.int64().toBigInt();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.disabledReason!=="")writer.tag(1,WireType.LengthDelimited).string(message.disabledReason);if(message.disabledCode!==0n)writer.tag(2,WireType.Varint).int64(message.disabledCode);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const ExtraContent=new ExtraContent$Type;
+                                                    class PlayViewReply$Type extends MessageType {
+                                                        constructor() {
+                                                            super('PlayViewReply', [{ no: 5, name: 'play_arc', kind: 'message', T: () => PlayArcConf }])
+                                                        }
+                                                        create(value) {
+                                                            const message = {}
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 5:
+                                                                        message.playArc = PlayArcConf.internalBinaryRead(
+                                                                            reader,
+                                                                            reader.uint32(),
+                                                                            options,
+                                                                            message.playArc
+                                                                        )
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.playArc)
+                                                                PlayArcConf.internalBinaryWrite(
+                                                                    message.playArc,
+                                                                    writer.tag(5, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const PlayViewReply = new PlayViewReply$Type()
+                                                    class PlayArcConf$Type extends MessageType {
+                                                        constructor() {
+                                                            super('PlayArcConf', [{ no: 1, name: 'background_play_conf', kind: 'message', T: () => ArcConf }])
+                                                        }
+                                                        create(value) {
+                                                            const message = {}
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.backgroundPlayConf = ArcConf.internalBinaryRead(
+                                                                            reader,
+                                                                            reader.uint32(),
+                                                                            options,
+                                                                            message.backgroundPlayConf
+                                                                        )
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.backgroundPlayConf)
+                                                                ArcConf.internalBinaryWrite(
+                                                                    message.backgroundPlayConf,
+                                                                    writer.tag(1, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const PlayArcConf = new PlayArcConf$Type()
+                                                    class ArcConf$Type extends MessageType {
+                                                        constructor() {
+                                                            super('ArcConf', [
+                                                                { no: 1, name: 'is_support', kind: 'scalar', T: 8 },
+                                                                { no: 2, name: 'disabled', kind: 'scalar', T: 8 },
+                                                                { no: 3, name: 'extra_content', kind: 'message', T: () => ExtraContent },
+                                                            ])
+                                                        }
+                                                        create(value) {
+                                                            const message = { isSupport: false, disabled: false }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.isSupport = reader.bool()
+                                                                        break
+                                                                    case 2:
+                                                                        message.disabled = reader.bool()
+                                                                        break
+                                                                    case 3:
+                                                                        message.extraContent = ExtraContent.internalBinaryRead(
+                                                                            reader,
+                                                                            reader.uint32(),
+                                                                            options,
+                                                                            message.extraContent
+                                                                        )
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.isSupport !== false) writer.tag(1, WireType.Varint).bool(message.isSupport)
+                                                            if (message.disabled !== false) writer.tag(2, WireType.Varint).bool(message.disabled)
+                                                            if (message.extraContent)
+                                                                ExtraContent.internalBinaryWrite(
+                                                                    message.extraContent,
+                                                                    writer.tag(3, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const ArcConf = new ArcConf$Type()
+                                                    class ExtraContent$Type extends MessageType {
+                                                        constructor() {
+                                                            super('ExtraContent', [
+                                                                { no: 1, name: 'disabled_reason', kind: 'scalar', T: 9 },
+                                                                { no: 2, name: 'disabled_code', kind: 'scalar', T: 3, L: 0 },
+                                                            ])
+                                                        }
+                                                        create(value) {
+                                                            const message = { disabledReason: '', disabledCode: 0n }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.disabledReason = reader.string()
+                                                                        break
+                                                                    case 2:
+                                                                        message.disabledCode = reader.int64().toBigInt()
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.disabledReason !== '')
+                                                                writer.tag(1, WireType.LengthDelimited).string(message.disabledReason)
+                                                            if (message.disabledCode !== 0n) writer.tag(2, WireType.Varint).int64(message.disabledCode)
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const ExtraContent = new ExtraContent$Type()
                                                     /******************  initialization finish  ******************/
                                                     let data = PlayViewReply.fromBinary(body)
                                                     const oldBackgroundConf = data.playArc?.backgroundPlayConf
@@ -10990,7 +11378,308 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                         case 'bilibili.app.dynamic.v2.Dynamic': // 动态
                                             /******************  initialization start  *******************/
                                             // protobuf/bilibili/app/dynamic/dynamic.proto
-                                            var DynamicType;(function(DynamicType){DynamicType[DynamicType["dyn_none"]=0]="dyn_none";DynamicType[DynamicType["ad"]=15]="ad"})(DynamicType||(DynamicType={}));class DynAllReply$Type extends MessageType{constructor(){super("DynAllReply",[{no:1,name:"dynamic_list",kind:"message",T:()=>DynamicList},{no:2,name:"up_list",kind:"message",T:()=>CardVideoUpList},{no:3,name:"topic_list",kind:"message",T:()=>TopicList}])}create(value){const message={};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.dynamicList=DynamicList.internalBinaryRead(reader,reader.uint32(),options,message.dynamicList);break;case 2:message.upList=CardVideoUpList.internalBinaryRead(reader,reader.uint32(),options,message.upList);break;case 3:message.topicList=TopicList.internalBinaryRead(reader,reader.uint32(),options,message.topicList);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.dynamicList)DynamicList.internalBinaryWrite(message.dynamicList,writer.tag(1,WireType.LengthDelimited).fork(),options).join();if(message.upList)CardVideoUpList.internalBinaryWrite(message.upList,writer.tag(2,WireType.LengthDelimited).fork(),options).join();if(message.topicList)TopicList.internalBinaryWrite(message.topicList,writer.tag(3,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const DynAllReply=new DynAllReply$Type;class DynVideoReply$Type extends MessageType{constructor(){super("DynVideoReply",[{no:2,name:"video_up_list",kind:"message",T:()=>CardVideoUpList}])}create(value){const message={};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 2:message.videoUpList=CardVideoUpList.internalBinaryRead(reader,reader.uint32(),options,message.videoUpList);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.videoUpList)CardVideoUpList.internalBinaryWrite(message.videoUpList,writer.tag(2,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const DynVideoReply=new DynVideoReply$Type;class DynamicList$Type extends MessageType{constructor(){super("DynamicList",[{no:1,name:"list",kind:"message",repeat:1,T:()=>DynamicItem}])}create(value){const message={list:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.list.push(DynamicItem.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.list.length;i++)DynamicItem.internalBinaryWrite(message.list[i],writer.tag(1,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const DynamicList=new DynamicList$Type;class CardVideoUpList$Type extends MessageType{constructor(){super("CardVideoUpList",[{no:1,name:"title",kind:"scalar",T:9}])}create(value){const message={title:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.title=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.title!=="")writer.tag(1,WireType.LengthDelimited).string(message.title);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const CardVideoUpList=new CardVideoUpList$Type;class TopicList$Type extends MessageType{constructor(){super("TopicList",[{no:1,name:"title",kind:"scalar",T:9}])}create(value){const message={title:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.title=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.title!=="")writer.tag(1,WireType.LengthDelimited).string(message.title);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const TopicList=new TopicList$Type;class DynamicItem$Type extends MessageType{constructor(){super("DynamicItem",[{no:1,name:"card_type",kind:"enum",T:()=>["DynamicType",DynamicType]}])}create(value){const message={cardType:0};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.cardType=reader.int32();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.cardType!==0)writer.tag(1,WireType.Varint).int32(message.cardType);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const DynamicItem=new DynamicItem$Type;
+                                            var DynamicType
+                                            ;(function (DynamicType) {
+                                                DynamicType[(DynamicType['dyn_none'] = 0)] = 'dyn_none'
+                                                DynamicType[(DynamicType['ad'] = 15)] = 'ad'
+                                            })(DynamicType || (DynamicType = {}))
+                                            class DynAllReply$Type extends MessageType {
+                                                constructor() {
+                                                    super('DynAllReply', [
+                                                        { no: 1, name: 'dynamic_list', kind: 'message', T: () => DynamicList },
+                                                        { no: 2, name: 'up_list', kind: 'message', T: () => CardVideoUpList },
+                                                        { no: 3, name: 'topic_list', kind: 'message', T: () => TopicList },
+                                                    ])
+                                                }
+                                                create(value) {
+                                                    const message = {}
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.dynamicList = DynamicList.internalBinaryRead(
+                                                                    reader,
+                                                                    reader.uint32(),
+                                                                    options,
+                                                                    message.dynamicList
+                                                                )
+                                                                break
+                                                            case 2:
+                                                                message.upList = CardVideoUpList.internalBinaryRead(
+                                                                    reader,
+                                                                    reader.uint32(),
+                                                                    options,
+                                                                    message.upList
+                                                                )
+                                                                break
+                                                            case 3:
+                                                                message.topicList = TopicList.internalBinaryRead(
+                                                                    reader,
+                                                                    reader.uint32(),
+                                                                    options,
+                                                                    message.topicList
+                                                                )
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.dynamicList)
+                                                        DynamicList.internalBinaryWrite(
+                                                            message.dynamicList,
+                                                            writer.tag(1, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    if (message.upList)
+                                                        CardVideoUpList.internalBinaryWrite(
+                                                            message.upList,
+                                                            writer.tag(2, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    if (message.topicList)
+                                                        TopicList.internalBinaryWrite(
+                                                            message.topicList,
+                                                            writer.tag(3, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const DynAllReply = new DynAllReply$Type()
+                                            class DynVideoReply$Type extends MessageType {
+                                                constructor() {
+                                                    super('DynVideoReply', [{ no: 2, name: 'video_up_list', kind: 'message', T: () => CardVideoUpList }])
+                                                }
+                                                create(value) {
+                                                    const message = {}
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 2:
+                                                                message.videoUpList = CardVideoUpList.internalBinaryRead(
+                                                                    reader,
+                                                                    reader.uint32(),
+                                                                    options,
+                                                                    message.videoUpList
+                                                                )
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.videoUpList)
+                                                        CardVideoUpList.internalBinaryWrite(
+                                                            message.videoUpList,
+                                                            writer.tag(2, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const DynVideoReply = new DynVideoReply$Type()
+                                            class DynamicList$Type extends MessageType {
+                                                constructor() {
+                                                    super('DynamicList', [{ no: 1, name: 'list', kind: 'message', repeat: 1, T: () => DynamicItem }])
+                                                }
+                                                create(value) {
+                                                    const message = { list: [] }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.list.push(DynamicItem.internalBinaryRead(reader, reader.uint32(), options))
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    for (let i = 0; i < message.list.length; i++)
+                                                        DynamicItem.internalBinaryWrite(
+                                                            message.list[i],
+                                                            writer.tag(1, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const DynamicList = new DynamicList$Type()
+                                            class CardVideoUpList$Type extends MessageType {
+                                                constructor() {
+                                                    super('CardVideoUpList', [{ no: 1, name: 'title', kind: 'scalar', T: 9 }])
+                                                }
+                                                create(value) {
+                                                    const message = { title: '' }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.title = reader.string()
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.title !== '') writer.tag(1, WireType.LengthDelimited).string(message.title)
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const CardVideoUpList = new CardVideoUpList$Type()
+                                            class TopicList$Type extends MessageType {
+                                                constructor() {
+                                                    super('TopicList', [{ no: 1, name: 'title', kind: 'scalar', T: 9 }])
+                                                }
+                                                create(value) {
+                                                    const message = { title: '' }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.title = reader.string()
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.title !== '') writer.tag(1, WireType.LengthDelimited).string(message.title)
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const TopicList = new TopicList$Type()
+                                            class DynamicItem$Type extends MessageType {
+                                                constructor() {
+                                                    super('DynamicItem', [{ no: 1, name: 'card_type', kind: 'enum', T: () => ['DynamicType', DynamicType] }])
+                                                }
+                                                create(value) {
+                                                    const message = { cardType: 0 }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.cardType = reader.int32()
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.cardType !== 0) writer.tag(1, WireType.Varint).int32(message.cardType)
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const DynamicItem = new DynamicItem$Type()
                                             /******************  initialization finish  ******************/
                                             switch (PATHs?.[1]) {
                                                 case 'DynAll': // 动态综合页
@@ -11054,7 +11743,328 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                                 case 'View': // 视频播放页
                                                     /******************  initialization start  *******************/
                                                     // protobuf/bilibili/app/view/view.proto
-                                                    class ViewReply$Type extends MessageType{constructor(){super("ViewReply",[{no:6,name:"t_icon",kind:"map",K:9,V:{kind:"message",T:()=>TIcon}},{no:10,name:"relates",kind:"message",repeat:1,T:()=>Relate},{no:30,name:"cms",kind:"message",repeat:1,T:()=>CM},{no:31,name:"cm_config",kind:"message",T:()=>CMConfig},{no:41,name:"cm_ipad",kind:"message",T:()=>CmIpad}])}create(value){const message={tIcon:{},relates:[],cms:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 6:this.binaryReadMap6(message.tIcon,reader,options);break;case 10:message.relates.push(Relate.internalBinaryRead(reader,reader.uint32(),options));break;case 30:message.cms.push(CM.internalBinaryRead(reader,reader.uint32(),options));break;case 31:message.cmConfig=CMConfig.internalBinaryRead(reader,reader.uint32(),options,message.cmConfig);break;case 41:message.cmIpad=CmIpad.internalBinaryRead(reader,reader.uint32(),options,message.cmIpad);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}binaryReadMap6(map,reader,options){let len=reader.uint32(),end=reader.pos+len,key,val;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:key=reader.string();break;case 2:val=TIcon.internalBinaryRead(reader,reader.uint32(),options);break;default:throw new globalThis.Error("unknown map entry field for field ViewReply.t_icon")}}map[key??""]=val??TIcon.create()}internalBinaryWrite(message,writer,options){for(let k of Object.keys(message.tIcon)){writer.tag(6,WireType.LengthDelimited).fork().tag(1,WireType.LengthDelimited).string(k);writer.tag(2,WireType.LengthDelimited).fork();TIcon.internalBinaryWrite(message.tIcon[k],writer,options);writer.join().join()}for(let i=0;i<message.relates.length;i++)Relate.internalBinaryWrite(message.relates[i],writer.tag(10,WireType.LengthDelimited).fork(),options).join();for(let i=0;i<message.cms.length;i++)CM.internalBinaryWrite(message.cms[i],writer.tag(30,WireType.LengthDelimited).fork(),options).join();if(message.cmConfig)CMConfig.internalBinaryWrite(message.cmConfig,writer.tag(31,WireType.LengthDelimited).fork(),options).join();if(message.cmIpad)CmIpad.internalBinaryWrite(message.cmIpad,writer.tag(41,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const ViewReply=new ViewReply$Type;class CMConfig$Type extends MessageType{constructor(){super("CMConfig",[{no:1,name:"ads_control",kind:"message",T:()=>Any}])}create(value){const message={};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.adsControl=Any.internalBinaryRead(reader,reader.uint32(),options,message.adsControl);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.adsControl)Any.internalBinaryWrite(message.adsControl,writer.tag(1,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const CMConfig=new CMConfig$Type;class CmIpad$Type extends MessageType{constructor(){super("CmIpad",[{no:5,name:"aid",kind:"scalar",T:3,L:0}])}create(value){const message={aid:0n};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 5:message.aid=reader.int64().toBigInt();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.aid!==0n)writer.tag(5,WireType.Varint).int64(message.aid);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const CmIpad=new CmIpad$Type;class TIcon$Type extends MessageType{constructor(){super("TIcon",[{no:1,name:"icon",kind:"scalar",T:9}])}create(value){const message={icon:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.icon=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.icon!=="")writer.tag(1,WireType.LengthDelimited).string(message.icon);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const TIcon=new TIcon$Type;class Relate$Type extends MessageType{constructor(){super("Relate",[{no:28,name:"cm",kind:"message",T:()=>CM}])}create(value){const message={};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 28:message.cm=CM.internalBinaryRead(reader,reader.uint32(),options,message.cm);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.cm)CM.internalBinaryWrite(message.cm,writer.tag(28,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const Relate=new Relate$Type;
+                                                    class ViewReply$Type extends MessageType {
+                                                        constructor() {
+                                                            super('ViewReply', [
+                                                                { no: 6, name: 't_icon', kind: 'map', K: 9, V: { kind: 'message', T: () => TIcon } },
+                                                                { no: 10, name: 'relates', kind: 'message', repeat: 1, T: () => Relate },
+                                                                { no: 30, name: 'cms', kind: 'message', repeat: 1, T: () => CM },
+                                                                { no: 31, name: 'cm_config', kind: 'message', T: () => CMConfig },
+                                                                { no: 41, name: 'cm_ipad', kind: 'message', T: () => CmIpad },
+                                                            ])
+                                                        }
+                                                        create(value) {
+                                                            const message = { tIcon: {}, relates: [], cms: [] }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 6:
+                                                                        this.binaryReadMap6(message.tIcon, reader, options)
+                                                                        break
+                                                                    case 10:
+                                                                        message.relates.push(Relate.internalBinaryRead(reader, reader.uint32(), options))
+                                                                        break
+                                                                    case 30:
+                                                                        message.cms.push(CM.internalBinaryRead(reader, reader.uint32(), options))
+                                                                        break
+                                                                    case 31:
+                                                                        message.cmConfig = CMConfig.internalBinaryRead(
+                                                                            reader,
+                                                                            reader.uint32(),
+                                                                            options,
+                                                                            message.cmConfig
+                                                                        )
+                                                                        break
+                                                                    case 41:
+                                                                        message.cmIpad = CmIpad.internalBinaryRead(
+                                                                            reader,
+                                                                            reader.uint32(),
+                                                                            options,
+                                                                            message.cmIpad
+                                                                        )
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        binaryReadMap6(map, reader, options) {
+                                                            let len = reader.uint32(),
+                                                                end = reader.pos + len,
+                                                                key,
+                                                                val
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        key = reader.string()
+                                                                        break
+                                                                    case 2:
+                                                                        val = TIcon.internalBinaryRead(reader, reader.uint32(), options)
+                                                                        break
+                                                                    default:
+                                                                        throw new globalThis.Error('unknown map entry field for field ViewReply.t_icon')
+                                                                }
+                                                            }
+                                                            map[key ?? ''] = val ?? TIcon.create()
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            for (let k of Object.keys(message.tIcon)) {
+                                                                writer.tag(6, WireType.LengthDelimited).fork().tag(1, WireType.LengthDelimited).string(k)
+                                                                writer.tag(2, WireType.LengthDelimited).fork()
+                                                                TIcon.internalBinaryWrite(message.tIcon[k], writer, options)
+                                                                writer.join().join()
+                                                            }
+                                                            for (let i = 0; i < message.relates.length; i++)
+                                                                Relate.internalBinaryWrite(
+                                                                    message.relates[i],
+                                                                    writer.tag(10, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            for (let i = 0; i < message.cms.length; i++)
+                                                                CM.internalBinaryWrite(
+                                                                    message.cms[i],
+                                                                    writer.tag(30, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            if (message.cmConfig)
+                                                                CMConfig.internalBinaryWrite(
+                                                                    message.cmConfig,
+                                                                    writer.tag(31, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            if (message.cmIpad)
+                                                                CmIpad.internalBinaryWrite(
+                                                                    message.cmIpad,
+                                                                    writer.tag(41, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const ViewReply = new ViewReply$Type()
+                                                    class CMConfig$Type extends MessageType {
+                                                        constructor() {
+                                                            super('CMConfig', [{ no: 1, name: 'ads_control', kind: 'message', T: () => Any }])
+                                                        }
+                                                        create(value) {
+                                                            const message = {}
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.adsControl = Any.internalBinaryRead(
+                                                                            reader,
+                                                                            reader.uint32(),
+                                                                            options,
+                                                                            message.adsControl
+                                                                        )
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.adsControl)
+                                                                Any.internalBinaryWrite(
+                                                                    message.adsControl,
+                                                                    writer.tag(1, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const CMConfig = new CMConfig$Type()
+                                                    class CmIpad$Type extends MessageType {
+                                                        constructor() {
+                                                            super('CmIpad', [{ no: 5, name: 'aid', kind: 'scalar', T: 3, L: 0 }])
+                                                        }
+                                                        create(value) {
+                                                            const message = { aid: 0n }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 5:
+                                                                        message.aid = reader.int64().toBigInt()
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.aid !== 0n) writer.tag(5, WireType.Varint).int64(message.aid)
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const CmIpad = new CmIpad$Type()
+                                                    class TIcon$Type extends MessageType {
+                                                        constructor() {
+                                                            super('TIcon', [{ no: 1, name: 'icon', kind: 'scalar', T: 9 }])
+                                                        }
+                                                        create(value) {
+                                                            const message = { icon: '' }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.icon = reader.string()
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.icon !== '') writer.tag(1, WireType.LengthDelimited).string(message.icon)
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const TIcon = new TIcon$Type()
+                                                    class Relate$Type extends MessageType {
+                                                        constructor() {
+                                                            super('Relate', [{ no: 28, name: 'cm', kind: 'message', T: () => CM }])
+                                                        }
+                                                        create(value) {
+                                                            const message = {}
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 28:
+                                                                        message.cm = CM.internalBinaryRead(reader, reader.uint32(), options, message.cm)
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.cm)
+                                                                CM.internalBinaryWrite(
+                                                                    message.cm,
+                                                                    writer.tag(28, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const Relate = new Relate$Type()
                                                     /******************  initialization finish  ******************/
                                                     switch (Settings?.Detail?.view) {
                                                         case true:
@@ -11095,7 +12105,177 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                                 case 'TFInfo':
                                                     /******************  initialization start  *******************/
                                                     // protobuf/bilibili/app/view/view.proto
-                                                    class TFInfoReply$Type extends MessageType{constructor(){super("TFInfoReply",[{no:1,name:"tipsId",kind:"scalar",T:3,L:0},{no:2,name:"tfToast",kind:"message",T:()=>TFToast},{no:3,name:"tfPanelCustomized",kind:"message",T:()=>TFPanelCustomized}])}create(value){const message={tipsId:0n};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.tipsId=reader.int64().toBigInt();break;case 2:message.tfToast=TFToast.internalBinaryRead(reader,reader.uint32(),options,message.tfToast);break;case 3:message.tfPanelCustomized=TFPanelCustomized.internalBinaryRead(reader,reader.uint32(),options,message.tfPanelCustomized);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.tipsId!==0n)writer.tag(1,WireType.Varint).int64(message.tipsId);if(message.tfToast)TFToast.internalBinaryWrite(message.tfToast,writer.tag(2,WireType.LengthDelimited).fork(),options).join();if(message.tfPanelCustomized)TFPanelCustomized.internalBinaryWrite(message.tfPanelCustomized,writer.tag(3,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const TFInfoReply=new TFInfoReply$Type;class TFToast$Type extends MessageType{constructor(){super("TFToast",[{no:1,name:"btnText",kind:"scalar",T:9}])}create(value){const message={btnText:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.btnText=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.btnText!=="")writer.tag(1,WireType.LengthDelimited).string(message.btnText);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const TFToast=new TFToast$Type;class TFPanelCustomized$Type extends MessageType{constructor(){super("TFPanelCustomized",[{no:2,name:"rightBtnText",kind:"scalar",T:9}])}create(value){const message={rightBtnText:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 2:message.rightBtnText=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.rightBtnText!=="")writer.tag(2,WireType.LengthDelimited).string(message.rightBtnText);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const TFPanelCustomized=new TFPanelCustomized$Type;
+                                                    class TFInfoReply$Type extends MessageType {
+                                                        constructor() {
+                                                            super('TFInfoReply', [
+                                                                { no: 1, name: 'tipsId', kind: 'scalar', T: 3, L: 0 },
+                                                                { no: 2, name: 'tfToast', kind: 'message', T: () => TFToast },
+                                                                { no: 3, name: 'tfPanelCustomized', kind: 'message', T: () => TFPanelCustomized },
+                                                            ])
+                                                        }
+                                                        create(value) {
+                                                            const message = { tipsId: 0n }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.tipsId = reader.int64().toBigInt()
+                                                                        break
+                                                                    case 2:
+                                                                        message.tfToast = TFToast.internalBinaryRead(
+                                                                            reader,
+                                                                            reader.uint32(),
+                                                                            options,
+                                                                            message.tfToast
+                                                                        )
+                                                                        break
+                                                                    case 3:
+                                                                        message.tfPanelCustomized = TFPanelCustomized.internalBinaryRead(
+                                                                            reader,
+                                                                            reader.uint32(),
+                                                                            options,
+                                                                            message.tfPanelCustomized
+                                                                        )
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.tipsId !== 0n) writer.tag(1, WireType.Varint).int64(message.tipsId)
+                                                            if (message.tfToast)
+                                                                TFToast.internalBinaryWrite(
+                                                                    message.tfToast,
+                                                                    writer.tag(2, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            if (message.tfPanelCustomized)
+                                                                TFPanelCustomized.internalBinaryWrite(
+                                                                    message.tfPanelCustomized,
+                                                                    writer.tag(3, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const TFInfoReply = new TFInfoReply$Type()
+                                                    class TFToast$Type extends MessageType {
+                                                        constructor() {
+                                                            super('TFToast', [{ no: 1, name: 'btnText', kind: 'scalar', T: 9 }])
+                                                        }
+                                                        create(value) {
+                                                            const message = { btnText: '' }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.btnText = reader.string()
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.btnText !== '') writer.tag(1, WireType.LengthDelimited).string(message.btnText)
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const TFToast = new TFToast$Type()
+                                                    class TFPanelCustomized$Type extends MessageType {
+                                                        constructor() {
+                                                            super('TFPanelCustomized', [{ no: 2, name: 'rightBtnText', kind: 'scalar', T: 9 }])
+                                                        }
+                                                        create(value) {
+                                                            const message = { rightBtnText: '' }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 2:
+                                                                        message.rightBtnText = reader.string()
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.rightBtnText !== '')
+                                                                writer.tag(2, WireType.LengthDelimited).string(message.rightBtnText)
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const TFPanelCustomized = new TFPanelCustomized$Type()
                                                     /******************  initialization finish  ******************/
                                                     let data = TFInfoReply.fromBinary(body)
                                                     $.log(data.tipsId)
@@ -11111,7 +12291,440 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                         case 'bilibili.app.viewunite.v1.View': // 视频(内测)
                                             /******************  initialization start  *******************/
                                             // protobuf/bilibili/app/viewunite/viewunite.proto
-                                            class ViewReply$Type extends MessageType{constructor(){super("bilibili.app.viewunite.v1.ViewReply",[{no:5,name:"tab",kind:"message",T:()=>Tab},{no:7,name:"cm",kind:"message",T:()=>CM}])}create(value){const message={};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 5:message.tab=Tab.internalBinaryRead(reader,reader.uint32(),options,message.tab);break;case 7:message.cm=CM.internalBinaryRead(reader,reader.uint32(),options,message.cm);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.tab)Tab.internalBinaryWrite(message.tab,writer.tag(5,WireType.LengthDelimited).fork(),options).join();if(message.cm)CM.internalBinaryWrite(message.cm,writer.tag(7,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const ViewReply=new ViewReply$Type;class Tab$Type extends MessageType{constructor(){super("bilibili.app.viewunite.v1.Tab",[{no:1,name:"tab_module",kind:"message",repeat:1,T:()=>TabModule}])}create(value){const message={tabModule:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.tabModule.push(TabModule.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.tabModule.length;i++)TabModule.internalBinaryWrite(message.tabModule[i],writer.tag(1,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const Tab=new Tab$Type;class TabModule$Type extends MessageType{constructor(){super("bilibili.app.viewunite.v1.TabModule",[{no:2,name:"introduction",kind:"message",oneof:"tab",T:()=>IntroductionTab}])}create(value){const message={tab:{oneofKind:undefined}};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 2:message.tab={oneofKind:"introduction",introduction:IntroductionTab.internalBinaryRead(reader,reader.uint32(),options,message.tab.introduction)};break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.tab.oneofKind==="introduction")IntroductionTab.internalBinaryWrite(message.tab.introduction,writer.tag(2,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const TabModule=new TabModule$Type;class IntroductionTab$Type extends MessageType{constructor(){super("bilibili.app.viewunite.v1.IntroductionTab",[{no:2,name:"modules",kind:"message",repeat:1,T:()=>Module}])}create(value){const message={modules:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 2:message.modules.push(Module.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.modules.length;i++)Module.internalBinaryWrite(message.modules[i],writer.tag(2,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const IntroductionTab=new IntroductionTab$Type;class Module$Type extends MessageType{constructor(){super("bilibili.app.viewunite.v1.Module",[{no:1,name:"type",kind:"scalar",T:5},{no:22,name:"relates",kind:"message",oneof:"data",T:()=>Relates}])}create(value){const message={type:0,data:{oneofKind:undefined}};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.type=reader.int32();break;case 22:message.data={oneofKind:"relates",relates:Relates.internalBinaryRead(reader,reader.uint32(),options,message.data.relates)};break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.type!==0)writer.tag(1,WireType.Varint).int32(message.type);if(message.data.oneofKind==="relates")Relates.internalBinaryWrite(message.data.relates,writer.tag(22,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const Module=new Module$Type;class Relates$Type extends MessageType{constructor(){super("bilibili.app.viewunite.v1.Relates",[{no:1,name:"cards",kind:"message",repeat:1,T:()=>RelateCard}])}create(value){const message={cards:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.cards.push(RelateCard.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.cards.length;i++)RelateCard.internalBinaryWrite(message.cards[i],writer.tag(1,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const Relates=new Relates$Type;class RelateCard$Type extends MessageType{constructor(){super("bilibili.app.viewunite.v1.RelateCard",[{no:1,name:"relate_card_type",kind:"scalar",T:5}])}create(value){const message={relateCardType:0};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.relateCardType=reader.int32();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.relateCardType!==0)writer.tag(1,WireType.Varint).int32(message.relateCardType);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const RelateCard=new RelateCard$Type;class CM$Type extends MessageType{constructor(){super("bilibili.app.viewunite.v1.CM",[{no:3,name:"source_content",kind:"message",repeat:1,T:()=>Any}])}create(value){const message={sourceContent:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 3:message.sourceContent.push(Any.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.sourceContent.length;i++)Any.internalBinaryWrite(message.sourceContent[i],writer.tag(3,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const CM=new CM$Type;class RelatesFeedReply$Type extends MessageType{constructor(){super("bilibili.app.viewunite.v1.RelatesFeedReply",[{no:1,name:"relates",kind:"message",repeat:1,T:()=>RelateCard}])}create(value){const message={relates:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.relates.push(RelateCard.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.relates.length;i++)RelateCard.internalBinaryWrite(message.relates[i],writer.tag(1,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const RelatesFeedReply=new RelatesFeedReply$Type;
+                                            class ViewReply$Type extends MessageType {
+                                                constructor() {
+                                                    super('bilibili.app.viewunite.v1.ViewReply', [
+                                                        { no: 5, name: 'tab', kind: 'message', T: () => Tab },
+                                                        { no: 7, name: 'cm', kind: 'message', T: () => CM },
+                                                    ])
+                                                }
+                                                create(value) {
+                                                    const message = {}
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 5:
+                                                                message.tab = Tab.internalBinaryRead(reader, reader.uint32(), options, message.tab)
+                                                                break
+                                                            case 7:
+                                                                message.cm = CM.internalBinaryRead(reader, reader.uint32(), options, message.cm)
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.tab)
+                                                        Tab.internalBinaryWrite(message.tab, writer.tag(5, WireType.LengthDelimited).fork(), options).join()
+                                                    if (message.cm)
+                                                        CM.internalBinaryWrite(message.cm, writer.tag(7, WireType.LengthDelimited).fork(), options).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const ViewReply = new ViewReply$Type()
+                                            class Tab$Type extends MessageType {
+                                                constructor() {
+                                                    super('bilibili.app.viewunite.v1.Tab', [
+                                                        { no: 1, name: 'tab_module', kind: 'message', repeat: 1, T: () => TabModule },
+                                                    ])
+                                                }
+                                                create(value) {
+                                                    const message = { tabModule: [] }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.tabModule.push(TabModule.internalBinaryRead(reader, reader.uint32(), options))
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    for (let i = 0; i < message.tabModule.length; i++)
+                                                        TabModule.internalBinaryWrite(
+                                                            message.tabModule[i],
+                                                            writer.tag(1, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const Tab = new Tab$Type()
+                                            class TabModule$Type extends MessageType {
+                                                constructor() {
+                                                    super('bilibili.app.viewunite.v1.TabModule', [
+                                                        { no: 2, name: 'introduction', kind: 'message', oneof: 'tab', T: () => IntroductionTab },
+                                                    ])
+                                                }
+                                                create(value) {
+                                                    const message = { tab: { oneofKind: undefined } }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 2:
+                                                                message.tab = {
+                                                                    oneofKind: 'introduction',
+                                                                    introduction: IntroductionTab.internalBinaryRead(
+                                                                        reader,
+                                                                        reader.uint32(),
+                                                                        options,
+                                                                        message.tab.introduction
+                                                                    ),
+                                                                }
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.tab.oneofKind === 'introduction')
+                                                        IntroductionTab.internalBinaryWrite(
+                                                            message.tab.introduction,
+                                                            writer.tag(2, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const TabModule = new TabModule$Type()
+                                            class IntroductionTab$Type extends MessageType {
+                                                constructor() {
+                                                    super('bilibili.app.viewunite.v1.IntroductionTab', [
+                                                        { no: 2, name: 'modules', kind: 'message', repeat: 1, T: () => Module },
+                                                    ])
+                                                }
+                                                create(value) {
+                                                    const message = { modules: [] }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 2:
+                                                                message.modules.push(Module.internalBinaryRead(reader, reader.uint32(), options))
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    for (let i = 0; i < message.modules.length; i++)
+                                                        Module.internalBinaryWrite(
+                                                            message.modules[i],
+                                                            writer.tag(2, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const IntroductionTab = new IntroductionTab$Type()
+                                            class Module$Type extends MessageType {
+                                                constructor() {
+                                                    super('bilibili.app.viewunite.v1.Module', [
+                                                        { no: 1, name: 'type', kind: 'scalar', T: 5 },
+                                                        { no: 22, name: 'relates', kind: 'message', oneof: 'data', T: () => Relates },
+                                                    ])
+                                                }
+                                                create(value) {
+                                                    const message = { type: 0, data: { oneofKind: undefined } }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.type = reader.int32()
+                                                                break
+                                                            case 22:
+                                                                message.data = {
+                                                                    oneofKind: 'relates',
+                                                                    relates: Relates.internalBinaryRead(reader, reader.uint32(), options, message.data.relates),
+                                                                }
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.type !== 0) writer.tag(1, WireType.Varint).int32(message.type)
+                                                    if (message.data.oneofKind === 'relates')
+                                                        Relates.internalBinaryWrite(
+                                                            message.data.relates,
+                                                            writer.tag(22, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const Module = new Module$Type()
+                                            class Relates$Type extends MessageType {
+                                                constructor() {
+                                                    super('bilibili.app.viewunite.v1.Relates', [
+                                                        { no: 1, name: 'cards', kind: 'message', repeat: 1, T: () => RelateCard },
+                                                    ])
+                                                }
+                                                create(value) {
+                                                    const message = { cards: [] }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.cards.push(RelateCard.internalBinaryRead(reader, reader.uint32(), options))
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    for (let i = 0; i < message.cards.length; i++)
+                                                        RelateCard.internalBinaryWrite(
+                                                            message.cards[i],
+                                                            writer.tag(1, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const Relates = new Relates$Type()
+                                            class RelateCard$Type extends MessageType {
+                                                constructor() {
+                                                    super('bilibili.app.viewunite.v1.RelateCard', [{ no: 1, name: 'relate_card_type', kind: 'scalar', T: 5 }])
+                                                }
+                                                create(value) {
+                                                    const message = { relateCardType: 0 }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.relateCardType = reader.int32()
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.relateCardType !== 0) writer.tag(1, WireType.Varint).int32(message.relateCardType)
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const RelateCard = new RelateCard$Type()
+                                            class CM$Type extends MessageType {
+                                                constructor() {
+                                                    super('bilibili.app.viewunite.v1.CM', [
+                                                        { no: 3, name: 'source_content', kind: 'message', repeat: 1, T: () => Any },
+                                                    ])
+                                                }
+                                                create(value) {
+                                                    const message = { sourceContent: [] }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 3:
+                                                                message.sourceContent.push(Any.internalBinaryRead(reader, reader.uint32(), options))
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    for (let i = 0; i < message.sourceContent.length; i++)
+                                                        Any.internalBinaryWrite(
+                                                            message.sourceContent[i],
+                                                            writer.tag(3, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const CM = new CM$Type()
+                                            class RelatesFeedReply$Type extends MessageType {
+                                                constructor() {
+                                                    super('bilibili.app.viewunite.v1.RelatesFeedReply', [
+                                                        { no: 1, name: 'relates', kind: 'message', repeat: 1, T: () => RelateCard },
+                                                    ])
+                                                }
+                                                create(value) {
+                                                    const message = { relates: [] }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.relates.push(RelateCard.internalBinaryRead(reader, reader.uint32(), options))
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    for (let i = 0; i < message.relates.length; i++)
+                                                        RelateCard.internalBinaryWrite(
+                                                            message.relates[i],
+                                                            writer.tag(1, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const RelatesFeedReply = new RelatesFeedReply$Type()
                                             /******************  initialization finish  ******************/
                                             switch (PATHs?.[1]) {
                                                 case 'View': // 视频播放页
@@ -11165,7 +12778,161 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                                 case 'ModeStatus': // 青少年模式
                                                     /******************  initialization start  *******************/
                                                     // protobuf/bilibili/app/interface/teenagers.proto
-                                                    class ModeStatus$Type extends MessageType{constructor(){super("ModeStatus",[{no:1,name:"modes",kind:"message",repeat:1,T:()=>Mode}])}create(value){const message={modes:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.modes.push(Mode.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.modes.length;i++)Mode.internalBinaryWrite(message.modes[i],writer.tag(1,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const ModeStatus=new ModeStatus$Type;class Mode$Type extends MessageType{constructor(){super("Mode",[{no:2,name:"name",kind:"scalar",T:9},{no:5,name:"f5",kind:"message",T:()=>F5}])}create(value){const message={name:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 2:message.name=reader.string();break;case 5:message.f5=F5.internalBinaryRead(reader,reader.uint32(),options,message.f5);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.name!=="")writer.tag(2,WireType.LengthDelimited).string(message.name);if(message.f5)F5.internalBinaryWrite(message.f5,writer.tag(5,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const Mode=new Mode$Type;class F5$Type extends MessageType{constructor(){super("F5",[{no:1,name:"f1",kind:"scalar",T:5}])}create(value){const message={f1:0};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.f1=reader.int32();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.f1!==0)writer.tag(1,WireType.Varint).int32(message.f1);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const F5=new F5$Type;
+                                                    class ModeStatus$Type extends MessageType {
+                                                        constructor() {
+                                                            super('ModeStatus', [{ no: 1, name: 'modes', kind: 'message', repeat: 1, T: () => Mode }])
+                                                        }
+                                                        create(value) {
+                                                            const message = { modes: [] }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.modes.push(Mode.internalBinaryRead(reader, reader.uint32(), options))
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            for (let i = 0; i < message.modes.length; i++)
+                                                                Mode.internalBinaryWrite(
+                                                                    message.modes[i],
+                                                                    writer.tag(1, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const ModeStatus = new ModeStatus$Type()
+                                                    class Mode$Type extends MessageType {
+                                                        constructor() {
+                                                            super('Mode', [
+                                                                { no: 2, name: 'name', kind: 'scalar', T: 9 },
+                                                                { no: 5, name: 'f5', kind: 'message', T: () => F5 },
+                                                            ])
+                                                        }
+                                                        create(value) {
+                                                            const message = { name: '' }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 2:
+                                                                        message.name = reader.string()
+                                                                        break
+                                                                    case 5:
+                                                                        message.f5 = F5.internalBinaryRead(reader, reader.uint32(), options, message.f5)
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.name !== '') writer.tag(2, WireType.LengthDelimited).string(message.name)
+                                                            if (message.f5)
+                                                                F5.internalBinaryWrite(
+                                                                    message.f5,
+                                                                    writer.tag(5, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const Mode = new Mode$Type()
+                                                    class F5$Type extends MessageType {
+                                                        constructor() {
+                                                            super('F5', [{ no: 1, name: 'f1', kind: 'scalar', T: 5 }])
+                                                        }
+                                                        create(value) {
+                                                            const message = { f1: 0 }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.f1 = reader.int32()
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.f1 !== 0) writer.tag(1, WireType.Varint).int32(message.f1)
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const F5 = new F5$Type()
                                                     data = ModeStatus.fromBinary(body)
                                                     /******************  initialization finish  ******************/
                                                     data.modes = data.modes.map((mode) => {
@@ -11184,7 +12951,221 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                         case 'bilibili.community.service.dm.v1.DM': //弹幕
                                             /******************  initialization start  *******************/
                                             // protobuf/bilibili/community/service/dm/dm.proto
-                                            class CommandDm$Type extends MessageType{constructor(){super("CommandDm",[{no:1,name:"id",kind:"scalar",T:3,L:0}])}create(value){const message={id:0n};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.id=reader.int64().toBigInt();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.id!==0n)writer.tag(1,WireType.Varint).int64(message.id);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const CommandDm=new CommandDm$Type;class DmView$Type extends MessageType{constructor(){super("DmView",[{no:1,name:"commandDms",kind:"message",repeat:1,T:()=>CommandDm}])}create(value){const message={commandDms:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.commandDms.push(CommandDm.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.commandDms.length;i++)CommandDm.internalBinaryWrite(message.commandDms[i],writer.tag(1,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const DmView=new DmView$Type;class DmViewReply$Type extends MessageType{constructor(){super("DmViewReply",[{no:22,name:"dmView",kind:"message",T:()=>DmView}])}create(value){const message={};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 22:message.dmView=DmView.internalBinaryRead(reader,reader.uint32(),options,message.dmView);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.dmView)DmView.internalBinaryWrite(message.dmView,writer.tag(22,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const DmViewReply=new DmViewReply$Type;class DmSegMobileReply$Type extends MessageType{constructor(){super("DmSegMobileReply",[{no:1,name:"elems",kind:"message",repeat:1,T:()=>DanmakuElem}])}create(value){const message={elems:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.elems.push(DanmakuElem.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.elems.length;i++)DanmakuElem.internalBinaryWrite(message.elems[i],writer.tag(1,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const DmSegMobileReply=new DmSegMobileReply$Type;class DanmakuElem$Type extends MessageType{constructor(){super("DanmakuElem",[{no:24,name:"colorful",kind:"scalar",T:5}])}create(value){const message={colorful:0};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 24:message.colorful=reader.int32();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.colorful!==0)writer.tag(24,WireType.Varint).int32(message.colorful);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const DanmakuElem=new DanmakuElem$Type;
+                                            class CommandDm$Type extends MessageType {
+                                                constructor() {
+                                                    super('CommandDm', [{ no: 1, name: 'id', kind: 'scalar', T: 3, L: 0 }])
+                                                }
+                                                create(value) {
+                                                    const message = { id: 0n }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.id = reader.int64().toBigInt()
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.id !== 0n) writer.tag(1, WireType.Varint).int64(message.id)
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const CommandDm = new CommandDm$Type()
+                                            class DmView$Type extends MessageType {
+                                                constructor() {
+                                                    super('DmView', [{ no: 1, name: 'commandDms', kind: 'message', repeat: 1, T: () => CommandDm }])
+                                                }
+                                                create(value) {
+                                                    const message = { commandDms: [] }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.commandDms.push(CommandDm.internalBinaryRead(reader, reader.uint32(), options))
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    for (let i = 0; i < message.commandDms.length; i++)
+                                                        CommandDm.internalBinaryWrite(
+                                                            message.commandDms[i],
+                                                            writer.tag(1, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const DmView = new DmView$Type()
+                                            class DmViewReply$Type extends MessageType {
+                                                constructor() {
+                                                    super('DmViewReply', [{ no: 22, name: 'dmView', kind: 'message', T: () => DmView }])
+                                                }
+                                                create(value) {
+                                                    const message = {}
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 22:
+                                                                message.dmView = DmView.internalBinaryRead(reader, reader.uint32(), options, message.dmView)
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.dmView)
+                                                        DmView.internalBinaryWrite(
+                                                            message.dmView,
+                                                            writer.tag(22, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const DmViewReply = new DmViewReply$Type()
+                                            class DmSegMobileReply$Type extends MessageType {
+                                                constructor() {
+                                                    super('DmSegMobileReply', [{ no: 1, name: 'elems', kind: 'message', repeat: 1, T: () => DanmakuElem }])
+                                                }
+                                                create(value) {
+                                                    const message = { elems: [] }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 1:
+                                                                message.elems.push(DanmakuElem.internalBinaryRead(reader, reader.uint32(), options))
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    for (let i = 0; i < message.elems.length; i++)
+                                                        DanmakuElem.internalBinaryWrite(
+                                                            message.elems[i],
+                                                            writer.tag(1, WireType.LengthDelimited).fork(),
+                                                            options
+                                                        ).join()
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const DmSegMobileReply = new DmSegMobileReply$Type()
+                                            class DanmakuElem$Type extends MessageType {
+                                                constructor() {
+                                                    super('DanmakuElem', [{ no: 24, name: 'colorful', kind: 'scalar', T: 5 }])
+                                                }
+                                                create(value) {
+                                                    const message = { colorful: 0 }
+                                                    globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                    if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                    return message
+                                                }
+                                                internalBinaryRead(reader, length, options, target) {
+                                                    let message = target ?? this.create(),
+                                                        end = reader.pos + length
+                                                    while (reader.pos < end) {
+                                                        let [fieldNo, wireType] = reader.tag()
+                                                        switch (fieldNo) {
+                                                            case 24:
+                                                                message.colorful = reader.int32()
+                                                                break
+                                                            default:
+                                                                let u = options.readUnknownField
+                                                                if (u === 'throw')
+                                                                    throw new globalThis.Error(
+                                                                        `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                    )
+                                                                let d = reader.skip(wireType)
+                                                                if (u !== false)
+                                                                    (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d)
+                                                        }
+                                                    }
+                                                    return message
+                                                }
+                                                internalBinaryWrite(message, writer, options) {
+                                                    if (message.colorful !== 0) writer.tag(24, WireType.Varint).int32(message.colorful)
+                                                    let u = options.writeUnknownFields
+                                                    if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                    return writer
+                                                }
+                                            }
+                                            const DanmakuElem = new DanmakuElem$Type()
                                             /******************  initialization finish  ******************/
                                             switch (PATHs?.[1]) {
                                                 case 'DmView': // 弹幕配置
@@ -11229,7 +13210,57 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                                 case 'MainList':
                                                     /******************  initialization start  *******************/
                                                     // protobuf/bilibili/main/community/reply/reply.proto
-                                                    class MainListReply$Type extends MessageType{constructor(){super("MainListReply",[{no:11,name:"cm",kind:"message",T:()=>CM}])}create(value){const message={};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 11:message.cm=CM.internalBinaryRead(reader,reader.uint32(),options,message.cm);break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.cm)CM.internalBinaryWrite(message.cm,writer.tag(11,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const MainListReply=new MainListReply$Type;
+                                                    class MainListReply$Type extends MessageType {
+                                                        constructor() {
+                                                            super('MainListReply', [{ no: 11, name: 'cm', kind: 'message', T: () => CM }])
+                                                        }
+                                                        create(value) {
+                                                            const message = {}
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 11:
+                                                                        message.cm = CM.internalBinaryRead(reader, reader.uint32(), options, message.cm)
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.cm)
+                                                                CM.internalBinaryWrite(
+                                                                    message.cm,
+                                                                    writer.tag(11, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const MainListReply = new MainListReply$Type()
                                                     /******************  initialization finish  ******************/
                                                     switch (Settings?.Detail?.MainList) {
                                                         case true:
@@ -11260,7 +13291,60 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                             switch (PATHs?.[1]) {
                                                 case 'DefaultWords':
                                                     /******************  initialization start  *******************/
-                                                    class DefaultWordsReply$Type extends MessageType{constructor(){super("bilibili.app.interface.v1.DefaultWordsReply",[{no:3,name:"show",kind:"scalar",T:9},{no:4,name:"word",kind:"scalar",T:9}])}create(value){const message=globalThis.Object.create(this.messagePrototype);message.show="";message.word="";if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 3:message.show=reader.string();break;case 4:message.word=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.show!=="")writer.tag(3,WireType.LengthDelimited).string(message.show);if(message.word!=="")writer.tag(4,WireType.LengthDelimited).string(message.word);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const DefaultWordsReply=new DefaultWordsReply$Type;
+                                                    class DefaultWordsReply$Type extends MessageType {
+                                                        constructor() {
+                                                            super('bilibili.app.interface.v1.DefaultWordsReply', [
+                                                                { no: 3, name: 'show', kind: 'scalar', T: 9 },
+                                                                { no: 4, name: 'word', kind: 'scalar', T: 9 },
+                                                            ])
+                                                        }
+                                                        create(value) {
+                                                            const message = globalThis.Object.create(this.messagePrototype)
+                                                            message.show = ''
+                                                            message.word = ''
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 3:
+                                                                        message.show = reader.string()
+                                                                        break
+                                                                    case 4:
+                                                                        message.word = reader.string()
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.show !== '') writer.tag(3, WireType.LengthDelimited).string(message.show)
+                                                            if (message.word !== '') writer.tag(4, WireType.LengthDelimited).string(message.word)
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const DefaultWordsReply = new DefaultWordsReply$Type()
                                                     /******************  initialization finish  ******************/
                                                     let data = DefaultWordsReply.fromBinary(body)
                                                     $.log(`🎉 移除 DefaultWord`)
@@ -11277,7 +13361,234 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                                 case 'SearchAll': {
                                                     // 全部结果（综合）
                                                     /******************  initialization start  *******************/
-                                                    class Item$Type extends MessageType{constructor(){super("bilibili.polymer.app.search.v1.Item",[{no:11,name:"game",kind:"message",oneof:"cardItem",T:()=>SearchGameCard},{no:25,name:"cm",kind:"message",oneof:"cardItem",T:()=>SearchAdCard}])}create(value){const message={cardItem:{oneofKind:undefined}};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 11:message.cardItem={oneofKind:"game",game:SearchGameCard.internalBinaryRead(reader,reader.uint32(),options,message.cardItem.game)};break;case 25:message.cardItem={oneofKind:"cm",cm:SearchAdCard.internalBinaryRead(reader,reader.uint32(),options,message.cardItem.cm)};break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.cardItem.oneofKind==="game")SearchGameCard.internalBinaryWrite(message.cardItem.game,writer.tag(11,WireType.LengthDelimited).fork(),options).join();if(message.cardItem.oneofKind==="cm")SearchAdCard.internalBinaryWrite(message.cardItem.cm,writer.tag(25,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const Item=new Item$Type;class SearchAdCard$Type extends MessageType{constructor(){super("bilibili.polymer.app.search.v1.SearchAdCard",[{no:1,name:"json_str",kind:"scalar",T:9}])}create(value){const message={jsonStr:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.jsonStr=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.jsonStr!=="")writer.tag(1,WireType.LengthDelimited).string(message.jsonStr);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const SearchAdCard=new SearchAdCard$Type;class SearchGameCard$Type extends MessageType{constructor(){super("bilibili.polymer.app.search.v1.SearchGameCard",[{no:1,name:"title",kind:"scalar",T:9}])}create(value){const message={title:""};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 1:message.title=reader.string();break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){if(message.title!=="")writer.tag(1,WireType.LengthDelimited).string(message.title);let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const SearchGameCard=new SearchGameCard$Type;class SearchAllResponse$Type extends MessageType{constructor(){super("bilibili.polymer.app.search.v1.SearchAllResponse",[{no:4,name:"item",kind:"message",repeat:1,T:()=>Item}])}create(value){const message={item:[]};globalThis.Object.defineProperty(message,MESSAGE_TYPE,{enumerable:false,value:this});if(value!==undefined)reflectionMergePartial(this,message,value);return message}internalBinaryRead(reader,length,options,target){let message=target??this.create(),end=reader.pos+length;while(reader.pos<end){let[fieldNo,wireType]=reader.tag();switch(fieldNo){case 4:message.item.push(Item.internalBinaryRead(reader,reader.uint32(),options));break;default:let u=options.readUnknownField;if(u==="throw")throw new globalThis.Error(`Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`);let d=reader.skip(wireType);if(u!==false)(u===true?UnknownFieldHandler.onRead:u)(this.typeName,message,fieldNo,wireType,d)}}return message}internalBinaryWrite(message,writer,options){for(let i=0;i<message.item.length;i++)Item.internalBinaryWrite(message.item[i],writer.tag(4,WireType.LengthDelimited).fork(),options).join();let u=options.writeUnknownFields;if(u!==false)(u==true?UnknownFieldHandler.onWrite:u)(this.typeName,message,writer);return writer}}const SearchAllResponse=new SearchAllResponse$Type;
+                                                    class Item$Type extends MessageType {
+                                                        constructor() {
+                                                            super('bilibili.polymer.app.search.v1.Item', [
+                                                                { no: 11, name: 'game', kind: 'message', oneof: 'cardItem', T: () => SearchGameCard },
+                                                                { no: 25, name: 'cm', kind: 'message', oneof: 'cardItem', T: () => SearchAdCard },
+                                                            ])
+                                                        }
+                                                        create(value) {
+                                                            const message = { cardItem: { oneofKind: undefined } }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 11:
+                                                                        message.cardItem = {
+                                                                            oneofKind: 'game',
+                                                                            game: SearchGameCard.internalBinaryRead(
+                                                                                reader,
+                                                                                reader.uint32(),
+                                                                                options,
+                                                                                message.cardItem.game
+                                                                            ),
+                                                                        }
+                                                                        break
+                                                                    case 25:
+                                                                        message.cardItem = {
+                                                                            oneofKind: 'cm',
+                                                                            cm: SearchAdCard.internalBinaryRead(
+                                                                                reader,
+                                                                                reader.uint32(),
+                                                                                options,
+                                                                                message.cardItem.cm
+                                                                            ),
+                                                                        }
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.cardItem.oneofKind === 'game')
+                                                                SearchGameCard.internalBinaryWrite(
+                                                                    message.cardItem.game,
+                                                                    writer.tag(11, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            if (message.cardItem.oneofKind === 'cm')
+                                                                SearchAdCard.internalBinaryWrite(
+                                                                    message.cardItem.cm,
+                                                                    writer.tag(25, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const Item = new Item$Type()
+                                                    class SearchAdCard$Type extends MessageType {
+                                                        constructor() {
+                                                            super('bilibili.polymer.app.search.v1.SearchAdCard', [
+                                                                { no: 1, name: 'json_str', kind: 'scalar', T: 9 },
+                                                            ])
+                                                        }
+                                                        create(value) {
+                                                            const message = { jsonStr: '' }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.jsonStr = reader.string()
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.jsonStr !== '') writer.tag(1, WireType.LengthDelimited).string(message.jsonStr)
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const SearchAdCard = new SearchAdCard$Type()
+                                                    class SearchGameCard$Type extends MessageType {
+                                                        constructor() {
+                                                            super('bilibili.polymer.app.search.v1.SearchGameCard', [
+                                                                { no: 1, name: 'title', kind: 'scalar', T: 9 },
+                                                            ])
+                                                        }
+                                                        create(value) {
+                                                            const message = { title: '' }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 1:
+                                                                        message.title = reader.string()
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            if (message.title !== '') writer.tag(1, WireType.LengthDelimited).string(message.title)
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const SearchGameCard = new SearchGameCard$Type()
+                                                    class SearchAllResponse$Type extends MessageType {
+                                                        constructor() {
+                                                            super('bilibili.polymer.app.search.v1.SearchAllResponse', [
+                                                                { no: 4, name: 'item', kind: 'message', repeat: 1, T: () => Item },
+                                                            ])
+                                                        }
+                                                        create(value) {
+                                                            const message = { item: [] }
+                                                            globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this })
+                                                            if (value !== undefined) reflectionMergePartial(this, message, value)
+                                                            return message
+                                                        }
+                                                        internalBinaryRead(reader, length, options, target) {
+                                                            let message = target ?? this.create(),
+                                                                end = reader.pos + length
+                                                            while (reader.pos < end) {
+                                                                let [fieldNo, wireType] = reader.tag()
+                                                                switch (fieldNo) {
+                                                                    case 4:
+                                                                        message.item.push(Item.internalBinaryRead(reader, reader.uint32(), options))
+                                                                        break
+                                                                    default:
+                                                                        let u = options.readUnknownField
+                                                                        if (u === 'throw')
+                                                                            throw new globalThis.Error(
+                                                                                `Unknown field ${fieldNo}(wire type ${wireType})for ${this.typeName}`
+                                                                            )
+                                                                        let d = reader.skip(wireType)
+                                                                        if (u !== false)
+                                                                            (u === true ? UnknownFieldHandler.onRead : u)(
+                                                                                this.typeName,
+                                                                                message,
+                                                                                fieldNo,
+                                                                                wireType,
+                                                                                d
+                                                                            )
+                                                                }
+                                                            }
+                                                            return message
+                                                        }
+                                                        internalBinaryWrite(message, writer, options) {
+                                                            for (let i = 0; i < message.item.length; i++)
+                                                                Item.internalBinaryWrite(
+                                                                    message.item[i],
+                                                                    writer.tag(4, WireType.LengthDelimited).fork(),
+                                                                    options
+                                                                ).join()
+                                                            let u = options.writeUnknownFields
+                                                            if (u !== false) (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer)
+                                                            return writer
+                                                        }
+                                                    }
+                                                    const SearchAllResponse = new SearchAllResponse$Type()
                                                     /******************  initialization finish  *******************/
                                                     switch (Settings?.Detail?.search) {
                                                         case true:
