@@ -109,7 +109,7 @@ switch (host) {
 
 $done({
     response: {
-        ststus: 302,
+        status: 302,
         headers: {
             Location: origin,
         },
