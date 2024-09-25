@@ -1,3 +1,4 @@
+// https://github.com/NanoCat-Me/utils/blob/main/URL.mjs
 class URL {
     constructor(url, base = undefined) {
         const name = 'URL'
@@ -107,8 +108,10 @@ switch (host) {
 }
 
 $done({
-    ststus: 302,
-    headers: {
-        Location: origin,
+    response: {
+        ststus: 302,
+        headers: {
+            Location: origin,
+        },
     },
 })
