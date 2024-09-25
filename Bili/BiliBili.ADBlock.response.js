@@ -12760,7 +12760,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, '')
                                                         data.relates = data.relates.filter((item) => {
                                                             if (item.relateCardType == 5) {
                                                                 $.log('Remove RelatesFeed CM ads')
-                                                                $.msg('Remove RelatesFeed CM ads')
                                                                 return false
                                                             }
                                                             return true
