@@ -36,11 +36,16 @@ URL-REGEX,http://api.bilibili.com/client_info
 URL-REGEX,^https:\/\/app\.bilibili\.com\/x\/resource\/ip*
 URL-REGEX,https://api.bilibili.com/x/v2/reply/add
 
-[URL Rewrite]
-# Reject IP 請求
-^https?:\/\/app\.bilibili\.com\/x\/resource\/ip - reject
-
 [Map Local]
+# IP 與地理位置
+^https:\/\/api\.bilibili\.com\/x\/web-interface\/zone\?jsonp data-type=text data="{}" status-code=200
+^https:\/\/app\.bilibili\.com\/x\/resource\/ip data-type=text data="{}" status-code=200
+# 滿意度
+^https:\/\/api\.bilibili\.com\/x\/v2\/dm\/qoe\/show\? data-type=text data="{}" status-code=200
+# 開屏廣告 //app.bilibili.com
+^http:\/\/[\d\.]+:8000\/v1\/resource\/\w{32}-1-SPLASH data-type=text data="{}" status-code=200
+^http:\/\/upos-sz-static\.bilivideo\.com\/ssaxcode\/\w{2}\/\w{2}\/\w{32}-1-SPLASH data-type=text data="{}" status-code=200
+^https:\/\/(api\.bilibili\.com\/x\/mengqi\/v1\/resource|app\.bilibili\.com\/x\/resource\/peak\/download) data-type=text data="{}" status-code=200
 # 去除搜索中的大家都在搜
 ^https?:\/\/api\.vc\.bilibili\.com\/search_svr\/v\d\/Search\/recommend_words data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
 # 去除動態中的話題
