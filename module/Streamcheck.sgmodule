@@ -1,8 +1,0 @@
-#!name=串流媒體跨區檢查
-#!desc=串流媒體跨區解鎖測試
-
-[Panel]
-streamcheck = script-name=streamcheck, title="串流媒體跨區解鎖測試", update-interval=-1
-
-[Script]
-streamcheck = type=generic,script-path=https://raw.githubusercontent.com/Yswag/for-own-use/main/js/streamcheck.js
