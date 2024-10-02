@@ -8,6 +8,8 @@ for (let key in body.data) {
       if (e.node.adPayload) {
         console.log('Remove feed Ads: ' + e.node.id)
         return false
+      } else if (e.node.__typename === 'AdPost') {
+        return false
       }
       return true
     })
