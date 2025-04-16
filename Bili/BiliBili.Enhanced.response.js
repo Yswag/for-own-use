@@ -476,7 +476,7 @@ var Settings = {
         Tab: ['直播tab', '推荐tab', 'hottopic', 'bangumi', 'anime', 'film', 'koreavtw'],
         Tab_default: 'bangumi',
     },
-    Bottom: ['home', 'dynamic', 'ogv', '会员购Bottom', '我的Bottom'],
+    Bottom: ['home', 'dynamic', 'ogv', 'publish', '会员购Bottom', '我的Bottom'],
     Mine: {
         Switch: 'true',
         CreatorCenter: [],
