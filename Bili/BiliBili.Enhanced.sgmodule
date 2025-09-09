@@ -16,7 +16,7 @@ DOMAIN,dataflow.biliapi.com,REJECT-DROP
 DOMAIN,cm.bilibili.com,REJECT-DROP
 # block httpdns
 DOMAIN,httpdns.bilivideo.com,REJECT,extended-matching
-IP-CIDR,203.107.1.0/24,REJECT,no-resolve
+# IP-CIDR,203.107.1.0/24,REJECT,no-resolve
 # 微信定位接口? 開啟 app 後會一直請求這個域名
 DOMAIN-SUFFIX,up-hl.3g.qq.com,REJECT-DROP
 
